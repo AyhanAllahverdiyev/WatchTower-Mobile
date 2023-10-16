@@ -39,6 +39,8 @@ dependencies:
   geolocator: ^7.6.0 # Use the latest version available
   flutter_dotenv: ^5.0.2
   shared_preferences: ^2.0.8
+  google_fonts: ^6.1.0
+  flutter_svg: ^2.0.7
 
 dev_dependencies:
   flutter_test:
@@ -62,15 +64,14 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - assets/logo.png
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
   # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
+  # https://flutter.dev/assets-and-images/#from-packages 
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
