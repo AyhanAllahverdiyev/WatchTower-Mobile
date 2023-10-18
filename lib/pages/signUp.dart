@@ -1,33 +1,44 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import './signUp.dart';
+import './login.dart';
 
-class LoginPage extends StatefulWidget {
-  static const String id = 'login_page';
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
+
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<SignUpPage> createState() => __SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-    TextEditingController userNameController = TextEditingController();
+class __SignUpPageState extends State<SignUpPage> {
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+    TextEditingController userNameController = TextEditingController();
   bool isPasswordVisible = false;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: Scaffold(
-        backgroundColor: const Color.fromARGB(36, 32, 50, 1000),
+      
+      child: Scaffold(  
+        
+        backgroundColor: const Color.fromARGB(36,32,50,1000),
         appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(10.0),
+            preferredSize: const Size.fromHeight(70.0), 
             child: AppBar(
-              backgroundColor: Color.fromARGB(57, 108, 126, 241)
-            )),
-        body: SafeArea(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                ),
+              backgroundColor: Color.fromARGB(57, 108, 126, 241),
+            )
+        ),
+body: SafeArea(
             child: Column(children: [
           Center(
             child: Container(
@@ -41,11 +52,11 @@ class _LoginPageState extends State<LoginPage> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Login',
+                      'Create Account',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 45,
+                        fontSize: 40,
                       ),
                     ),
                   ),
@@ -75,6 +86,39 @@ class _LoginPageState extends State<LoginPage> {
                         filled: true,
                         fillColor: Color.fromARGB(57, 108, 126, 241),
                         prefixIcon: Icon(Icons.person_rounded),
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'E-mail',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'E-mail',
+                        prefixIconColor: Colors.grey,
+                        filled: true,
+                        fillColor: Color.fromARGB(57, 108, 126, 241),
+                        prefixIcon: Icon(Icons.email),
                         hintStyle: TextStyle(
                           color: Colors.grey,
                         )),
@@ -129,6 +173,26 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.white,
                     ),
                   ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                    TextField(
+                    obscureText: !isPasswordVisible,
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Confirm Password',
+                        prefixIconColor: Colors.grey,
+                        filled: true,
+                        fillColor: Color.fromARGB(57, 108, 126, 241),
+                        prefixIcon: Icon(Icons.lock),
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        )),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -155,53 +219,19 @@ class _LoginPageState extends State<LoginPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: const Text(
-                    'LOGIN',
+                    'SIGN UP',
                     style: TextStyle(),
                   ),
                 ),
                 onPressed: () {
+                  String email = emailController.text;
                   String userName = userNameController.text;
                   String password = passwordController.text;
-
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        content: Text(userName + " " + password),
-                      );
-                    },
-                  );
                 },
               ),
             ),
           ),
-          Center(
-            child: SizedBox(
-              height: 30.0,
-              child: TextButton(
-                child: Text(
-                  'Forgot Password?',
-                  style: TextStyle(
-                    color: Colors.lightBlueAccent,
-                    height: 1.0,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SignUpPage()));
-                },
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          Center(
-            child: Image(
-              height: 300,
-              image: AssetImage('assets/images/login.png'),
-            ),
-          ),
+          
         ])),
         bottomNavigationBar: BottomAppBar(
           color: Colors.transparent,
@@ -213,7 +243,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 TextButton(
                   child: Text(
-                    "Don't have an account?",
+                    "Already have an account?",
                     style: TextStyle(
                       color: Colors.grey,
                       height: 0.05,
@@ -221,12 +251,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignUpPage()));
+                        MaterialPageRoute(builder: (context) => LoginPage()));
                   },
                 ),
                 TextButton(
                   child: Text(
-                    'Sign up',
+                    'Sign in',
                     style: TextStyle(
                       color: Colors.lightBlueAccent,
                       height: 0.05,
@@ -234,7 +264,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignUpPage()));
+                        MaterialPageRoute(builder: (context) => LoginPage()));
                   },
                 ),
               ],
