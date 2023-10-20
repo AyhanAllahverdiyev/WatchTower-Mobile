@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import './signUp.dart';
@@ -11,10 +10,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-    TextEditingController userNameController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPasswordVisible = false;
-final httpService = HttpServices();
+  final httpService = HttpServices();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -25,9 +24,7 @@ final httpService = HttpServices();
         backgroundColor: const Color.fromARGB(36, 32, 50, 1000),
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(40.0),
-            child: AppBar(
-              backgroundColor: Color.fromARGB(57, 108, 126, 241)
-            )),
+            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
         body: SingleChildScrollView(
           child: SafeArea(
               child: Column(children: [
@@ -161,10 +158,14 @@ final httpService = HttpServices();
                       style: TextStyle(),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     String userName = userNameController.text;
                     String password = passwordController.text;
-
+                    print(
+                        "//////////////////////////////////////////////////////////////////////////");
+                    bool loginTest =
+                        await HttpServices().loginPost(userName, password);
+                    print(loginTest);
                   },
                 ),
               ),
