@@ -14,7 +14,7 @@ class _LoginPageState extends State<LoginPage> {
     TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPasswordVisible = false;
-
+final httpService = HttpServices();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller: userNameController,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'User Name',
+                          hintText: 'Username',
                           prefixIconColor: Colors.grey,
                           filled: true,
                           fillColor: Color.fromARGB(57, 108, 126, 241),
@@ -164,15 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     String userName = userNameController.text;
                     String password = passwordController.text;
-        
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          content: Text(userName + " " + password),
-                        );
-                      },
-                    );
+
                   },
                 ),
               ),
