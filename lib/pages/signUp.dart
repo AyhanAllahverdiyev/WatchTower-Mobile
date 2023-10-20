@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import './login.dart';
+import '../services/http_service.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -228,7 +229,7 @@ class __SignUpPageState extends State<SignUpPage> {
                       style: TextStyle(),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     String email = emailController.text;
                     String userName = userNameController.text;
                     String password = passwordController.text;
@@ -241,6 +242,11 @@ class __SignUpPageState extends State<SignUpPage> {
                         isPasswordConfirmed = true;
                       }
                     });
+                    if (isPasswordConfirmed) {
+                      bool signupTest =
+                          await HttpServices().signUpPost(email, password);
+                      print('signup result: $signupTest');
+                    }
                   },
                 ),
               ),

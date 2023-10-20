@@ -37,13 +37,13 @@ class HttpServices {
       final jsonObject = {
         "email": email,
         "password": password,
-        
+
       };
 
       print('what is being sent to server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse('http://localhost:3000/login'),
+        Uri.parse('http://localhost:3000/signup'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
