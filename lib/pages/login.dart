@@ -22,6 +22,20 @@ class _LoginPageState extends State<LoginPage> {
   bool checkedValue = false;
   final httpService = HttpServices();
   final loginUtils = LoginUtils();
+
+  @override
+void initState() {
+  loadSavedCredentials();
+}
+
+Future<void> loadSavedCredentials() async {
+  final credentials = await LoginUtils().loadSavedCredentials();
+  setState(() {
+    mailController.text = credentials.email;
+    passwordController.text = credentials.password;
+    checkedValue = credentials.rememberMe;
+  });
+}
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -219,8 +233,6 @@ class _LoginPageState extends State<LoginPage> {
                         "//////////////////////////////////////////////////////////////////////////");
                     ApiResponse loginTest =
                         await HttpServices().loginPost(mail, password);
-                    print("logintest: " + loginTest.response);
-
                     LoginError loginErrorResponse =
                         await LoginUtils().getLoginError(loginTest);
                     setState(() {
@@ -228,12 +240,16 @@ class _LoginPageState extends State<LoginPage> {
                       errorPasswordMessage =
                           loginErrorResponse.errorPasswordMessage;
                     });
+                    
+                    loginUtils.saveCredentials(mail, password,checkedValue);
+                    
                     if (loginErrorResponse.isLoginDone) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => HomePage()));
                     }
+
                   },
                 ),
               ),

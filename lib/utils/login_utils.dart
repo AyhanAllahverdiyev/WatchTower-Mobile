@@ -1,11 +1,15 @@
+// ignore_for_file: override_on_non_overriding_member
+
 import 'dart:convert';
+import 'package:flutter/material.dart';
+
 import '../services/http_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginError {
   bool isLoginDone = false;
   String errorEmailMessage = '';
   String errorPasswordMessage = '';
-
 
   setisLoginDone(bool value) {
     isLoginDone = value;
@@ -18,6 +22,14 @@ class LoginError {
   setErrorPasswordMessage(String value) {
     errorPasswordMessage = value;
   }
+}
+
+class Credentials {
+  String email;
+  String password;
+  bool rememberMe;
+
+  Credentials(this.email, this.password, this.rememberMe);
 }
 
 class LoginUtils {
@@ -38,5 +50,29 @@ class LoginUtils {
     }
 
     return loginError;
+  }
+
+  Future<Credentials> loadSavedCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    String mailController = prefs.getString('email') ?? '';
+    String passwordController = prefs.getString('password') ?? '';
+    bool checkedValue = prefs.getBool('rememberMe') ?? false;
+
+    return Credentials(mailController, passwordController, checkedValue);
+  }
+
+  Future<void> saveCredentials(
+    String mail, String password, bool rememberMe) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (rememberMe) {
+      prefs.setString('email', mail);
+      prefs.setString('password', password);
+      prefs.setBool('rememberMe', true);
+    } else {
+      prefs.remove('email');
+      prefs.remove('password');
+      prefs.setBool('rememberMe', false);
+    }
   }
 }

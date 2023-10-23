@@ -22,12 +22,15 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: const Color.fromARGB(36, 32, 50, 1000),
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(40.0),
-            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
+            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))
+          ),
         body: SingleChildScrollView(
           child: SafeArea(
               child: Column(children: [
               
-          ])),
+              ]
+            )
+          ),
         ),
       ),
     );

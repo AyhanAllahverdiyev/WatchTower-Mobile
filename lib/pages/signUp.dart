@@ -248,7 +248,7 @@ class __SignUpPageState extends State<SignUpPage> {
                   ),
                   onPressed: () async {
                     String email = emailController.text;
-                    String userName = userNameController.text;
+                    //String userName = userNameController.text;
                     String password = passwordController.text;
                     String passwordConfirm = passwordConfirmController.text;
 
