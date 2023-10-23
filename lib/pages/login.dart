@@ -1,9 +1,10 @@
-
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import './signUp.dart';
 import '../services/http_service.dart';
+import '../utils/login_utils.dart';
+import './home.dart';
 
 class LoginPage extends StatefulWidget {
   static const String id = 'login_page';
@@ -12,10 +13,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController userNameController = TextEditingController();
+  TextEditingController mailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPasswordVisible = false;
+  bool isLoginFailed = false;
+  String errorEmailMessage = '';
+  String errorPasswordMessage = '';
+  bool checkedValue = false;
   final httpService = HttpServices();
+  final loginUtils = LoginUtils();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -56,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Username',
+                        'E-mail',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.normal,
@@ -68,10 +74,10 @@ class _LoginPageState extends State<LoginPage> {
                       height: 10.0,
                     ),
                     TextField(
-                      controller: userNameController,
+                      controller: mailController,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Username',
+                          hintText: 'Mail',
                           prefixIconColor: Colors.grey,
                           filled: true,
                           fillColor: Color.fromARGB(57, 108, 126, 241),
@@ -84,7 +90,18 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(
-                      height: 20.0,
+                      height: 5.0,
+                    ),
+                    if (errorEmailMessage != '')
+                      Text(
+                        errorEmailMessage,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 18,
+                        ),
+                      ),
+                    SizedBox(
+                      height: 18.0,
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -134,9 +151,44 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 8.0,
+            if (errorPasswordMessage != '')
+              Text(
+                errorPasswordMessage,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 18,
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  primary: Colors.grey,
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+                onPressed: () {
+                  setState(() {
+                    checkedValue = !checkedValue;
+                  });
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      checkedValue
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
+                    Text(' Remember me'),
+                  ],
+                ),
+              ),
             ),
+         
             Center(
               child: Container(
                 child: ElevatedButton(
@@ -161,13 +213,27 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   onPressed: () async {
-                    String userName = userNameController.text;
+                    String mail = mailController.text;
                     String password = passwordController.text;
                     print(
                         "//////////////////////////////////////////////////////////////////////////");
-                    bool loginTest =
-                        await HttpServices().loginPost(userName, password);
-                    print(loginTest);
+                    ApiResponse loginTest =
+                        await HttpServices().loginPost(mail, password);
+                    print("logintest: " + loginTest.response);
+
+                    LoginError loginErrorResponse =
+                        await LoginUtils().getLoginError(loginTest);
+                    setState(() {
+                      errorEmailMessage = loginErrorResponse.errorEmailMessage;
+                      errorPasswordMessage =
+                          loginErrorResponse.errorPasswordMessage;
+                    });
+                    if (loginErrorResponse.isLoginDone) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomePage()));
+                    }
                   },
                 ),
               ),
@@ -195,7 +261,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Center(
               child: Image(
-                height: 270,
+                height: 250,
                 image: AssetImage('assets/images/login.png'),
               ),
             ),

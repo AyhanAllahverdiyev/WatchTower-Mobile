@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import './login.dart';
 import '../services/http_service.dart';
+import '../utils/signup_utils.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -18,6 +19,8 @@ class __SignUpPageState extends State<SignUpPage> {
   TextEditingController userNameController = TextEditingController();
   bool isPasswordConfirmed = true;
   bool isPasswordVisible = false;
+  String errorEmailMessage = '';
+  String errorPasswordMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +84,7 @@ class __SignUpPageState extends State<SignUpPage> {
                       controller: userNameController,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'User Name',
+                          hintText: 'Username',
                           prefixIconColor: Colors.grey,
                           filled: true,
                           fillColor: Color.fromARGB(57, 108, 126, 241),
@@ -126,6 +129,17 @@ class __SignUpPageState extends State<SignUpPage> {
                         color: Colors.white,
                       ),
                     ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    if (errorEmailMessage != '')
+                      Text(
+                        errorEmailMessage,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 18,
+                        ),
+                      ),
                     SizedBox(
                       height: 20.0,
                     ),
@@ -197,14 +211,17 @@ class __SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-            Text(
-              isPasswordConfirmed ? '' : 'Passwords do not match',
-              style: TextStyle(
-                color: Colors.red,
+            if (errorPasswordMessage!= '' || !isPasswordConfirmed )
+              Text(
+                isPasswordConfirmed ? errorPasswordMessage : 'Passwords do not match',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 18,
+                ),
               ),
-            ),
+        
             SizedBox(
-              height: 8.0,
+              height: 20.0,
             ),
             Center(
               child: Container(
@@ -243,9 +260,22 @@ class __SignUpPageState extends State<SignUpPage> {
                       }
                     });
                     if (isPasswordConfirmed) {
-                      bool signupTest =
+                      ApiResponse signupTest =
                           await HttpServices().signUpPost(email, password);
-                      print('signup result: $signupTest');
+                      SignupError loginErrorResponse =
+                          await SignupUtils().getLoginError(signupTest);
+                      setState(() {
+                        errorEmailMessage =
+                            loginErrorResponse.errorEmailMessage;
+                        errorPasswordMessage =
+                            loginErrorResponse.errorPasswordMessage;
+                      });
+                      if (loginErrorResponse.isSignupDone) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()));
+                      }
                     }
                   },
                 ),
