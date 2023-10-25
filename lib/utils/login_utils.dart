@@ -75,4 +75,5 @@ class LoginUtils {
       prefs.setBool('rememberMe', false);
     }
   }
+
 }

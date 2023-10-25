@@ -2,16 +2,16 @@
 
 import 'package:flutter/material.dart';
 import './nfcHome.dart';
-import '../components/bottom_navigation.dart';
+import '../components/admin_bottom_navigation.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class AdminHomePage extends StatefulWidget {
+  const AdminHomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<AdminHomePage> createState() => _AdminHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _AdminHomePageState extends State<AdminHomePage> {
   bool isStartSelected = false;
   @override
   Widget build(BuildContext context) {
@@ -19,19 +19,14 @@ class _HomePageState extends State<HomePage> {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-   
         child: Scaffold(
-        
           backgroundColor: const Color.fromARGB(36, 32, 50, 1000),
-          
           appBar: PreferredSize(
               preferredSize: const Size.fromHeight(40.0),
               child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))
             ),
           body: SafeArea(
             child: SingleChildScrollView(
-            
-             
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                 
@@ -59,13 +54,12 @@ class _HomePageState extends State<HomePage> {
                   ],
             
               ),
-                  
+             
             ),
           ),
-          bottomNavigationBar:  BottomAppBarWidget(),
+          bottomNavigationBar:  AdminBottomAppBarWidget(),
         ),
-        
-     
+      
     );
   }
 }

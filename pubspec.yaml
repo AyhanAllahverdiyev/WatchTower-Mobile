@@ -63,6 +63,8 @@ flutter:
   # Asset eklemek için assets anahtarını kullanabilirsiniz.
   assets:
     - assets/images/login.png
+    - assets/images/profile_1.png
+
 
   uses-material-design: true
 
