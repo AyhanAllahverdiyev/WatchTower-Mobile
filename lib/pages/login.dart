@@ -2,10 +2,9 @@
 
 import 'package:flutter/material.dart';
 import './signUp.dart';
-import '../services/http_service.dart';
+import '../services/login_Services.dart';
 import '../utils/login_utils.dart';
 import './home.dart';
-
 
 class LoginPage extends StatefulWidget {
   static const String id = 'login_page';
@@ -25,18 +24,19 @@ class _LoginPageState extends State<LoginPage> {
   final loginUtils = LoginUtils();
 
   @override
-void initState() {
-  loadSavedCredentials();
-}
+  void initState() {
+    loadSavedCredentials();
+  }
 
-Future<void> loadSavedCredentials() async {
-  final credentials = await LoginUtils().loadSavedCredentials();
-  setState(() {
-    mailController.text = credentials.email;
-    passwordController.text = credentials.password;
-    checkedValue = credentials.rememberMe;
-  });
-}
+  Future<void> loadSavedCredentials() async {
+    final credentials = await LoginUtils().loadSavedCredentials();
+    setState(() {
+      mailController.text = credentials.email;
+      passwordController.text = credentials.password;
+      checkedValue = credentials.rememberMe;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -203,7 +203,6 @@ Future<void> loadSavedCredentials() async {
                 ),
               ),
             ),
-         
             Center(
               child: Container(
                 child: ElevatedButton(
@@ -241,16 +240,13 @@ Future<void> loadSavedCredentials() async {
                       errorPasswordMessage =
                           loginErrorResponse.errorPasswordMessage;
                     });
-                    
-                    loginUtils.saveCredentials(mail, password,checkedValue);
-                    
-                    if (loginErrorResponse.isLoginDone) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomePage()));
-                    }
 
+                    loginUtils.saveCredentials(mail, password, checkedValue);
+
+                    if (loginErrorResponse.isLoginDone) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                    }
                   },
                 ),
               ),

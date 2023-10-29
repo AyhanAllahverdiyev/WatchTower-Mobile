@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -20,10 +21,27 @@ class HttpServices {
       print('what is being sent to the server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse('http://localhost:3000/login'),
+        Uri.parse('http://192.168.1.40:3000/login'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
+      final cookies = response.headers['set-cookie'];
+
+      // Split the cookie string to individual cookies
+      final cookieList = cookies?.split(';');
+
+      // Find and print the "hwt" cookie
+      late String jwtCookieValue;
+      for (final cookie in cookieList!) {
+        if (cookie.trim().startsWith('jwt=')) {
+          final prefs = await SharedPreferences.getInstance();
+          jwtCookieValue = cookie.trim().substring(4);
+          prefs.setString('jwt', jwtCookieValue);
+          break;
+        }
+      }
+      print('======================RESPONSE======================');
+      print('JWT Cookie Value: $jwtCookieValue');
 
       final statusCode = response.statusCode;
       final responseBody = response.body;
@@ -38,6 +56,20 @@ class HttpServices {
     }
   }
 
+  Future<bool> verifyToken(String jwt) async {
+    final response = await http.post(
+      Uri.parse('http://192.168.1.40:3000/jwt-verify'),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+      body: jsonEncode({"jwt":jwt}),
+    );
+    print(response.body);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<ApiResponse> signUpPost(String email, String password) async {
     try {
       final jsonObject = {
@@ -48,7 +80,7 @@ class HttpServices {
       print('what is being sent to server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse('http://localhost:3000/signup'),
+        Uri.parse('http://192.168.1.40:3000/signup'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
