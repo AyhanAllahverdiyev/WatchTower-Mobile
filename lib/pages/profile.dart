@@ -44,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                Spacer(), // Boş alanı kapla
+               
               Text(
                 'Bu metin sabit altta',
                 style: TextStyle(

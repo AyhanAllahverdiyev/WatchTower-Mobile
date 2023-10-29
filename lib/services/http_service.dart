@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import '../utils/login_utils.dart';
 
 class ApiResponse {
   final int statusCode;
@@ -20,11 +21,13 @@ class HttpServices {
       print('what is being sent to the server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse('http://localhost:3000/login'),
+        //Uri.parse('http://localhost:3000/login'),
+        
+        Uri.parse('http://192.168.1.119:3000/login'), // ev
+        
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
-
       final statusCode = response.statusCode;
       final responseBody = response.body;
 
@@ -48,7 +51,10 @@ class HttpServices {
       print('what is being sent to server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse('http://localhost:3000/signup'),
+        //Uri.parse('http://localhost:3000/signup'),
+        Uri.parse('http://192.168.1.119:3000/signup'), //ev
+        
+
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
@@ -65,4 +71,5 @@ class HttpServices {
       return ApiResponse(-1, "Error: $e");
     }
   }
+
 }
