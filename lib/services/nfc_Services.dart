@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import './device_services.dart';
 
 class NfcService {
-  void printAllSharedPreferences() async {
+  Future<void> printAllSharedPreferences() async {
     print('================SHARED PREFERENCES================');
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -26,17 +26,10 @@ class NfcService {
     allData.forEach((key, value) {
       print("$key: $value");
     });
-    print('================SHARED PREFERENCES================');
   }
 
   Future<ApiResponse> getOrderArray() async {
-    printAllSharedPreferences();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? jwt = prefs.getString('jwt') ?? '';
-    print('JWT Value: $jwt');
-
-    print(jwt);
-    if (await HttpServices().verifyToken(jwt)) {
+    if (await HttpServices().verifyToken()) {
       try {
         print(
             '====================================Order which the system expects==================================== ');
@@ -68,7 +61,7 @@ class NfcService {
   Future<bool> tagRead(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwt = prefs.getString('jwt') ?? '';
-    if (await HttpServices().verifyToken(jwt)) {
+    if (await HttpServices().verifyToken()) {
       Completer<bool> completer = Completer<bool>();
 
       try {
@@ -136,9 +129,7 @@ class NfcService {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   void resetNfcTag() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? jwt = prefs.getString('jwt') ?? '';
-    if (await HttpServices().verifyToken(jwt)) {
+    if (await HttpServices().verifyToken()) {
       NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
         var ndef = Ndef.from(tag);
         if (ndef == null || !ndef.isWritable) {

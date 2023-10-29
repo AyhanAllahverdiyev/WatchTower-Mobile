@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'nfc_Services.dart';
 import 'package:http/http.dart' as http;
 
 class ApiResponse {
@@ -56,11 +56,13 @@ class HttpServices {
     }
   }
 
-  Future<bool> verifyToken(String jwt) async {
+  Future<bool> verifyToken( ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwt = prefs.getString('jwt') ?? '';
     final response = await http.post(
       Uri.parse('http://192.168.1.40:3000/jwt-verify'),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
-      body: jsonEncode({"jwt":jwt}),
+      body: jsonEncode({"jwt": jwt}),
     );
     print(response.body);
     if (response.statusCode == 200) {
@@ -96,5 +98,17 @@ class HttpServices {
       print("Error in db_services : $e");
       return ApiResponse(-1, "Error: $e");
     }
+  }
+
+  Future<bool> logout() async {
+    print(
+        '==========================Before LOGOUT============================');
+    await NfcService().printAllSharedPreferences();
+    await SharedPreferences.getInstance().then((prefs) {
+      prefs.remove('jwt');
+    });
+    print('==========================After LOGOUT============================');
+    NfcService().printAllSharedPreferences();
+    return Future.value(true);
   }
 }

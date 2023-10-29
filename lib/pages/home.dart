@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:watch_tower_flutter/pages/login.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
 import './nfcHome.dart';
 import '../components/bottom_navigation.dart';
@@ -79,6 +80,16 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Text('Flashlight'),
                 ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(),
+                        ));
+                  },
+                  child: Text('Logout'),
+                )
               ],
             ),
           ),

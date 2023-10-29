@@ -25,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+    resetLoginPage();
     loadSavedCredentials();
   }
 
@@ -34,6 +35,16 @@ class _LoginPageState extends State<LoginPage> {
       mailController.text = credentials.email;
       passwordController.text = credentials.password;
       checkedValue = credentials.rememberMe;
+    });
+  }
+
+  void resetLoginPage() {
+    setState(() {
+      mailController.clear();
+      passwordController.clear();
+      checkedValue = false;
+      errorEmailMessage = '';
+      errorPasswordMessage = '';
     });
   }
 
@@ -230,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
                     String mail = mailController.text;
                     String password = passwordController.text;
                     print(
-                        "//////////////////////////////////////////////////////////////////////////");
+                        "///////////////////////////////////////////////////////////////////////////////////////////////////////");
                     ApiResponse loginTest =
                         await HttpServices().loginPost(mail, password);
                     LoginError loginErrorResponse =
