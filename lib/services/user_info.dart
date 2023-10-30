@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'package:watch_tower_flutter/utils/login_utils.dart';
+
 import '../services/device_services.dart';
 
 class UserInfoService {
+    String BaseUrl = LoginUtils().baseUrl;
+
   Future<String> updateUserInfo(String jsonString) async {
     try {
       Map<String, dynamic> jsonData = jsonDecode(jsonString);

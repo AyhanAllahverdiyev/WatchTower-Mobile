@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:nfc_manager/nfc_manager.dart';
+import '../utils/login_utils.dart';
 
 class DeviceService {
+    String BaseUrl = LoginUtils().baseUrl;
+
   static const platform = MethodChannel('battery');
 
   static Future<int?> getBatteryLevel() async {

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:watch_tower_flutter/utils/login_utils.dart';
 import '../utils/payload_utils.dart';
 import 'login_Services.dart';
 import './user_info.dart';
@@ -12,6 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import './device_services.dart';
 
 class NfcService {
+  String BaseUrl = LoginUtils().baseUrl;
+
   Future<void> printAllSharedPreferences() async {
     print('================SHARED PREFERENCES================');
 
@@ -35,7 +38,7 @@ class NfcService {
             '====================================Order which the system expects==================================== ');
 
         final response = await http.get(
-          Uri.parse('http://192.168.1.153:3000/order'),
+          Uri.parse(BaseUrl + 'order'),
         );
 
         final statusCode = response.statusCode;

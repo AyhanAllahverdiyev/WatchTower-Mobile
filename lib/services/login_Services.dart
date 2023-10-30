@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:watch_tower_flutter/utils/login_utils.dart';
 import 'nfc_Services.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,7 +12,9 @@ class ApiResponse {
 }
 
 class HttpServices {
-Future<ApiResponse> loginPost(String email, String password) async {
+  String BaseUrl = LoginUtils().baseUrl;
+
+  Future<ApiResponse> loginPost(String email, String password) async {
     try {
       final jsonObject = {
         "email": email,
@@ -21,7 +24,7 @@ Future<ApiResponse> loginPost(String email, String password) async {
       print('what is being sent to the server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse('http://192.168.1.153:3000/login'),
+        Uri.parse(BaseUrl + 'login'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
@@ -53,19 +56,19 @@ Future<ApiResponse> loginPost(String email, String password) async {
         return ApiResponse(statusCode, responseBody);
       } else {
         print(response.body);
-         return ApiResponse(response.statusCode, response.body);
+        return ApiResponse(response.statusCode, response.body);
       }
     } catch (e) {
       print("Error in login post  : $e");
       return ApiResponse(-1, "Error: $e");
     }
   }
- 
-  Future<bool> verifyToken( ) async {
+
+  Future<bool> verifyToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwt = prefs.getString('jwt') ?? '';
     final response = await http.post(
-      Uri.parse('http://192.168.1.153:3000/jwt-verify'),
+      Uri.parse(BaseUrl + 'jwt-verify'),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode({"jwt": jwt}),
     );
@@ -88,7 +91,7 @@ Future<ApiResponse> loginPost(String email, String password) async {
       print('what is being sent to server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse('http://192.168.1.153:3000/signup'),
+        Uri.parse(BaseUrl + 'signup'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );

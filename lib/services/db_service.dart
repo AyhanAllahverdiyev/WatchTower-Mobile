@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../utils/login_utils.dart';
 
 class DbServices {
+  String BaseUrl = LoginUtils().baseUrl;
   Future<bool> saveToDatabase(BuildContext context, String inputString) async {
     try {
       final jsonObject = jsonDecode(inputString);
@@ -10,7 +12,7 @@ class DbServices {
 
       final response = await http.post(
         //192.168.1.153
-        Uri.parse('http://192.168.1.153:3000/logs'),
+        Uri.parse(BaseUrl + 'logs'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
@@ -29,10 +31,9 @@ class DbServices {
     }
   }
 
- 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<void> updateArray(List<String> array) async {
-    final url = 'http://192.168.1.153:3000/order';
+    final url = BaseUrl + 'order';
     print('trying to set read order : $array');
     try {
       final response = await http.post(

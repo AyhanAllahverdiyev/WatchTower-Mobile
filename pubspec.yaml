@@ -42,6 +42,8 @@ dependencies:
   google_fonts: ^6.1.0
   flutter_svg: ^2.0.7
   torch_light: ^1.0.0
+  path_provider: ^2.1.1
+  location: ^5.0.0
 
 
 dev_dependencies:

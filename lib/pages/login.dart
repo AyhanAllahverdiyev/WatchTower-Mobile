@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   bool checkedValue = false;
   final httpService = HttpServices();
   final loginUtils = LoginUtils();
-  String authorizationKey="Admin ";
+  String authorizationKey = "Admin2";
 
   @override
   void initState() {
@@ -44,7 +44,6 @@ class _LoginPageState extends State<LoginPage> {
       mailController.clear();
       passwordController.clear();
       checkedValue = false;
-    
     });
   }
 
@@ -268,81 +267,80 @@ class _LoginPageState extends State<LoginPage> {
                           MaterialPageRoute(builder: (context) => HomePage()),
                           
                         );
-                        }
                       }
-                    },
-                  ),
+                    }
+                  },
                 ),
               ),
-              Center(
-                child: SizedBox(
-                  height: 30.0,
-                  child: TextButton(
-                    child: Text(
-                      'Forgot Password?',
-                      style: TextStyle(
-                        color: Colors.lightBlueAccent,
-                        height: 1.0,
-                      ),
+            ),
+            Center(
+              child: SizedBox(
+                height: 30.0,
+                child: TextButton(
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(
+                      color: Colors.lightBlueAccent,
+                      height: 1.0,
                     ),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SignUpPage()));
-                    },
                   ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignUpPage()));
+                  },
                 ),
               ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Center(
-                child: Image(
-                  height: 250,
-                  image: AssetImage('assets/images/login.png'),
-                ),
-              ),
-            ])),
-          ),
-          bottomNavigationBar: BottomAppBar(
-            color: Colors.transparent,
-            elevation: 0,
-            child: SizedBox(
+            ),
+            SizedBox(
               height: 20.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    child: Text(
-                      "Don't have an account?",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        height: 0.05,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SignUpPage()));
-                    },
-                  ),
-                  TextButton(
-                    child: Text(
-                      'Sign up',
-                      style: TextStyle(
-                        color: Colors.lightBlueAccent,
-                        height: 0.05,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SignUpPage()));
-                    },
-                  ),
-                ],
+            ),
+            Center(
+              child: Image(
+                height: 250,
+                image: AssetImage('assets/images/login.png'),
               ),
+            ),
+          ])),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.transparent,
+          elevation: 0,
+          child: SizedBox(
+            height: 20.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  child: Text(
+                    "Don't have an account?",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      height: 0.05,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignUpPage()));
+                  },
+                ),
+                TextButton(
+                  child: Text(
+                    'Sign up',
+                    style: TextStyle(
+                      color: Colors.lightBlueAccent,
+                      height: 0.05,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignUpPage()));
+                  },
+                ),
+              ],
             ),
           ),
         ),
-   
+      ),
     );
   }
 }
