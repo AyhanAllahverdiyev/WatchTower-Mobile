@@ -11,7 +11,7 @@ class ApiResponse {
 }
 
 class HttpServices {
-  Future<ApiResponse> loginPost(String email, String password) async {
+Future<ApiResponse> loginPost(String email, String password) async {
     try {
       final jsonObject = {
         "email": email,
@@ -32,30 +32,35 @@ class HttpServices {
 
       // Find and print the "hwt" cookie
       late String jwtCookieValue;
-      for (final cookie in cookieList!) {
-        if (cookie.trim().startsWith('jwt=')) {
-          final prefs = await SharedPreferences.getInstance();
-          jwtCookieValue = cookie.trim().substring(4);
-          prefs.setString('jwt', jwtCookieValue);
-          break;
+      if (response.statusCode == 200) {
+        for (final cookie in cookieList!) {
+          if (cookie.trim().startsWith('jwt=')) {
+            final prefs = await SharedPreferences.getInstance();
+            jwtCookieValue = cookie.trim().substring(4);
+            prefs.setString('jwt', jwtCookieValue);
+            break;
+          }
         }
+        print('======================RESPONSE======================');
+        print('JWT Cookie Value: $jwtCookieValue');
+
+        final statusCode = response.statusCode;
+        final responseBody = response.body;
+
+        print('Response Status Code: $statusCode');
+        print('Response Body: $responseBody');
+
+        return ApiResponse(statusCode, responseBody);
+      } else {
+        print(response.body);
+         return ApiResponse(response.statusCode, response.body);
       }
-      print('======================RESPONSE======================');
-      print('JWT Cookie Value: $jwtCookieValue');
-
-      final statusCode = response.statusCode;
-      final responseBody = response.body;
-
-      print('Response Status Code: $statusCode');
-      print('Response Body: $responseBody');
-
-      return ApiResponse(statusCode, responseBody);
     } catch (e) {
-      print("Error in db_services : $e");
+      print("Error in login post  : $e");
       return ApiResponse(-1, "Error: $e");
     }
   }
-
+ 
   Future<bool> verifyToken( ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwt = prefs.getString('jwt') ?? '';
