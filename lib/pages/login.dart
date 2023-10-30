@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import './signUp.dart';
-import '../services/http_service.dart';
+import '../services/login_Services.dart';
 import '../utils/login_utils.dart';
 import './home.dart';
 import './admin_home.dart';
@@ -35,6 +35,15 @@ class _LoginPageState extends State<LoginPage> {
       mailController.text = credentials.email;
       passwordController.text = credentials.password;
       checkedValue = credentials.rememberMe;
+    });
+  }
+
+  void resetLoginPage() {
+    setState(() {
+      mailController.clear();
+      passwordController.clear();
+      checkedValue = false;
+    
     });
   }
 
@@ -230,6 +239,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () async {
                       String mail = mailController.text;
                       String password = passwordController.text;
+                
                       print(
                           "//////////////////////////////////////////////////////////////////////////");
                       ApiResponse loginTest =
@@ -241,9 +251,9 @@ class _LoginPageState extends State<LoginPage> {
                         errorPasswordMessage =
                             loginErrorResponse.errorPasswordMessage;
                       });
-      
+          
                       loginUtils.saveCredentials(mail, password, checkedValue);
-      
+               
                       if (loginErrorResponse.isLoginDone) {
                         if (authorizationKey == "Admin") {
                           Navigator.push(
