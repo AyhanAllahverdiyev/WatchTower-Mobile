@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   bool checkedValue = false;
   final httpService = HttpServices();
   final loginUtils = LoginUtils();
-  String authorizationKey="Admin2";
+  String authorizationKey="Admin ";
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
         child: Scaffold(
-          backgroundColor: const Color.fromARGB(36, 32, 50, 1000),
+          backgroundColor: Colors.black,
           appBar: PreferredSize(
               preferredSize: const Size.fromHeight(40.0),
               child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
@@ -263,9 +263,10 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (context) => AdminHomePage()),
                           );
                         } else {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => HomePage()),
+                          
                         );
                         }
                       }

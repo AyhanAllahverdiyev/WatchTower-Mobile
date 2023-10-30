@@ -82,6 +82,7 @@ Future<ApiResponse> loginPost(String email, String password) async {
       final jsonObject = {
         "email": email,
         "password": password,
+        "auth_level": "user",
       };
 
       print('what is being sent to server: $jsonObject');
