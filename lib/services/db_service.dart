@@ -9,7 +9,8 @@ class DbServices {
       print('what is being sent to server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse('http://192.168.1.40:3000/logs'),
+        //192.168.1.153
+        Uri.parse('http://192.168.1.153:3000/logs'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
@@ -31,7 +32,7 @@ class DbServices {
  
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<void> updateArray(List<String> array) async {
-    final url = 'http://192.168.1.40:3000/order';
+    final url = 'http://192.168.1.153:3000/order';
     print('trying to set read order : $array');
     try {
       final response = await http.post(

@@ -21,7 +21,7 @@ class HttpServices {
       print('what is being sent to the server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse('http://192.168.1.40:3000/login'),
+        Uri.parse('http://192.168.1.153:3000/login'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
@@ -60,7 +60,7 @@ class HttpServices {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwt = prefs.getString('jwt') ?? '';
     final response = await http.post(
-      Uri.parse('http://192.168.1.40:3000/jwt-verify'),
+      Uri.parse('http://192.168.1.153:3000/jwt-verify'),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode({"jwt": jwt}),
     );
@@ -82,7 +82,7 @@ class HttpServices {
       print('what is being sent to server: $jsonObject');
 
       final response = await http.post(
-        Uri.parse('http://192.168.1.40:3000/signup'),
+        Uri.parse('http://192.168.1.153:3000/signup'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
