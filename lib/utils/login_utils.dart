@@ -1,7 +1,10 @@
 // ignore_for_file: override_on_non_overriding_member
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../services/login_Services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +36,9 @@ class Credentials {
 }
 
 class LoginUtils {
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  String baseUrl = 'http://192.168.1.153:3000/';
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<LoginError> getLoginError(ApiResponse httpResponce) async {
     final jsonData = jsonDecode(httpResponce.response);
     LoginError loginError = LoginError();
@@ -63,7 +69,7 @@ class LoginUtils {
   }
 
   Future<void> saveCredentials(
-    String mail, String password, bool rememberMe) async {
+      String mail, String password, bool rememberMe) async {
     final prefs = await SharedPreferences.getInstance();
     if (rememberMe) {
       prefs.setString('email', mail);
@@ -75,5 +81,4 @@ class LoginUtils {
       prefs.setBool('rememberMe', false);
     }
   }
-
 }
