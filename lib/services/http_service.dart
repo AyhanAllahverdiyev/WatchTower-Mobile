@@ -22,9 +22,9 @@ class HttpServices {
 
       final response = await http.post(
         //Uri.parse('http://localhost:3000/login'),
-        
-        Uri.parse('http://192.168.1.119:3000/login'), // ev
-        
+
+        Uri.parse('http://192.168.1.153:3000/login'), // meet n study
+
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
