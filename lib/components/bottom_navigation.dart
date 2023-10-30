@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import '../pages/home.dart';
 import '../pages/profile.dart';
+import '../services/device_services.dart';
 
-class BottomAppBarWidget extends StatelessWidget {
+class BottomAppBarWidget extends StatefulWidget {
   const BottomAppBarWidget({Key? key}) : super(key: key);
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _BottomAppBarWidgetState createState() => _BottomAppBarWidgetState();
+}
+
+class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
+  bool isTorchPressed = false;
+  bool isStartSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +29,11 @@ class BottomAppBarWidget extends StatelessWidget {
                   icon: Icon(Icons.flashlight_on),
                   color: Colors.white,
                   iconSize: 40,
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
+                 onPressed: () async {
+                    setState(() {
+                      isTorchPressed = !isTorchPressed;
+                    });
+                    DeviceService().toggleTorch(isTorchPressed);
                   },
                 ),
                 IconButton(
