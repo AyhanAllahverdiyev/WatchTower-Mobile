@@ -3,49 +3,15 @@ import 'package:watch_tower_flutter/utils/login_utils.dart';
 import 'package:web_socket_channel/io.dart';
 import '../pages/home.dart';
 import '../pages/profile.dart';
-
 import '../pages/alert_screen.dart';
 import '../pages/alert_details.dart';
-
 
 class BottomAppBarWidget extends StatefulWidget {
   BottomAppBarWidget({Key? key}) : super(key: key);
 
   @override
-
   BottomAppBarWidgetState createState() => BottomAppBarWidgetState();
 }
-
-class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
-  final channel = IOWebSocketChannel.connect('ws://192.168.1.160:3000');
-  String message = ''; // Variable to store received messages
-
-  @override
-  void initState() {
-    super.initState();
-    // Listen to incoming WebSocket messages
-    channel.stream.listen((data) {
-      if (data is String) {
-        // If it's a string, handle it as a message
-        setState(() {
-          message = data;
-          // Handle the received message as needed
-        });
-      } else {
-        // Handle other types of data if necessary
-        String decoded = String.fromCharCodes(data);
-        print('Received data of buffer type: $decoded');
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    // Don't forget to close the WebSocket channel when the widget is disposed.
-    channel.sink.close();
-    super.dispose();
-  }
-
 
 class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   String message = ''; // Variable to store received messages
