@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   bool checkedValue = false;
   final httpService = HttpServices();
   final loginUtils = LoginUtils();
-  String authorizationKey = "Admin2";
+
 
   @override
   void initState() {
@@ -253,15 +253,17 @@ class _LoginPageState extends State<LoginPage> {
                       });
           
                       loginUtils.saveCredentials(mail, password, checkedValue);
+                      
                
                       if (loginErrorResponse.isLoginDone) {
-                        if (authorizationKey == "Admin") {
-                          Navigator.push(
+                        String authLevel = await LoginUtils().getAuthLevel();
+                        if (authLevel == "admin") {
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AdminHomePage()),
                           );
-                        } else {
+                        } else if(authLevel == "user"){
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => HomePage()),

@@ -2,21 +2,23 @@
 
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import '../components/bottom_navigation.dart';
-import '../components/nfc_block.dart';
+import '../components/admin_bottom_navigation.dart';
+import '../components/admin_nfc_block.dart';
 import '../services/nfc_Services.dart';
+import '../utils/nfc_order_utils.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
 
-class NfcHomePage extends StatefulWidget {
-  const NfcHomePage({super.key});
+class NfcOrderPage extends StatefulWidget {
+  const NfcOrderPage({super.key});
 
   @override
-  State<NfcHomePage> createState() => _NfcHomePageState();
+  State<NfcOrderPage> createState() => _NfcOrderPageState();
 }
 
-class _NfcHomePageState extends State<NfcHomePage> {
-
+class _NfcOrderPageState extends State<NfcOrderPage> {
   List<String> allowedOrderArray = [];
+  int? pressedOrderIndex;
+
   @override
   void initState() {
     _getOrderArray();
@@ -50,13 +52,13 @@ class _NfcHomePageState extends State<NfcHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for (var order in allowedOrderArray)
-                  NfcBlockWidget(order: order,isOrderDone: false),
+                  AdminNfcBlockWidget(order: order),
                 SizedBox(height: 20),
               ],
             ),
           ),
         ),
-        bottomNavigationBar: BottomAppBarWidget(),
+        bottomNavigationBar: AdminBottomAppBarWidget(),
       ),
     );
   }

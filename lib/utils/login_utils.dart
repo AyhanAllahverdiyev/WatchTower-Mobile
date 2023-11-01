@@ -1,10 +1,6 @@
 // ignore_for_file: override_on_non_overriding_member
 
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../services/login_Services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,6 +21,7 @@ class LoginError {
   setErrorPasswordMessage(String value) {
     errorPasswordMessage = value;
   }
+
 }
 
 class Credentials {
@@ -32,12 +29,15 @@ class Credentials {
   String password;
   bool rememberMe;
 
+
   Credentials(this.email, this.password, this.rememberMe);
 }
 
 class LoginUtils {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  String baseUrl = 'http://192.168.1.160:3000/';
+
+  String baseUrl = 'http://192.168.1.163:3000/';
+
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<LoginError> getLoginError(ApiResponse httpResponce) async {
     final jsonData = jsonDecode(httpResponce.response);
@@ -52,6 +52,8 @@ class LoginUtils {
     } else {
       if (jsonData.containsKey('user')) {
         loginError.setisLoginDone(true);
+        var authLevel = jsonData['auth_level'];
+        saveAuthLevel(authLevel);
       }
     }
 
@@ -81,4 +83,13 @@ class LoginUtils {
       prefs.setBool('rememberMe', false);
     }
   }
-}
+ Future<void> saveAuthLevel(String authLevel) async {
+      final prefsAuth = await SharedPreferences.getInstance();  
+      prefsAuth.setString('authLevel', authLevel);
+    } 
+  Future<String> getAuthLevel() async {
+      final prefsAuth = await SharedPreferences.getInstance();  
+      String authLevel = prefsAuth.getString('authLevel') ?? 'user';
+      return authLevel;
+    }
+}   
