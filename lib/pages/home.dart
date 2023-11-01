@@ -5,6 +5,7 @@ import 'package:watch_tower_flutter/pages/login.dart';
 import './nfcHome.dart';
 import '../components/bottom_navigation.dart';
 import '../services/nfc_Services.dart';
+import './admin_nfc_order.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -60,6 +61,12 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Text('Read tag'),
                 ),
+                ElevatedButton(    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NfcOrderPage()));
+                    } , child: Text('change order')),
               ],
             ),
           ),

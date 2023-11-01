@@ -2,12 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import '../pages/home.dart';
 import '../pages/profile.dart';
-import '../services/device_services.dart';
 
-class BottomAppBarWidget extends StatelessWidget {
+class BottomAppBarWidget extends StatefulWidget {
   BottomAppBarWidget({Key? key}) : super(key: key);
 
+  @override
+  _BottomAppBarWidgetState createState() => _BottomAppBarWidgetState();
+}
+
+class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   final channel = IOWebSocketChannel.connect('ws://192.168.1.160:3000');
+  String message = ''; // Variable to store received messages
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen to incoming WebSocket messages
+    channel.stream.listen((data) {
+      if (data is String) {
+        // If it's a string, handle it as a message
+        setState(() {
+          message = data;
+          // Handle the received message as needed
+        });
+      } else {
+        // Handle other types of data if necessary
+        String decoded = String.fromCharCodes(data);
+        print('Received data of buffer type: $decoded');
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // Don't forget to close the WebSocket channel when the widget is disposed.
+    channel.sink.close();
+    super.dispose();
+  }
 
   void sendMessage(String message) {
     channel.sink.add(message);
