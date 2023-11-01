@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
 
               children: [
+                //////Potential error in the future: the height of the SizedBox is too large depending on the device
                 SizedBox(height: 250),
                 Center(
                   child: ElevatedButton(
