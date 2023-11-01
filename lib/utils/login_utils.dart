@@ -21,7 +21,6 @@ class LoginError {
   setErrorPasswordMessage(String value) {
     errorPasswordMessage = value;
   }
-
 }
 
 class Credentials {
@@ -29,14 +28,13 @@ class Credentials {
   String password;
   bool rememberMe;
 
-
   Credentials(this.email, this.password, this.rememberMe);
 }
 
 class LoginUtils {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  String baseUrl = 'http://192.168.1.163:3000/';
+  String baseUrl = 'http://192.168.1.160:3000/';
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<LoginError> getLoginError(ApiResponse httpResponce) async {
@@ -53,7 +51,8 @@ class LoginUtils {
       if (jsonData.containsKey('user')) {
         loginError.setisLoginDone(true);
         var authLevel = jsonData['auth_level'];
-        saveAuthLevel(authLevel);
+        var user = jsonData['user'];
+        saveUserInfo(authLevel, user);
       }
     }
 
@@ -83,13 +82,25 @@ class LoginUtils {
       prefs.setBool('rememberMe', false);
     }
   }
- Future<void> saveAuthLevel(String authLevel) async {
-      final prefsAuth = await SharedPreferences.getInstance();  
-      prefsAuth.setString('authLevel', authLevel);
-    } 
+
+  Future<void> saveUserInfo(String authLevel, String user) async {
+    final prefsUser = await SharedPreferences.getInstance();
+    prefsUser.setString('authLevel', authLevel);
+    prefsUser.setString('user', user);
+  }
+
   Future<String> getAuthLevel() async {
-      final prefsAuth = await SharedPreferences.getInstance();  
-      String authLevel = prefsAuth.getString('authLevel') ?? 'user';
-      return authLevel;
-    }
-}   
+    final prefsUser = await SharedPreferences.getInstance();
+    String authLevel = prefsUser.getString('authLevel') ?? 'user';
+    String user = prefsUser.getString('user') ?? 'user';
+    print('user: $user');
+    return authLevel;
+  }
+
+  Future<String> getUserId() async {
+    final prefsUser = await SharedPreferences.getInstance();
+    String user = prefsUser.getString('user') ?? 'user';
+    print('user: $user');
+    return user;
+  }
+}
