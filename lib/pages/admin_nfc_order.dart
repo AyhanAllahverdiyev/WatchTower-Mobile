@@ -13,12 +13,14 @@ class NfcOrderPage extends StatefulWidget {
   const NfcOrderPage({super.key});
 
   @override
-  State<NfcOrderPage> createState() => _NfcOrderPageState();
+  State<NfcOrderPage> createState() => NfcOrderPageState();
 }
 
-class _NfcOrderPageState extends State<NfcOrderPage> {
+class NfcOrderPageState extends State<NfcOrderPage> {
   List<String> allowedOrderArray = [];
   int? pressedOrderIndex;
+  bool isEditing = false;
+  bool isDeleteSelected = false;
 
   @override
   void initState() {
@@ -34,6 +36,12 @@ class _NfcOrderPageState extends State<NfcOrderPage> {
     setState(() {
       allowedOrderArray = newAllowedOrderArray;
     });
+  }
+  List<String> deleteTag(List<String> array,int index)    {
+          array.removeAt(index);
+          print('allowedOrderArray: $allowedOrderArray');
+   return array;
+ 
   }
 
   @override
@@ -61,41 +69,100 @@ class _NfcOrderPageState extends State<NfcOrderPage> {
             },
             children: [
               for (var i = 0; i < allowedOrderArray.length; i++)
-                Container(
-                  key: ValueKey(allowedOrderArray[i]),
-                  child: AdminNfcBlockWidget(order: allowedOrderArray[i]),
-                ),
+               Container(
+                key: ValueKey(allowedOrderArray[i]),
+                 child: TextButton(
+                     onPressed: ()  {
+                  print('pressed delete button at index $i');
+               
+                      if(isDeleteSelected){
+                        setState(() {
+                                allowedOrderArray=deleteTag(allowedOrderArray, i);
+                        });
+                
+                        
+                      }
+                     },
+                     style: TextButton.styleFrom(
+                       backgroundColor: Color.fromARGB(57, 108, 126, 241),
+                     ),
+                     child: Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         Text(
+                           allowedOrderArray[i],
+                           style: TextStyle(fontSize: 20.0, color: Colors.white),
+                    
+                         ),
+                         if(isDeleteSelected)
+                      Icon(
+                           Icons.delete,
+                           color: Colors.red,
+                           size: 20,
+                           ),
+                         
+                       ],
+                      
+                    
+                     ),
+                   ),
+               ),
             ],
           ),
         ),
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FloatingActionButton(
-              onPressed: () async {
-                addTag newTag = await NfcOrderUtils().showAddTagDialog(context);
-                if (newTag.isConfirmed == true) {
-                   setState(() {
-                  allowedOrderArray.add(newTag.tagName);
-                });
-                }
-               
-              },
-              tooltip: 'Add Tag',
-              child: Icon(Icons.add),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                print(allowedOrderArray);
-                NfcOrderUtils().setAsDefaultReadOrder(allowedOrderArray);
-              },
-              child: Text('Save'),
-              style: ElevatedButton.styleFrom(
-                textStyle: TextStyle(fontSize: 25),
-                primary: Colors.green,
+            if (!isEditing)
+              FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    isEditing = !isEditing;
+                  });
+                },
+                child: Icon(Icons.edit),
               ),
-            ),
+            if (isEditing)
+              Column(
+                children: [
+                  FloatingActionButton(
+                    onPressed: () async {
+                      addTag newTag =
+                          await NfcOrderUtils().showAddTagDialog(context);
+                      if (newTag.isConfirmed == true) {
+                        setState(() {
+                          allowedOrderArray.add(newTag.tagName);
+                        });
+                      }
+                    },
+                    tooltip: 'Add Tag',
+                    child: Icon(Icons.add),
+                  ),
+                  SizedBox(height: 10),
+                  FloatingActionButton(
+                      onPressed: () {
+                        setState(() {
+                          isDeleteSelected = !isDeleteSelected;
+              
+                        });
+                      },
+                      tooltip: 'Delete',
+                      backgroundColor: Colors.red,
+                      child: Icon(Icons.delete)),
+                  SizedBox(height: 10),
+                  FloatingActionButton(
+                    onPressed: () {
+                      setState(() {
+                        isEditing = !isEditing;
+                      });
+                      NfcOrderUtils().setAsDefaultReadOrder(allowedOrderArray);
+                    },
+                    tooltip: 'Save',
+                    backgroundColor: Colors.green,
+                    child: Icon(Icons.save),
+                  ),
+                ],
+              ),
           ],
         ),
         bottomNavigationBar: AdminBottomAppBarWidget(),
