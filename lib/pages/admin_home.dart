@@ -50,16 +50,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     ),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ));
-                  },
-                  child: Text('Logout'),
-                )
               ],
             ),
           ),
