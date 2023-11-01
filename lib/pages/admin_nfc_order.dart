@@ -7,6 +7,7 @@ import '../components/admin_nfc_block.dart';
 import '../services/nfc_Services.dart';
 import '../utils/nfc_order_utils.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
+import '../services/db_service.dart';
 
 class NfcOrderPage extends StatefulWidget {
   const NfcOrderPage({super.key});
@@ -46,17 +47,56 @@ class _NfcOrderPageState extends State<NfcOrderPage> {
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(40.0),
             child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
-        body: SingleChildScrollView(
-          child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (var order in allowedOrderArray)
-                  AdminNfcBlockWidget(order: order),
-                SizedBox(height: 20),
-              ],
-            ),
+        body: Container(
+          margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          child: ReorderableListView(
+            onReorder: (int oldIndex, int newIndex) {
+              setState(() {
+                if (newIndex > oldIndex) {
+                  newIndex -= 1;
+                }
+                final String item = allowedOrderArray.removeAt(oldIndex);
+                allowedOrderArray.insert(newIndex, item);
+              });
+            },
+            children: [
+              for (var i = 0; i < allowedOrderArray.length; i++)
+                Container(
+                  key: ValueKey(allowedOrderArray[i]),
+                  child: AdminNfcBlockWidget(order: allowedOrderArray[i]),
+                ),
+            ],
           ),
+        ),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: () async {
+                addTag newTag = await NfcOrderUtils().showAddTagDialog(context);
+                if (newTag.isConfirmed == true) {
+                   setState(() {
+                  allowedOrderArray.add(newTag.tagName);
+                });
+                }
+               
+              },
+              tooltip: 'Add Tag',
+              child: Icon(Icons.add),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                print(allowedOrderArray);
+                NfcOrderUtils().setAsDefaultReadOrder(allowedOrderArray);
+              },
+              child: Text('Save'),
+              style: ElevatedButton.styleFrom(
+                textStyle: TextStyle(fontSize: 25),
+                primary: Colors.green,
+              ),
+            ),
+          ],
         ),
         bottomNavigationBar: AdminBottomAppBarWidget(),
       ),

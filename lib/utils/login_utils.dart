@@ -52,7 +52,9 @@ class LoginUtils {
         loginError.setisLoginDone(true);
         var authLevel = jsonData['auth_level'];
         var user = jsonData['user'];
+
         saveUserInfo(authLevel, user);
+
       }
     }
 
@@ -83,24 +85,20 @@ class LoginUtils {
     }
   }
 
-  Future<void> saveUserInfo(String authLevel, String user) async {
-    final prefsUser = await SharedPreferences.getInstance();
-    prefsUser.setString('authLevel', authLevel);
-    prefsUser.setString('user', user);
-  }
-
+ Future<void> saveUserInfo(String authLevel,String user) async {
+      final prefsUser= await SharedPreferences.getInstance();  
+      prefsUser.setString('authLevel', authLevel);
+      prefsUser.setString('user', user);
+    } 
   Future<String> getAuthLevel() async {
-    final prefsUser = await SharedPreferences.getInstance();
-    String authLevel = prefsUser.getString('authLevel') ?? 'user';
-    String user = prefsUser.getString('user') ?? 'user';
-    print('user: $user');
-    return authLevel;
-  }
+      final prefsUser = await SharedPreferences.getInstance();  
+      String authLevel = prefsUser.getString('authLevel') ?? 'user';
+      return authLevel;
+    }
+      Future<String> getUserId() async {
+      final prefsUser = await SharedPreferences.getInstance();  
+      String user = prefsUser.getString('user') ?? 'user';
+      return user;
+    }
+}   
 
-  Future<String> getUserId() async {
-    final prefsUser = await SharedPreferences.getInstance();
-    String user = prefsUser.getString('user') ?? 'user';
-    print('user: $user');
-    return user;
-  }
-}

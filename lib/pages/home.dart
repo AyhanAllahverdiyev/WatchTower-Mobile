@@ -5,7 +5,7 @@ import 'package:watch_tower_flutter/pages/login.dart';
 import './nfcHome.dart';
 import '../components/bottom_navigation.dart';
 import '../services/nfc_Services.dart';
-
+import './admin_nfc_order.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,7 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -23,17 +22,14 @@ class _HomePageState extends State<HomePage> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-        backgroundColor:   Colors.black,
+        backgroundColor: Colors.black,
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(40.0),
-            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))
-          ),
+            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
         body: SingleChildScrollView(
-        
           child: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-
               children: [
                 //////Potential error in the future: the height of the SizedBox is too large depending on the device
                 SizedBox(height: 250),
@@ -65,17 +61,12 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Text('Read tag'),
                 ),
-      
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ));
-                  },
-                  child: Text('Logout'),
-                )
+                ElevatedButton(    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NfcOrderPage()));
+                    } , child: Text('change order')),
               ],
             ),
           ),
