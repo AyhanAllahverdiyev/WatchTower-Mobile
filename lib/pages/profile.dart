@@ -22,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Expanded(
+
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -54,7 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
                 ],
               ),
-            ),
+
           ),
         ),
    
