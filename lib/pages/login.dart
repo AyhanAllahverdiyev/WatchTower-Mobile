@@ -257,9 +257,8 @@ class _LoginPageState extends State<LoginPage> {
                
                       if (loginErrorResponse.isLoginDone) {
                         String authLevel = await LoginUtils().getAuthLevel();
-                        print(authLevel );
                         if (authLevel == "admin") {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AdminHomePage()),

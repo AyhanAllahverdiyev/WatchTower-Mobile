@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use, sort_child_properties_last
 
 import 'package:flutter/material.dart';
-import './nfcHome.dart';
+import './admin_nfc_order.dart';
 import '../components/admin_bottom_navigation.dart';
 
 class AdminHomePage extends StatefulWidget {
@@ -38,16 +38,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         style: ElevatedButton.styleFrom(
                           primary: Colors.blue,
                           onPrimary: Colors.white,
-                          padding: EdgeInsets.all(65),
+                          padding: EdgeInsets.all(85),
                           shape: CircleBorder()
                         ),
                       onPressed: () {
                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => NfcHomePage()));
+                              MaterialPageRoute(builder: (context) => NfcOrderPage()));
                       },
                       child:  Text(
-                        'Start Tour',
-                        style: TextStyle(fontSize: 30.0),
+                        "Change the Order",
+                        style: TextStyle(fontSize: 20.0),
                         ), 
                      ),
                    )
