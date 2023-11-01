@@ -21,14 +21,12 @@ class LoginError {
   setErrorPasswordMessage(String value) {
     errorPasswordMessage = value;
   }
-
 }
 
 class Credentials {
   String email;
   String password;
   bool rememberMe;
-
 
   Credentials(this.email, this.password, this.rememberMe);
 }
@@ -54,7 +52,9 @@ class LoginUtils {
         loginError.setisLoginDone(true);
         var authLevel = jsonData['auth_level'];
         var user = jsonData['user'];
-        saveUserInfo(authLevel,user);
+
+        saveUserInfo(authLevel, user);
+
       }
     }
 
@@ -84,6 +84,7 @@ class LoginUtils {
       prefs.setBool('rememberMe', false);
     }
   }
+
  Future<void> saveUserInfo(String authLevel,String user) async {
       final prefsUser= await SharedPreferences.getInstance();  
       prefsUser.setString('authLevel', authLevel);
@@ -100,3 +101,4 @@ class LoginUtils {
       return user;
     }
 }   
+
