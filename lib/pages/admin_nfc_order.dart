@@ -68,24 +68,31 @@ class _NfcOrderPageState extends State<NfcOrderPage> {
             ],
           ),
         ),
-        
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             FloatingActionButton(
-              onPressed: () {},
-              tooltip: 'Add Tile',
+              onPressed: () async {
+                addTag newTag = await NfcOrderUtils().showAddTagDialog(context);
+                if (newTag.isConfirmed == true) {
+                   setState(() {
+                  allowedOrderArray.add(newTag.tagName);
+                });
+                }
+               
+              },
+              tooltip: 'Add Tag',
               child: Icon(Icons.add),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 print(allowedOrderArray);
-                DbServices().updateArray(allowedOrderArray);
+                NfcOrderUtils().setAsDefaultReadOrder(allowedOrderArray);
               },
               child: Text('Save'),
               style: ElevatedButton.styleFrom(
-              textStyle: TextStyle(fontSize: 25),
+                textStyle: TextStyle(fontSize: 25),
                 primary: Colors.green,
               ),
             ),
