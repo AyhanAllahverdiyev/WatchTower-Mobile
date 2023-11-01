@@ -45,7 +45,8 @@ dependencies:
   path_provider: ^2.1.1
   location: ^5.0.0
   web_socket_channel: ^2.4.0
-
+  audioplayers: ^5.2.0
+  assets_audio_player: ^3.0.8
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +70,7 @@ flutter:
   assets:
     - assets/images/login.png
     - assets/images/profile_1.png
+    - assets/sounds/alert.mp3
 
 
   uses-material-design: true

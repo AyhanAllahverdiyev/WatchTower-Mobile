@@ -8,7 +8,7 @@ import '../pages/alert_details.dart';
 
 class BottomAppBarWidget extends StatefulWidget {
   BottomAppBarWidget({Key? key}) : super(key: key);
- 
+
   @override
   BottomAppBarWidgetState createState() => BottomAppBarWidgetState();
 }
@@ -74,8 +74,7 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               color: Colors.white,
               iconSize: 40,
               onPressed: () {
-                                // Send a WebSocket message when the button is pressed
-                sendMessage("Hello, WebSocket Server!");
+                // Send a WebSocket message when the button is pressed
                 // Navigate to HomePage or perform any other action
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => HomePage()));
