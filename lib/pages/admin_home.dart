@@ -20,7 +20,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
         child: Scaffold(
-          backgroundColor: const Color.fromARGB(36, 32, 50, 1000),
+          backgroundColor: Colors.black,
           appBar: PreferredSize(
               preferredSize: const Size.fromHeight(40.0),
               child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))

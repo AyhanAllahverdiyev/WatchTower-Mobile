@@ -2,11 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/pages/login.dart';
-import 'package:watch_tower_flutter/services/login_Services.dart';
 import './nfcHome.dart';
 import '../components/bottom_navigation.dart';
 import '../services/nfc_Services.dart';
-import '../services/device_services.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,8 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isTorchPressed = false;
-  bool isStartSelected = false;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -25,7 +23,7 @@ class _HomePageState extends State<HomePage> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(36, 32, 50, 1000),
+        backgroundColor:   Colors.black,
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(40.0),
             child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))
@@ -61,29 +59,13 @@ class _HomePageState extends State<HomePage> {
                 ElevatedButton(
                   onPressed: () async {
                     print(
-                        '==============================This is the function to get the order array==============================');
-                    ApiResponse response = await NfcService().getOrderArray();
-                  },
-                  child: Text('Get Order Array'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    print(
                         '==============================CONTENTS OF NFC TAG==============================');
                     bool readTagResult = await NfcService().tagRead(context);
                     print("tag read result:$readTagResult");
                   },
                   child: Text('Read tag'),
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    setState(() {
-                      isTorchPressed = !isTorchPressed;
-                    });
-                    DeviceService().toggleTorch(isTorchPressed);
-                  },
-                  child: Text('Flashlight'),
-                ),
+      
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushReplacement(

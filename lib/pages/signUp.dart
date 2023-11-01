@@ -30,7 +30,7 @@ class __SignUpPageState extends State<SignUpPage> {
       },
   
         child: Scaffold(
-          backgroundColor: const Color.fromARGB(36, 32, 50, 1000),
+          backgroundColor: Colors.black,
           appBar: PreferredSize(
               preferredSize: const Size.fromHeight(40.0),
               child: AppBar(

@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 
 class NfcBlockWidget extends StatelessWidget {
-  const NfcBlockWidget({Key? key}) : super(key: key);
+  final String order;
+  final bool isOrderDone;
+  const NfcBlockWidget({Key? key, required this.order,required this.isOrderDone}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +25,11 @@ class NfcBlockWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Welcome to the',
-                      style: TextStyle(fontSize: 30.0, color: Colors.black),
+                      order,
+                      style: TextStyle(fontSize: 28.0, color: Colors.white),
                     ),
-                    Icon(Icons.location_on),
+                    isOrderDone?Icon(Icons.check_circle,color: Colors.green,):
+                    Icon(Icons.remove_circle,color: Colors.red,),
                   ],
                 ),
               ),

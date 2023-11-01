@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import '../pages/home.dart';
 import '../pages/profile.dart';
+import '../services/device_services.dart';
 
 class BottomAppBarWidget extends StatelessWidget {
   BottomAppBarWidget({Key? key}) : super(key: key);
