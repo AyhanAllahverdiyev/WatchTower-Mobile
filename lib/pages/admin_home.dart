@@ -12,7 +12,7 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
-  bool isStartSelected = false;
+  bool isStartSelected = false; 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
