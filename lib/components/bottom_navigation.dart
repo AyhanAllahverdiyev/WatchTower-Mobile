@@ -11,10 +11,10 @@ class BottomAppBarWidget extends StatefulWidget {
   const BottomAppBarWidget({Key? key}) : super(key: key);
 
   @override
-  _BottomAppBarWidgetState createState() => _BottomAppBarWidgetState();
+  BottomAppBarWidgetState createState() => BottomAppBarWidgetState();
 }
 
-class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
+class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   bool isTorchPressed = false;
   String message = ''; // Variable to store received messages
   final channel = IOWebSocketChannel.connect('ws://192.168.1.160:3000');

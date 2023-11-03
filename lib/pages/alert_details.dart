@@ -3,6 +3,7 @@ import 'package:watch_tower_flutter/components/bottom_navigation.dart';
 import 'package:web_socket_channel/io.dart';
 import '../components/admin_bottom_navigation.dart';
 import '../utils/login_utils.dart';
+import '../components/bottom_navigation.dart';
 
 class AlertDetails extends StatefulWidget {
   const AlertDetails({Key? key}) : super(key: key);
@@ -51,6 +52,7 @@ class _AlertDetailsState extends State<AlertDetails> {
                 };
                 // Send a WebSocket message when the button is pressed
                 // BottomAppBarWidgetState().sendMessage(data.toString());
+                BottomAppBarWidgetState().sendMessage(data.toString());
                 Navigator.pop(context);
               },
               child: Text('Submit'),
