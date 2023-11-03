@@ -52,6 +52,32 @@ class _NfcHomePageState extends State<NfcHomePage> {
                 for (var order in allowedOrderArray)
                   NfcBlockWidget(order: order, isOrderDone: false),
                 SizedBox(height: 20),
+                 ElevatedButton(
+                  onPressed: () async {
+                    print(
+                        '==============================CONTENTS OF NFC TAG==============================');
+                    bool readTagResult = await NfcService().tagRead(context);
+                    print("tag read result:$readTagResult");
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left:20,right:20,top:10,bottom:10),
+                    child: Text('Read tag',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(28.0),
+                      ),
+                      
+                  
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

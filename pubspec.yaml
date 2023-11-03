@@ -48,6 +48,7 @@ dependencies:
   audioplayers: ^5.2.0
   assets_audio_player: ^3.0.8
   quickalert: ^1.0.2
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +72,7 @@ flutter:
   assets:
     - assets/images/login.png
     - assets/images/profile_1.png
+    - assets/images/nfc_reader.png
     - assets/sounds/alert.mp3
 
 

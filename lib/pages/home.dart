@@ -7,6 +7,8 @@ import './nfcHome.dart';
 import '../components/bottom_navigation.dart';
 import '../services/nfc_Services.dart';
 import './admin_nfc_order.dart';
+import '../components/custom_card.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,48 +36,113 @@ class _HomePageState extends State<HomePage> {
             child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
         body: SingleChildScrollView(
           child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //////Potential error in the future: the height of the SizedBox is too large depending on the device
-                SizedBox(height: 250),
-                Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.blue,
-                        onPrimary: Colors.white,
-                        padding: EdgeInsets.all(65),
-                        shape: CircleBorder()),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NfcHomePage()));
-                    },
-                    child: Text(
-                      'Start Tour',
-                      style: TextStyle(fontSize: 30.0),
-                    ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Quick Access",
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    print(
-                        '==============================CONTENTS OF NFC TAG==============================');
-                    bool readTagResult = await NfcService().tagRead(context);
-                    print("tag read result:$readTagResult");
-                  },
-                  child: Text('Read tag'),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NfcOrderPage()));
-                    },
-                    child: Text('change order')),
-              ],
+                  SizedBox(height: 20),
+                  Card(
+                      color: Colors.purple.shade800,
+                      clipBehavior: Clip.hardEdge,
+                      shadowColor: Colors.blueGrey,
+                      child: InkWell(
+                        splashColor: Colors.grey.withAlpha(90),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NfcHomePage()));
+                        },
+                        child: Container(
+                          height: 200,
+                          width: MediaQuery.of(context).size.width - 48,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 5),
+                                      child: Text("Start Tour!",
+                                          style: TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white)),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 15),
+                                      child: Text("Scan NFC Tags Now",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Image(
+                                image:
+                                    AssetImage('assets/images/nfc_reader.png'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )),
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      CustomCard(
+                          text: "First Card",
+                          title: "Card 1",
+                          imgRoute: "assets/images/nfc_reader.png",
+                          customWidth: 'half'),
+                      CustomCard(
+                          text: "Second Card",
+                          title: "Card 2",
+                          imgRoute: "assets/images/nfc_reader.png",
+                          customWidth: 'half'),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  CarouselSlider(
+                    options: CarouselOptions(
+                      autoPlay: true,
+                      aspectRatio: 2.0,
+                      enlargeCenterPage: false,
+                    ),
+                    items: [
+                      CustomCard(
+                          text: "First Card",
+                          title: "Card 1",
+                          imgRoute: "assets/images/nfc_reader.png",
+                          customWidth: 'full'),
+                      CustomCard(
+                          text: "Second Card",
+                          title: "Card 2",
+                          imgRoute: "assets/images/nfc_reader.png",
+                          customWidth: 'full'),
+                      CustomCard(
+                          text: "Third Card",
+                          title: "Card 3",
+                          imgRoute: "assets/images/nfc_reader.png",
+                          customWidth: 'full'),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
