@@ -32,7 +32,7 @@ class DbServices {
   }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  Future<void> updateArray(List<String> array) async {
+  Future<int> updateArray(List<String> array) async {
     final url = BaseUrl + 'order';
     print('trying to set read order : $array');
     try {
@@ -49,8 +49,11 @@ class DbServices {
       } else {
         print('OK: ${response.body}');
       }
+      return response.statusCode;
     } catch (e) {
       print("Error in db_services: $e");
+      return 500;
     }
+    
   }
 }

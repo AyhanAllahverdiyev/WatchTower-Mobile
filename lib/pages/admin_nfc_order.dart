@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:watch_tower_flutter/pages/admin_home.dart';
 import 'dart:convert';
 import '../components/admin_bottom_navigation.dart';
 import '../components/admin_nfc_block.dart';
 import '../services/nfc_Services.dart';
-import '../utils/nfc_order_utils.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
 import '../services/db_service.dart';
 import '../utils/alert_utils.dart';
@@ -23,11 +23,12 @@ class NfcOrderPageState extends State<NfcOrderPage> {
   int? pressedOrderIndex;
   bool isEditing = false;
   bool isDeleteSelected = false;
+  int dbResponse = 500;
 
   @override
   void initState() {
     super.initState();
-     _getOrderArray();
+    _getOrderArray();
   }
 
   Future _getOrderArray() async {
@@ -40,11 +41,11 @@ class NfcOrderPageState extends State<NfcOrderPage> {
       allowedOrderArray = newAllowedOrderArray;
     });
   }
-  List<String> deleteTag(List<String> array,int index)    {
-          array.removeAt(index);
-          print('allowedOrderArray: $allowedOrderArray');
-   return array;
- 
+
+  List<String> deleteTag(List<String> array, int index) {
+    array.removeAt(index);
+    print('allowedOrderArray: $allowedOrderArray');
+    return array;
   }
 
   @override
@@ -52,6 +53,10 @@ class NfcOrderPageState extends State<NfcOrderPage> {
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
+        setState(() {
+          isEditing = false;
+        });
+
       },
       child: Scaffold(
         backgroundColor: Colors.black,
@@ -72,44 +77,38 @@ class NfcOrderPageState extends State<NfcOrderPage> {
             },
             children: [
               for (var i = 0; i < allowedOrderArray.length; i++)
-               Container(
-                key: ValueKey(allowedOrderArray[i]),
-                 child: TextButton(
-                     onPressed: ()  {
-                  print('pressed delete button at index $i');
-               
-                      if(isDeleteSelected){
+                Container(
+                  key: ValueKey(allowedOrderArray[i]),
+                  child: TextButton(
+                    onPressed: () {
+                      print('pressed delete button at index $i');
+
+                      if (isDeleteSelected) {
                         setState(() {
-                                allowedOrderArray=deleteTag(allowedOrderArray, i);
+                          allowedOrderArray = deleteTag(allowedOrderArray, i);
                         });
-                
-                        
                       }
-                     },
-                     style: TextButton.styleFrom(
-                       backgroundColor: Color.fromARGB(57, 108, 126, 241),
-                     ),
-                     child: Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                       children: [
-                         Text(
-                           allowedOrderArray[i],
-                           style: TextStyle(fontSize: 20.0, color: Colors.white),
-                    
-                         ),
-                         if(isDeleteSelected)
-                      Icon(
-                           Icons.delete,
-                           color: Colors.red,
-                           size: 20,
-                           ),
-                         
-                       ],
-                      
-                    
-                     ),
-                   ),
-               ),
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Color.fromARGB(57, 108, 126, 241),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          allowedOrderArray[i],
+                          style: TextStyle(fontSize: 20.0, color: Colors.white),
+                        ),
+                        if (isDeleteSelected)
+                          Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                            size: 20,
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
@@ -123,19 +122,23 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                     isEditing = !isEditing;
                   });
                 },
-                child: Icon(Icons.edit),
+                child: Icon(Icons.edit, color: Colors.black),
+                backgroundColor: Colors.white,
               ),
             if (isEditing)
               Column(
                 children: [
                   FloatingActionButton(
                     onPressed: () async {
-                      addTag newTag =
-                          await NfcOrderUtils().showAddTagDialog(context);
-                      if (newTag.isConfirmed == true) {
+                      addNewTag newTag =
+                         await AlertUtils().addNewTagDialog(context);
+                      if (newTag.isConfirmed == true && newTag.tagName != '' ) {
                         setState(() {
                           allowedOrderArray.add(newTag.tagName);
                         });
+                      }
+                      if (newTag.isConfirmed==true && newTag.tagName == '') {
+                        await AlertUtils().errorAlert('Tag Name Cannot Be Empty!', context);
                       }
                     },
                     tooltip: 'Add Tag',
@@ -146,7 +149,6 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                       onPressed: () {
                         setState(() {
                           isDeleteSelected = !isDeleteSelected;
-              
                         });
                       },
                       tooltip: 'Delete',
@@ -154,17 +156,29 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                       child: Icon(Icons.delete)),
                   SizedBox(height: 10),
                   FloatingActionButton(
-                    onPressed: () {
-                      setState(() {
-                        isEditing = !isEditing;
-                      });
-                      NfcOrderUtils().setAsDefaultReadOrder(allowedOrderArray);
-                      AlertUtils().SuccessfullySavedAlert(context);
+                    onPressed: () async {
+                      dbResponse = await DbServices().updateArray(allowedOrderArray);
+                      if (dbResponse <= 399) {
+                        if (AlertUtils().isDialogOpen == false) {
+                          await AlertUtils()
+                              .successfulAlert('Successfully Saved!', context);
+                        }
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AdminHomePage()));
+                      } else if (dbResponse == 500) {
+                        if (AlertUtils().isDialogOpen == false) {
+                          await AlertUtils()
+                              .errorAlert('Internal Server Error!', context);
+                        }
+                      }
                     },
                     tooltip: 'Save',
                     backgroundColor: Colors.green,
                     child: Icon(Icons.save),
                   ),
+               
                 ],
               ),
           ],
