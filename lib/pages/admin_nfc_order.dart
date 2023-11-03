@@ -160,13 +160,14 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                       dbResponse = await DbServices().updateArray(allowedOrderArray);
                       if (dbResponse <= 399) {
                         if (AlertUtils().isDialogOpen == false) {
-                          await AlertUtils()
-                              .successfulAlert('Successfully Saved!', context);
+                          
+                              await AlertUtils().successfulAlert('Successfully Saved!', context);
+                              setState(() {
+                                isEditing = false;
+                              });                       
+                              
                         }
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AdminHomePage()));
+                       
                       } else if (dbResponse == 500) {
                         if (AlertUtils().isDialogOpen == false) {
                           await AlertUtils()
