@@ -50,7 +50,7 @@ class _AlertDetailsState extends State<AlertDetails> {
                   'id': await LoginUtils().getUserId(),
                 };
                 // Send a WebSocket message when the button is pressed
-                BottomAppBarWidgetState().sendMessage(data.toString());
+                // BottomAppBarWidgetState().sendMessage(data.toString());
                 Navigator.pop(context);
               },
               child: Text('Submit'),

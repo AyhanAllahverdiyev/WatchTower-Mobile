@@ -6,6 +6,7 @@ import '../services/login_Services.dart';
 import '../utils/login_utils.dart';
 import './home.dart';
 import './admin_home.dart';
+import "../utils/alarm_utils.dart";
 
 class LoginPage extends StatefulWidget {
   static const String id = 'login_page';
@@ -24,11 +25,11 @@ class _LoginPageState extends State<LoginPage> {
   final httpService = HttpServices();
   final loginUtils = LoginUtils();
 
-
   @override
   void initState() {
     loadSavedCredentials();
-  }
+   }
+  
 
   Future<void> loadSavedCredentials() async {
     final credentials = await LoginUtils().loadSavedCredentials();
@@ -53,221 +54,219 @@ class _LoginPageState extends State<LoginPage> {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(40.0),
-              child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
-          body: SingleChildScrollView(
-            child: SafeArea(
-                child: Column(children: [
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.only(
-                      top: 20, bottom: 8, left: 20, right: 20),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 15.0,
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Login',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 45,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'E-mail',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      TextField(
-                        controller: mailController,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Mail',
-                            prefixIconColor: Colors.grey,
-                            filled: true,
-                            fillColor: Color.fromARGB(57, 108, 126, 241),
-                            prefixIcon: Icon(Icons.person_rounded),
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                            )),
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(40.0),
+            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
+        body: SingleChildScrollView(
+          child: SafeArea(
+              child: Column(children: [
+            Center(
+              child: Container(
+                padding: const EdgeInsets.only(
+                    top: 20, bottom: 8, left: 20, right: 20),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Login',
                         style: TextStyle(
                           color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 45,
                         ),
                       ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      if (errorEmailMessage != '')
-                        Text(
-                          errorEmailMessage,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 18,
-                          ),
-                        ),
-                      SizedBox(
-                        height: 18.0,
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Password',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 18,
-                          ),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'E-mail',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 18,
                         ),
                       ),
-                      SizedBox(
-                        height: 10.0,
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextField(
+                      controller: mailController,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Mail',
+                          prefixIconColor: Colors.grey,
+                          filled: true,
+                          fillColor: Color.fromARGB(57, 108, 126, 241),
+                          prefixIcon: Icon(Icons.person_rounded),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          )),
+                      style: TextStyle(
+                        color: Colors.white,
                       ),
-                      TextField(
-                        obscureText: !isPasswordVisible,
-                        controller: passwordController,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Password',
-                            prefixIconColor: Colors.grey,
-                            suffixIconColor: Colors.grey,
-                            filled: true,
-                            fillColor: Color.fromARGB(57, 108, 126, 241),
-                            prefixIcon: Icon(Icons.lock),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                isPasswordVisible
-                                    ? Icons.visibility_off
-                                    : Icons.remove_red_eye_outlined,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  isPasswordVisible = !isPasswordVisible;
-                                });
-                              },
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    if (errorEmailMessage != '')
+                      Text(
+                        errorEmailMessage,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 18,
+                        ),
+                      ),
+                    SizedBox(
+                      height: 18.0,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Password',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextField(
+                      obscureText: !isPasswordVisible,
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Password',
+                          prefixIconColor: Colors.grey,
+                          suffixIconColor: Colors.grey,
+                          filled: true,
+                          fillColor: Color.fromARGB(57, 108, 126, 241),
+                          prefixIcon: Icon(Icons.lock),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              isPasswordVisible
+                                  ? Icons.visibility_off
+                                  : Icons.remove_red_eye_outlined,
                             ),
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                            )),
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
+                            onPressed: () {
+                              setState(() {
+                                isPasswordVisible = !isPasswordVisible;
+                              });
+                            },
+                          ),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          )),
+                      style: TextStyle(
+                        color: Colors.white,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              if (errorPasswordMessage != '')
-                Text(
-                  errorPasswordMessage,
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 18,
+            ),
+            if (errorPasswordMessage != '')
+              Text(
+                errorPasswordMessage,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 18,
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  primary: Colors.grey,
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
                   ),
                 ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    primary: Colors.grey,
-                    textStyle: const TextStyle(
-                      fontSize: 16,
+                onPressed: () {
+                  setState(() {
+                    checkedValue = !checkedValue;
+                  });
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      checkedValue
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
+                      size: 16,
                       color: Colors.grey,
                     ),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      checkedValue = !checkedValue;
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Icon(
-                        checkedValue
-                            ? Icons.check_box
-                            : Icons.check_box_outline_blank,
-                        size: 16,
-                        color: Colors.grey,
-                      ),
-                      Text(' Remember me'),
-                    ],
-                  ),
+                    Text(' Remember me'),
+                  ],
                 ),
               ),
-              Center(
-                child: Container(
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.pressed)) {
-                            return Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.5);
-                          }
-                          return null;
-                        },
-                      ),
+            ),
+            Center(
+              child: Container(
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.pressed)) {
+                          return Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.5);
+                        }
+                        return null;
+                      },
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: const Text(
-                        'LOGIN',
-                        style: TextStyle(),
-                      ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Text(
+                      'LOGIN',
+                      style: TextStyle(),
                     ),
-                    onPressed: () async {
-                      String mail = mailController.text;
-                      String password = passwordController.text;
-                
-                      print(
-                          "//////////////////////////////////////////////////////////////////////////");
-                      ApiResponse loginTest =
-                          await HttpServices().loginPost(mail, password);
-                      LoginError loginErrorResponse =
-                          await LoginUtils().getLoginError(loginTest);
-                      setState(() {
-                        errorEmailMessage = loginErrorResponse.errorEmailMessage;
-                        errorPasswordMessage =
-                            loginErrorResponse.errorPasswordMessage;
-                      });
-          
-                      loginUtils.saveCredentials(mail, password, checkedValue);
-                      
-               
-                      if (loginErrorResponse.isLoginDone) {
-                        String authLevel = await LoginUtils().getAuthLevel();
-                        if (authLevel == "admin") {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AdminHomePage()),
-                          );
-                        } else if(authLevel == "user"){
+                  ),
+                  onPressed: () async {
+                    String mail = mailController.text;
+                    String password = passwordController.text;
+
+                    print(
+                        "//////////////////////////////////////////////////////////////////////////");
+                    ApiResponse loginTest =
+                        await HttpServices().loginPost(mail, password);
+                    LoginError loginErrorResponse =
+                        await LoginUtils().getLoginError(loginTest);
+                    setState(() {
+                      errorEmailMessage = loginErrorResponse.errorEmailMessage;
+                      errorPasswordMessage =
+                          loginErrorResponse.errorPasswordMessage;
+                    });
+
+                    loginUtils.saveCredentials(mail, password, checkedValue);
+
+                    if (loginErrorResponse.isLoginDone) {
+                      String authLevel = await LoginUtils().getAuthLevel();
+                      if (authLevel == "admin") {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AdminHomePage()),
+                        );
+                      } else if (authLevel == "user") {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => HomePage()),
-                          
                         );
                       }
                     }

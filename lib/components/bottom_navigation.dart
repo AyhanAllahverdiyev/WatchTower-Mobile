@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:watch_tower_flutter/services/device_services.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import 'package:web_socket_channel/io.dart';
 import '../pages/home.dart';
@@ -7,13 +8,14 @@ import '../pages/alert_screen.dart';
 import '../pages/alert_details.dart';
 
 class BottomAppBarWidget extends StatefulWidget {
-  BottomAppBarWidget({Key? key}) : super(key: key);
+  const BottomAppBarWidget({Key? key}) : super(key: key);
 
   @override
-  BottomAppBarWidgetState createState() => BottomAppBarWidgetState();
+  _BottomAppBarWidgetState createState() => _BottomAppBarWidgetState();
 }
 
-class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
+class _BottomAppBarWidgetState extends State<BottomAppBarWidget> {
+  bool isTorchPressed = false;
   String message = ''; // Variable to store received messages
   final channel = IOWebSocketChannel.connect('ws://192.168.1.160:3000');
   void sendMessage(String message) {
@@ -73,11 +75,11 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               icon: Icon(Icons.flashlight_on),
               color: Colors.white,
               iconSize: 40,
-              onPressed: () {
-                // Send a WebSocket message when the button is pressed
-                // Navigate to HomePage or perform any other action
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
+              onPressed: () async {
+                setState(() {
+                  isTorchPressed = !isTorchPressed;
+                });
+                DeviceService().toggleTorch(isTorchPressed);
               },
             ),
             IconButton(
@@ -103,8 +105,7 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               color: Colors.white,
               iconSize: 40,
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                print('pressed');
               },
             ),
             IconButton(

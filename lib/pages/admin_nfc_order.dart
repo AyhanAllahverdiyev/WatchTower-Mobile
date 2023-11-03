@@ -8,6 +8,7 @@ import '../services/nfc_Services.dart';
 import '../utils/nfc_order_utils.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
 import '../services/db_service.dart';
+import '../utils/alarm_utils.dart';
 
 class NfcOrderPage extends StatefulWidget {
   const NfcOrderPage({super.key});
@@ -22,7 +23,8 @@ class _NfcOrderPageState extends State<NfcOrderPage> {
 
   @override
   void initState() {
-    _getOrderArray();
+    super.initState();
+     _getOrderArray();
   }
 
   Future _getOrderArray() async {
@@ -75,11 +77,10 @@ class _NfcOrderPageState extends State<NfcOrderPage> {
               onPressed: () async {
                 addTag newTag = await NfcOrderUtils().showAddTagDialog(context);
                 if (newTag.isConfirmed == true) {
-                   setState(() {
-                  allowedOrderArray.add(newTag.tagName);
-                });
+                  setState(() {
+                    allowedOrderArray.add(newTag.tagName);
+                  });
                 }
-               
               },
               tooltip: 'Add Tag',
               child: Icon(Icons.add),
