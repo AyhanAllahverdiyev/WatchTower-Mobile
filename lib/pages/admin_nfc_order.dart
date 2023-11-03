@@ -8,6 +8,7 @@ import '../services/nfc_Services.dart';
 import '../utils/nfc_order_utils.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
 import '../services/db_service.dart';
+import '../utils/alert_utils.dart';
 
 class NfcOrderPage extends StatefulWidget {
   const NfcOrderPage({super.key});
@@ -156,6 +157,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                         isEditing = !isEditing;
                       });
                       NfcOrderUtils().setAsDefaultReadOrder(allowedOrderArray);
+                      AlertUtils().SuccessfullySavedAlert(context);
                     },
                     tooltip: 'Save',
                     backgroundColor: Colors.green,

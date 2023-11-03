@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 
 import '../services/db_service.dart';
 
-class addTag{
+class addTag {
   String tagName;
   bool isConfirmed;
   addTag(this.tagName, this.isConfirmed);
-
 }
-class NfcOrderUtils{
+
+class NfcOrderUtils {
   Future<void> setAsDefaultReadOrder(List<String> newOrder) async {
     print('Final format of list after re-ordering: $newOrder');
     await DbServices().updateArray(newOrder);
@@ -23,25 +23,25 @@ class NfcOrderUtils{
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Add a Tile'),
+          title: Text('Add a Tag'),
           content: TextField(
             onChanged: (value) {
               newTag = value;
             },
-            decoration: InputDecoration(labelText: 'Tile content'),
+            decoration: InputDecoration(labelText: 'Tag content'),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 isConfirmed = false;
-                Navigator.pop( context);
+                Navigator.pop(context);
               },
-              child: Text('Cancel'),
+              child: Text('Cancel', style: TextStyle(color: Colors.red)),
             ),
             ElevatedButton(
               onPressed: () {
                 isConfirmed = true;
-                         Navigator.pop( context);
+                Navigator.pop(context);
               },
               child: Text('Add'),
             ),
@@ -49,6 +49,6 @@ class NfcOrderUtils{
         );
       },
     );
-    return addTag(newTag,isConfirmed);
+    return addTag(newTag, isConfirmed);
   }
 }
