@@ -9,6 +9,7 @@ import '../utils/nfc_order_utils.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
 import '../services/db_service.dart';
 import '../utils/alert_utils.dart';
+import '../utils/alarm_utils.dart';
 
 class NfcOrderPage extends StatefulWidget {
   const NfcOrderPage({super.key});
@@ -25,7 +26,8 @@ class NfcOrderPageState extends State<NfcOrderPage> {
 
   @override
   void initState() {
-    _getOrderArray();
+    super.initState();
+     _getOrderArray();
   }
 
   Future _getOrderArray() async {

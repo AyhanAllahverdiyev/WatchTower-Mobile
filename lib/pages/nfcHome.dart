@@ -6,6 +6,7 @@ import '../components/bottom_navigation.dart';
 import '../components/nfc_block.dart';
 import '../services/nfc_Services.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
+import '../utils/alarm_utils.dart';
 
 class NfcHomePage extends StatefulWidget {
   const NfcHomePage({super.key});
@@ -15,12 +16,11 @@ class NfcHomePage extends StatefulWidget {
 }
 
 class _NfcHomePageState extends State<NfcHomePage> {
-
   List<String> allowedOrderArray = [];
   @override
   void initState() {
     _getOrderArray();
-  }
+   }
 
   Future _getOrderArray() async {
     ApiResponse orderArray = await NfcService().getOrderArray();
@@ -50,7 +50,7 @@ class _NfcHomePageState extends State<NfcHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for (var order in allowedOrderArray)
-                  NfcBlockWidget(order: order,isOrderDone: false),
+                  NfcBlockWidget(order: order, isOrderDone: false),
                 SizedBox(height: 20),
               ],
             ),

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/pages/login.dart';
+import 'package:watch_tower_flutter/utils/alarm_utils.dart';
 import './nfcHome.dart';
 import '../components/bottom_navigation.dart';
 import '../services/nfc_Services.dart';
@@ -15,6 +16,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -61,12 +67,14 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Text('Read tag'),
                 ),
-                ElevatedButton(    onPressed: () {
+                ElevatedButton(
+                    onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => NfcOrderPage()));
-                    } , child: Text('change order')),
+                    },
+                    child: Text('change order')),
               ],
             ),
           ),
