@@ -37,7 +37,6 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
         }
       } else {
         String decoded = String.fromCharCodes(data);
-        // Handle other types of data if necessary
         if (!decoded.contains(await LoginUtils().getUserId())) {
           print('here 2');
           Navigator.push(
@@ -75,7 +74,7 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               iconSize: 40,
               onPressed: () {
                 // Send a WebSocket message when the button is pressed
-                // Navigate to HomePage or perform any other action
+                // Navigate to HomePage
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => HomePage()));
               },
