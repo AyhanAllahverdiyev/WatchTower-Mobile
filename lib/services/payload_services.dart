@@ -1,4 +1,11 @@
-class Payload_Services {
+import 'dart:ffi';
+
+List<String> updatedAuthLevelList = [];
+List<String> _updatedAuthLevelList = [];
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class PayloadServices {
   String decodedResultPayload(List<int> intArray) {
     // Map each integer to its corresponding character and join them into a string
     String decodedString = String.fromCharCodes(intArray);
@@ -48,4 +55,28 @@ class Payload_Services {
       return "";
     }
   }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  void addToUpdatedAuthLevelList(String email, String auth_level) {
+    _updatedAuthLevelList.add('$email:$auth_level');
+  
+  }
+
+  List<String> getUpdatedAuthLevelList() {
+    setUpdatedAuthLevelList(_updatedAuthLevelList);
+    print('======================USER LIST======================');
+    print('updatedAuthLevelList: $updatedAuthLevelList');
+    return updatedAuthLevelList;
+  }
+
+  void setUpdatedAuthLevelList(List<String> list) {
+    updatedAuthLevelList = list;
+  }
+  void clearUpdatedAuthLevelList() {
+    updatedAuthLevelList.clear();
+    _updatedAuthLevelList.clear();
+  }
+
+
+  
 }

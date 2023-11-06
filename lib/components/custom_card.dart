@@ -1,18 +1,21 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import '../pages/admin_user_list.dart';
+import '../pages/admin_home.dart';
 
 class CustomCard extends StatelessWidget {
   final String text;
   final String title;
   final String imgRoute;
   final String customWidth;
+  final String navigatorName;
 
   const CustomCard(
       {Key? key,
       required this.text,
       required this.title,
-      required this.imgRoute,required this.customWidth})
+      required this.imgRoute,required this.customWidth,required this.navigatorName})
       : super(key: key);
 
 
@@ -24,17 +27,30 @@ class CustomCard extends StatelessWidget {
         shadowColor: Colors.blueGrey,
         child: InkWell(
           splashColor: Colors.grey.withAlpha(90),
-          onTap: () {},
+          onTap: () {
+            if(navigatorName=="AdminHomePage"){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AdminHomePage()));
+                      }else if(navigatorName=="UsersListPage"){
+  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UsersListPage()));
+                      }
+
+          },
           child: Container(
             height: 180,
                width: customWidth == 'full'
           ? MediaQuery.of(context).size.width - 48
            : (MediaQuery.of(context).size.width - 58) / 2,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -57,6 +73,7 @@ class CustomCard extends StatelessWidget {
                 if (imgRoute != '')
                   Image(
                     image: AssetImage(imgRoute),
+                    height: 100,
                   ),
               ],
             ),

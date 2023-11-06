@@ -5,6 +5,8 @@ import 'package:watch_tower_flutter/pages/login.dart';
 import 'package:watch_tower_flutter/utils/alarm_utils.dart';
 import './admin_nfc_order.dart';
 import '../components/admin_bottom_navigation.dart';
+import '../components/custom_card.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({super.key});
@@ -14,13 +16,11 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
-
-
-  
   @override
   void initState() {
     super.initState();
-   }
+  }
+
   bool isStartSelected = false;
   @override
   Widget build(BuildContext context) {
@@ -38,25 +38,93 @@ class _AdminHomePageState extends State<AdminHomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 250),
-                Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.blue,
-                        onPrimary: Colors.white,
-                        padding: EdgeInsets.all(85),
-                        shape: CircleBorder()),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NfcOrderPage()));
-                    },
-                    child: Text(
-                      "Change the Order",
-                      style: TextStyle(fontSize: 20.0),
-                    ),
+                SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Quick Access",
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
                   ),
+                ),
+                SizedBox(height: 20),
+                Card(
+                    color: Colors.purple.shade800,
+                    clipBehavior: Clip.hardEdge,
+                    shadowColor: Colors.blueGrey,
+                    child: InkWell(
+                      splashColor: Colors.grey.withAlpha(90),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NfcOrderPage()));
+                      },
+                      child: Container(
+                        height: 200,
+                        width: MediaQuery.of(context).size.width - 48,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5),
+                                    child: Text("Change Order!",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white)),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 15),
+                                    child: Text("Reorder NFC Tags Now",
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Image(
+                              image: AssetImage('assets/images/nfc_reader.png'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )),
+                SizedBox(height: 20),
+                SizedBox(height: 20),
+                CarouselSlider(
+                  options: CarouselOptions(
+                    autoPlay: true,
+                    aspectRatio: 2.0,
+                    enlargeCenterPage: false,
+                  ),
+                  items: [
+                    CustomCard(
+                        text: "First Card",
+                        title: "Card 1",
+                        imgRoute: "assets/images/nfc.png",
+                        customWidth: 'full',navigatorName: "UsersListPage"),
+                    CustomCard(
+                        text: "Second Card",
+                        title: "Card 2",
+                        imgRoute: "assets/images/nfc.png",
+                        customWidth: 'full',navigatorName: ""),
+                    CustomCard(
+                        text: "Third Card",
+                        title: "Card 3",
+                        imgRoute: "assets/images/nfc.png",
+                        customWidth: 'full',navigatorName: ""),
+                  ],
                 ),
               ],
             ),

@@ -11,10 +11,10 @@ class AdminNfcBlockWidget extends StatefulWidget {
   const AdminNfcBlockWidget({Key? key, required this.order,required this.isDeleteSelected,required this.index}) : super(key: key);
 
   @override
-  _AdminNfcBlockWidgetState createState() => _AdminNfcBlockWidgetState();
+  AdminNfcBlockWidgetState createState() => AdminNfcBlockWidgetState();
 }
 
-class _AdminNfcBlockWidgetState extends State<AdminNfcBlockWidget> {
+class AdminNfcBlockWidgetState extends State<AdminNfcBlockWidget> {
   @override
   Widget build(BuildContext context) {
     return TextButton(

@@ -73,6 +73,7 @@ flutter:
     - assets/images/login.png
     - assets/images/profile_1.png
     - assets/images/nfc_reader.png
+    - assets/images/nfc.png  
     - assets/sounds/alert.mp3
 
 
