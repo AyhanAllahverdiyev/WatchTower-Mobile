@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "443000749246",
+    "firebase_url": "https://watchtower-cloud-default-rtdb.firebaseio.com",
+    "project_id": "watchtower-cloud",
+    "storage_bucket": "watchtower-cloud.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443000749246:android:14e7221f5dd0f79ea7f2ef",
+        "android_client_info": {
+          "package_name": "com.example.watch_tower_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzHT4Au8IgDRfZQ3sS7as9NQAqN24VIl4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
