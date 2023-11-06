@@ -11,7 +11,6 @@ class AlertScreen extends StatefulWidget {
 
 class _AlertScreenState extends State<AlertScreen> {
   final assetsAudioPlayer = AssetsAudioPlayer.newPlayer();
-
   @override
   void initState() {
     super.initState();
@@ -28,7 +27,7 @@ class _AlertScreenState extends State<AlertScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String message = widget.data;
+    final notificationMessage = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -40,8 +39,8 @@ class _AlertScreenState extends State<AlertScreen> {
           child: Column(
             children: [
               Text(
-                message,
-                style: TextStyle(color: Colors.red, fontSize: 20),
+                notificationMessage.toString(),
+                style: TextStyle(color: Colors.red, fontSize: 40),
               ),
               ElevatedButton(
                 onPressed: () {
