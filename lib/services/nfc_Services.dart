@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:watch_tower_flutter/services/payload_services.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
-import '../utils/payload_utils.dart';
 import 'login_Services.dart';
 import './user_info.dart';
 import 'db_service.dart';
@@ -72,10 +72,10 @@ class NfcService {
           try {
             result.value = tag.data;
 
-            List<int> intList = Payload_Services().convertStringToArray(
-                Payload_Services().getPayload(result.toString()));
+            List<int> intList = PayloadServices().convertStringToArray(
+                PayloadServices().getPayload(result.toString()));
             String payload_as_String =
-                Payload_Services().decodedResultPayload((intList));
+                PayloadServices().decodedResultPayload((intList));
 
             result.value = payload_as_String;
 
