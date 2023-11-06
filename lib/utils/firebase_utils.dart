@@ -24,10 +24,9 @@ class FirebaseUtils {
 
   void handleMessage(RemoteMessage? message) {
     if (message == null) {
-      return;
-    } else if (message.notification == null) {
-      return;
+      return ;
     }
+
     navigatorKey.currentState!.push(
       MaterialPageRoute(
         builder: (context) => AlertScreen(data: message.notification!.body!),
