@@ -5,6 +5,7 @@ import '../components/admin_bottom_navigation.dart';
 import '../utils/login_utils.dart';
 import '../components/bottom_navigation.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import '../utils/alarm_utils.dart';
 
 class AlertDetails extends StatefulWidget {
   const AlertDetails({Key? key}) : super(key: key);
@@ -53,6 +54,10 @@ class _AlertDetailsState extends State<AlertDetails> {
                 // Send a WebSocket message when the button is pressed
                 // BottomAppBarWidgetState().sendMessage(data.toString());
                 BottomAppBarWidgetState().sendMessage(data.toString());
+                await WebSocketService().sendBroadcastMessage(
+                    textFieldController1.text,
+                    textFieldController2.text,
+                    'Broadcast_Alert');
                 Navigator.pop(context);
               },
               child: Text('Submit'),
