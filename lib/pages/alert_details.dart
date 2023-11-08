@@ -4,6 +4,7 @@ import 'package:web_socket_channel/io.dart';
 import '../components/admin_bottom_navigation.dart';
 import '../utils/login_utils.dart';
 import '../components/bottom_navigation.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class AlertDetails extends StatefulWidget {
   const AlertDetails({Key? key}) : super(key: key);
@@ -15,7 +16,6 @@ class AlertDetails extends StatefulWidget {
 class _AlertDetailsState extends State<AlertDetails> {
   final TextEditingController textFieldController1 = TextEditingController();
   final TextEditingController textFieldController2 = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

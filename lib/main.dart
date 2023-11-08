@@ -13,6 +13,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseUtils().initNotifications();
+  await FirebaseMessaging.instance.subscribeToTopic('Broadcast_Alert');
   runApp(MyApp());
 }
 

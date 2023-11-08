@@ -12,7 +12,6 @@ class WebSocketService {
     }
 
     try {
-      print('1111');
       _channel = IOWebSocketChannel.connect('ws://192.168.1.160:3000');
 
       _channel!.stream.listen((data) async {
@@ -26,10 +25,8 @@ class WebSocketService {
                     builder: (context) => AlertScreen(data: data)));
           }
         } else {
-          print('2');
           String decoded = String.fromCharCodes(data);
           if (!decoded.contains(await LoginUtils().getUserId())) {
-            print('3');
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -38,7 +35,6 @@ class WebSocketService {
         }
       });
     } catch (e) {
-      print('3');
       print("WebSocket connection error: $e");
       // Handle the error as needed
     }
@@ -46,6 +42,7 @@ class WebSocketService {
 
   static void sendMessage(String message) {
     _channel?.sink.add(message);
+    
   }
 
   static void dispose() {

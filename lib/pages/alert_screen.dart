@@ -11,7 +11,6 @@ class AlertScreen extends StatefulWidget {
 
 class _AlertScreenState extends State<AlertScreen> {
   final assetsAudioPlayer = AssetsAudioPlayer.newPlayer();
-  static const route = '/alert-screen';
   @override
   void initState() {
     super.initState();
