@@ -64,7 +64,7 @@ class _AlertDetailsState extends State<AlertDetails> {
               onPressed: () async {
                 Data data=Data(textFieldController1.text, textFieldController2.text,
                     textFieldController3.text, await LoginUtils().getUserId());
-                BottomAppBarWidgetState().sendMessage(data);
+                await BottomAppBarWidgetState().sendMessage(data);
                 await WebSocketService().sendBroadcastMessage(
                     textFieldController1.text,
                     textFieldController2.text,

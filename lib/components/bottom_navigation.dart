@@ -20,7 +20,7 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   bool isTorchPressed = false;
   String message = ''; // Variable to store received messages
   final channel = IOWebSocketChannel.connect('ws://192.168.1.160:3000');
-  void sendMessage(Data message) {
+  Future<void> sendMessage(Data message) async {
     channel.sink.add(message);
   }
 
