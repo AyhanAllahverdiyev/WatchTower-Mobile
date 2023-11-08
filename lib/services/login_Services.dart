@@ -104,7 +104,7 @@ class HttpServices {
 
       return ApiResponse(statusCode, responseBody);
     } catch (e) {
-      print("Error in db_services : $e");
+      print("Error while saving user to DB : $e");
       return ApiResponse(-1, "Error: $e");
     }
   }
