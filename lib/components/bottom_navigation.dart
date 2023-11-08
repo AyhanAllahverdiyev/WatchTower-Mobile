@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/services/device_services.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
@@ -18,7 +20,7 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   bool isTorchPressed = false;
   String message = ''; // Variable to store received messages
   final channel = IOWebSocketChannel.connect('ws://192.168.1.160:3000');
-  void sendMessage(String message) {
+  void sendMessage(Data message) {
     channel.sink.add(message);
   }
 
