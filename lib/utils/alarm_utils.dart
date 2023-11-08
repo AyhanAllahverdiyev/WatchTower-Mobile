@@ -54,7 +54,7 @@ class WebSocketService {
     _channel = null;
   }
 
-  Future<bool> sendBroadcastMessage(
+  Future<bool> sendBroadcastMessageFirebase(
       String content, String type, String topic) async {
     try {
       final jsonObject = {'content': content, 'type': type, 'topic': topic};
@@ -73,7 +73,7 @@ class WebSocketService {
 
         return false;
       } else {
-        print('Message sent to topic: $response');
+        print('Message sent to topic: ${response.body}');
         return true;
       }
     } catch (e) {
