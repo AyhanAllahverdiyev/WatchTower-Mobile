@@ -15,6 +15,14 @@ class Data {
   String topic;
   String id;
   Data(this.content, this.type, this.topic, this.id);
+  List<String> getJson(Data message) {
+    content = message.content;
+    type = message.type;
+    topic = message.topic;
+    id = message.id;
+    List<String> list = [content, type, topic, id];
+    return list;
+  }
 }
 
 class AlertDetails extends StatefulWidget {
@@ -62,10 +70,13 @@ class _AlertDetailsState extends State<AlertDetails> {
             ),
             ElevatedButton(
               onPressed: () async {
-                Data data=Data(textFieldController1.text, textFieldController2.text,
-                    textFieldController3.text, await LoginUtils().getUserId());
+                Data data = Data(
+                    textFieldController1.text,
+                    textFieldController2.text,
+                    textFieldController3.text,
+                    await LoginUtils().getUserId());
                 await BottomAppBarWidgetState().sendMessage(data);
-                await WebSocketService().sendBroadcastMessage(
+                await WebSocketService().sendBroadcastMessageFirebase(
                     textFieldController1.text,
                     textFieldController2.text,
                     'Broadcast_Alert');
