@@ -12,7 +12,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseUtils().initNotifications();
+  //await FirebaseUtils().initNotifications();
   runApp(MyApp());
 }
 

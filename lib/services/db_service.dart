@@ -88,35 +88,39 @@ class DbServices {
     
   }
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-   Future<int> changeAuthLevel(List<String> array) async {
+  Future<int> changeAuthLevel(String item) async {
     final url = BaseUrl + 'change_auth_level';
-    print('trying to set read order : $array');
+    print('======================changeAuthLevel======================');
     try {
-      for(var id in array
-      ){
-        print(id);
-         final response = await http.post(
+      print("item: $item");
+      final response = await http.post(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: jsonEncode({
-          'allowedOrderArray': id,
-        }),
+        body:item,
       );
-          if (response.statusCode >= 399) {
+
+      if (response.statusCode >= 399) {
         print('ERROR: ${response.body}');
+        return response.statusCode;
       } else {
         print('OK: ${response.body}');
+        return response.statusCode;
       }
-      return response.statusCode;
-    } 
-      }catch (e) {
+    } catch (e) {
       print("Error in db_services: $e");
       return 500;
     }
-     
-  return 0;
-  
-    
+  }
+
+  Future<List<int>> runChangeAuthLevel(List<String> array) async {
+    List<int> statusCodeList = [];
+    for (var item in array) {
+      print("item: $item");
+      int statusCode = await changeAuthLevel(item);
+      statusCodeList.add(statusCode);
+    }
+    print("====================================statusCodeList====================================");
+    print("statusCodeList: $statusCodeList");
+    return statusCodeList;
   }
 }

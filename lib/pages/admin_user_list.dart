@@ -9,7 +9,6 @@ import '../utils/alert_utils.dart';
 import '../components/users_list_block.dart';
 import '../services/payload_services.dart';
 
-
 class UsersListPage extends StatefulWidget {
   const UsersListPage({super.key});
 
@@ -20,6 +19,7 @@ class UsersListPage extends StatefulWidget {
 class UsersListPageState extends State<UsersListPage> {
   String usersListString = '';
   List<dynamic> usersList = [];
+  List<int> statusCodeList = [];
   @override
   void initState() {
     _getUsersArray();
@@ -32,18 +32,14 @@ class UsersListPageState extends State<UsersListPage> {
       if (!AlertUtils().isDialogOpen) {
         await AlertUtils().errorAlert("Internal Server Error!", context);
       }
-    }
-    else{
-
+    } else {
       String usersListString2 = userListResponce.response;
-          List<dynamic> usersList2 = json.decode(usersListString2);
-    print("usersListString: $usersListString");
-    setState(() {
-      usersListString = usersListString2;
-      usersList = usersList2;
-    });
+      List<dynamic> usersList2 = json.decode(usersListString2);
+      setState(() {
+        usersListString = usersListString2;
+        usersList = usersList2;
+      });
     }
-    
   }
 
   @override
@@ -63,26 +59,45 @@ class UsersListPageState extends State<UsersListPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 20),
-                for (int index=0; index<usersList.length; index++)
-                  UserListBlockWidget(email: usersList[index]['email'], auth_level:usersList[index]['auth_level'], id: usersList[index]['_id'])
-              
-               
+                for (int index = 0; index < usersList.length; index++)
+                  UserListBlockWidget(
+                      email: usersList[index]['email'],
+                      auth_level: usersList[index]['auth_level'],
+                      id: usersList[index]['_id'])
               ],
             ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
-                    onPressed: () async {
-                
-                 var aaa=PayloadServices().getUpdatedAuthLevelList().toString();
-                 print('//////////////////////////////////////////////');
-                 print(aaa);
-                    },
-                    tooltip: 'Save',
-                    backgroundColor: Colors.green,
-                    child: Icon(Icons.save),
-                  ),
-               
+          onPressed: () async {
+            for (var item in PayloadServices().getUpdatedAuthLevelList()) {
+              print("item: $item");
+              int statusCode = await DbServices().changeAuthLevel(item);
+              statusCodeList.add(statusCode);
+            }
+            if(statusCodeList.isNotEmpty){
+               if (statusCodeList.contains(500)) {
+              if (!AlertUtils().isDialogOpen) {
+                await AlertUtils().errorAlert("Internal Server Error!", context);
+              }
+            } else {
+              if (!AlertUtils().isDialogOpen) {
+                await AlertUtils().successfulAlert(
+                    "Auth Level Updated Successfully!", context);
+              }
+            }
+            }else{
+              if (!AlertUtils().isDialogOpen) {
+                await AlertUtils().errorAlert(
+                    "Please make some changes first!", context);
+              }}
+           
+            PayloadServices().clearUpdatedAuthLevelList();
+          },
+          tooltip: 'Save',
+          backgroundColor: Colors.green,
+          child: Icon(Icons.save),
+        ),
         bottomNavigationBar: AdminBottomAppBarWidget(),
       ),
     );

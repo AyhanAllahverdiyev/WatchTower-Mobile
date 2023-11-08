@@ -58,7 +58,7 @@ class PayloadServices {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   void addToUpdatedAuthLevelList(String id, String auth_level) {
-    _updatedAuthLevelList.add('{"_id": $id,"auth_level": "$auth_level"}');
+    _updatedAuthLevelList.add('{"_id": "$id","auth_level": "$auth_level"}');
   
   }
 
