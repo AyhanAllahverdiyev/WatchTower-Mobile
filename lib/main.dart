@@ -12,8 +12,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseUtils().initNotifications();
-  await FirebaseMessaging.instance.subscribeToTopic('Broadcast_Alert');
+  //await FirebaseUtils().initNotifications();
+  //await FirebaseMessaging.instance.subscribeToTopic('Broadcast_Alert');
   runApp(MyApp());
 }
 
