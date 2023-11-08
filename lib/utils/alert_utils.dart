@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:flutter/material.dart';
 
 import '../services/db_service.dart';
@@ -77,9 +76,5 @@ class AlertUtils {
     );
 
     return addNewTag(newTag, isConfirmed);
-
-
   }
-
-  
 }

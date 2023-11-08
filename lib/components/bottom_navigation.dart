@@ -19,7 +19,13 @@ class BottomAppBarWidget extends StatefulWidget {
 class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   bool isTorchPressed = false;
   String message = ''; // Variable to store received messages
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
   final channel = IOWebSocketChannel.connect('ws://192.168.1.160:3000');
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
   Future<void> sendMessage(Data message) async {
     channel.sink.add(message.getJson(message).toString());
   }
@@ -29,10 +35,8 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
     super.initState();
     // Listen to incoming WebSocket messages
     channel.stream.listen((data) async {
-      print('inside listening');
       if (data is String) {
         if (!data.contains(await LoginUtils().getUserId())) {
-          print('here1 ');
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => AlertScreen(data: data)));
 
@@ -43,7 +47,6 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
       } else {
         String decoded = String.fromCharCodes(data);
         if (!decoded.contains(await LoginUtils().getUserId())) {
-          print('here 2');
           Navigator.push(
               context,
               MaterialPageRoute(
