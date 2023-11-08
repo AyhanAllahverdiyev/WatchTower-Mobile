@@ -64,7 +64,7 @@ class UsersListPageState extends State<UsersListPage> {
               children: [
                 SizedBox(height: 20),
                 for (int index=0; index<usersList.length; index++)
-                  UserListBlockWidget(email: usersList[index]['email'], auth_level:usersList[index]['auth_level'], index: index)
+                  UserListBlockWidget(email: usersList[index]['email'], auth_level:usersList[index]['auth_level'], id: usersList[index]['_id'])
               
                
               ],

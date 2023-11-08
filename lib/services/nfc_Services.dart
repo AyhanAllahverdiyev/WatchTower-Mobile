@@ -12,6 +12,7 @@ import '../services/device_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './device_services.dart';
 
+
 class NfcService {
   String BaseUrl = LoginUtils().baseUrl;
 

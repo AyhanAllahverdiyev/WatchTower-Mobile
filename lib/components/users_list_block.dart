@@ -8,12 +8,12 @@ import '../services/payload_services.dart';
 class UserListBlockWidget extends StatefulWidget {
   final String email;
   final String auth_level;
-  final int index;
+  final String id;
   const UserListBlockWidget(
       {Key? key,
       required this.email,
       required this.auth_level,
-      required this.index})
+      required this.id})
       : super(key: key);
 
   @override
@@ -65,7 +65,7 @@ class UserListBlockWidgetState extends State<UserListBlockWidget> {
                 finalAuthLevel = value!;
                 if(widget.auth_level != finalAuthLevel){
                   PayloadServices().addToUpdatedAuthLevelList(
-                    widget.email, finalAuthLevel!);
+                    widget.id, finalAuthLevel!);
                 }
                 
               });

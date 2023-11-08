@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                           height: 200,
                           width: MediaQuery.of(context).size.width - 48,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -96,6 +96,7 @@ class _HomePageState extends State<HomePage> {
                               Image(
                                 image:
                                     AssetImage('assets/images/nfc_reader.png'),
+                                    height: 180,
                               ),
                             ],
                           ),
