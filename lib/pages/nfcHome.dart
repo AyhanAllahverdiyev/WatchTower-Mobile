@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'dart:convert';
 import '../components/bottom_navigation.dart';
 import '../components/nfc_block.dart';
@@ -20,7 +21,7 @@ class _NfcHomePageState extends State<NfcHomePage> {
   @override
   void initState() {
     _getOrderArray();
-   }
+  }
 
   Future _getOrderArray() async {
     ApiResponse orderArray = await NfcService().getOrderArray();
@@ -52,29 +53,28 @@ class _NfcHomePageState extends State<NfcHomePage> {
                 for (var order in allowedOrderArray)
                   NfcBlockWidget(order: order, isOrderDone: false),
                 SizedBox(height: 20),
-                 ElevatedButton(
+                ElevatedButton(
                   onPressed: () async {
                     print(
                         '==============================CONTENTS OF NFC TAG==============================');
                     bool readTagResult = await NfcService().tagRead(context);
+
                     print("tag read result:$readTagResult");
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(left:20,right:20,top:10,bottom:10),
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 20, top: 10, bottom: 10),
                     child: Text('Read tag',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
-                            fontWeight: FontWeight.bold)
-                    ),
+                            fontWeight: FontWeight.bold)),
                   ),
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(28.0),
                       ),
-                      
-                  
                     ),
                   ),
                 ),

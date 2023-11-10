@@ -28,8 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     loadSavedCredentials();
-   }
-  
+  }
 
   Future<void> loadSavedCredentials() async {
     final credentials = await LoginUtils().loadSavedCredentials();
@@ -257,7 +256,7 @@ class _LoginPageState extends State<LoginPage> {
 
                     if (loginErrorResponse.isLoginDone) {
                       String authLevel = await LoginUtils().getAuthLevel();
-                      if (authLevel == "admin") {
+                      if (authLevel == "admin" || authLevel == "super_admin") {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

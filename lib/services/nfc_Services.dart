@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:watch_tower_flutter/services/payload_services.dart';
+import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import 'login_Services.dart';
 import './user_info.dart';
@@ -61,7 +62,7 @@ class NfcService {
   static ValueNotifier<dynamic> result = ValueNotifier(null);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  Future<bool> tagRead(context) async {
+  Future<bool> tagRead(BuildContext context) async {
     if (await HttpServices().verifyToken()) {
       Completer<bool> completer = Completer<bool>();
 
@@ -102,10 +103,13 @@ class NfcService {
         // Return the Future from the Completer
         return completer.future;
       } catch (e) {
+        AlertUtils().errorAlert(
+            'Unexpected error occured ,please check your connection', context);
         print('error in tagread :  $e');
         return false;
       }
     } else {
+      AlertUtils().errorAlert('Session Timeout.Please login again', context);
       print('JWT is not valid');
       return false;
     }
