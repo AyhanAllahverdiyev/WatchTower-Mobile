@@ -20,12 +20,18 @@ class FirebaseUtils {
   final firebaseMessaging = FirebaseMessaging.instance;
 
   Future<void> initNotifications() async {
+
+    String deviceToken = await getDeviceTokenIos();
+    print("###### PRINT DEVICE TOKEN TO USE FOR PUSH NOTIFCIATION######");
+    print(deviceToken);
+    print("#######################################################");
+
     await firebaseMessaging.requestPermission();
     final fcmToken = await firebaseMessaging.getToken();
     print('===================================');
     print("TOKEN: $fcmToken");
     initPushNotifications();
-    initLocalNotifications();
+   // initLocalNotifications();
   }
 
   void handleMessage(RemoteMessage? message) {
@@ -89,53 +95,33 @@ class FirebaseUtils {
     description: 'this channel is used for important notifications',
     importance: Importance.high,
   );
+
+///////////////////////////////////////////////////
+//get device token to use for push notification
+  Future getDeviceTokenIos() async {
+    //request user permission for push notification
+    FirebaseMessaging.instance.requestPermission();
+    FirebaseMessaging _firebaseMessage = FirebaseMessaging.instance;
+    String? deviceToken = await _firebaseMessage.getToken();
+    return (deviceToken == null) ? "" : deviceToken;
+  }
 }
 
+// Future<void> configure() async {
+//   // Subscribe to a topic (optional)
+//   firebaseMessaging.subscribeToTopic('your_topic_name');
 
+//   // Configure the background message handler
+//   FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+// }
 
+// // Handle background messages
+// Future<void> _handleBackgroundMessage(RemoteMessage message) async {
+//   print('Handling a background message ${message.messageId}');
+// }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // Future<void> configure() async {
-  //   // Subscribe to a topic (optional)
-  //   firebaseMessaging.subscribeToTopic('your_topic_name');
-
-  //   // Configure the background message handler
-  //   FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
-  // }
-
-  // // Handle background messages
-  // Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-  //   print('Handling a background message ${message.messageId}');
-  // }
-
-  // void requestNotificationPermission() async {
-  //   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  //   NotificationSettings settings = await messaging.requestPermission();
-  //   print("User granted permission: ${settings.authorizationStatus}");
-  // }
- 
+// void requestNotificationPermission() async {
+//   FirebaseMessaging messaging = FirebaseMessaging.instance;
+//   NotificationSettings settings = await messaging.requestPermission();
+//   print("User granted permission: ${settings.authorizationStatus}");
+// }
