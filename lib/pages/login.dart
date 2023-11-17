@@ -11,10 +11,10 @@ import "../utils/alarm_utils.dart";
 class LoginPage extends StatefulWidget {
   static const String id = 'login_page';
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
   TextEditingController mailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPasswordVisible = false;
@@ -27,11 +27,26 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+    canLogInWithJWT(context);
+    loginUtils.setBaseUrl('http://192.168.1.160:3000/');
     loadSavedCredentials();
+  }
+  Future<bool> isJWTValid = HttpServices().checkIfTokenValid();
+  Future<bool> canLogInWithJWT(BuildContext context) async {
+    if (await isJWTValid) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<void> loadSavedCredentials() async {
     final credentials = await LoginUtils().loadSavedCredentials();
+
     setState(() {
       mailController.text = credentials.email;
       passwordController.text = credentials.password;

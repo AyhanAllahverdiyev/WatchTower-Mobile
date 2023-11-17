@@ -32,7 +32,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
   }
 
   Future _getOrderArray() async {
-    ApiResponse orderArray = await NfcService().getOrderArray();
+    ApiResponse orderArray = await NfcService().getOrderArray(context);
     Map<String, dynamic> jsonResponse = json.decode(orderArray.response);
     List<String> newAllowedOrderArray =
         List<String>.from(jsonResponse['allowedOrderArray']);
@@ -56,7 +56,6 @@ class NfcOrderPageState extends State<NfcOrderPage> {
         setState(() {
           isEditing = false;
         });
-
       },
       child: Scaffold(
         backgroundColor: Colors.black,
@@ -131,14 +130,15 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                   FloatingActionButton(
                     onPressed: () async {
                       addNewTag newTag =
-                         await AlertUtils().addNewTagDialog(context);
-                      if (newTag.isConfirmed == true && newTag.tagName != '' ) {
+                          await AlertUtils().addNewTagDialog(context);
+                      if (newTag.isConfirmed == true && newTag.tagName != '') {
                         setState(() {
                           allowedOrderArray.add(newTag.tagName);
                         });
                       }
-                      if (newTag.isConfirmed==true && newTag.tagName == '') {
-                        await AlertUtils().errorAlert('Tag Name Cannot Be Empty!', context);
+                      if (newTag.isConfirmed == true && newTag.tagName == '') {
+                        await AlertUtils()
+                            .errorAlert('Tag Name Cannot Be Empty!', context);
                       }
                     },
                     tooltip: 'Add Tag',
@@ -157,17 +157,16 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                   SizedBox(height: 10),
                   FloatingActionButton(
                     onPressed: () async {
-                      dbResponse = await DbServices().updateArray(allowedOrderArray);
+                      dbResponse =
+                          await DbServices().updateArray(allowedOrderArray);
                       if (dbResponse <= 399) {
                         if (AlertUtils().isDialogOpen == false) {
-                          
-                              await AlertUtils().successfulAlert('Successfully Saved!', context);
-                              setState(() {
-                                isEditing = false;
-                              });                       
-                              
+                          await AlertUtils()
+                              .successfulAlert('Successfully Saved!', context);
+                          setState(() {
+                            isEditing = false;
+                          });
                         }
-                       
                       } else if (dbResponse == 500) {
                         if (AlertUtils().isDialogOpen == false) {
                           await AlertUtils()
@@ -179,7 +178,6 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                     backgroundColor: Colors.green,
                     child: Icon(Icons.save),
                   ),
-               
                 ],
               ),
           ],

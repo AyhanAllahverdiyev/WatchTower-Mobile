@@ -64,6 +64,17 @@ class HttpServices {
     }
   }
 
+  Future<bool> checkIfTokenValid() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool rememberMe = prefs.getBool('rememberMe') ?? false;
+    String jwt = prefs.getString('jwt') ?? '';
+    if (rememberMe && jwt.isNotEmpty) {
+      return verifyToken();
+    } else {
+      return Future.value(false);
+    }
+  }
+
   Future<bool> verifyToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwt = prefs.getString('jwt') ?? '';
@@ -87,7 +98,6 @@ class HttpServices {
         "password": password,
         "auth_level": "user",
       };
-
       print('what is being sent to server: $jsonObject');
 
       final response = await http.post(

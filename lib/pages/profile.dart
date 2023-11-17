@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../components/bottom_navigation.dart';
 import './login.dart';
 import '../utils/alarm_utils.dart';
@@ -50,12 +52,19 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ));
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.remove('jwt');
+                    await AlertUtils()
+                        .successfulAlert('Logging  out...', context);
+
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      (route) =>
+                          false, 
+                    );
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

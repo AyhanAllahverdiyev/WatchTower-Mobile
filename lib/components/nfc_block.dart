@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class NfcBlockWidget extends StatelessWidget {
   final String order;
-  final bool isOrderDone;
-  const NfcBlockWidget({Key? key, required this.order,required this.isOrderDone}) : super(key: key);
+  final String isRead;
+  const NfcBlockWidget({Key? key, required this.order, required this.isRead})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +29,15 @@ class NfcBlockWidget extends StatelessWidget {
                       order,
                       style: TextStyle(fontSize: 28.0, color: Colors.white),
                     ),
-                    isOrderDone?Icon(Icons.check_circle,color: Colors.green,):
-                    Icon(Icons.remove_circle,color: Colors.red,),
+                    isRead == 'true'
+                        ? Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                          )
+                        : Icon(
+                            Icons.remove_circle,
+                            color: Colors.red,
+                          ),
                   ],
                 ),
               ),

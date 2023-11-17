@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/components/bottom_navigation.dart';
+import 'package:watch_tower_flutter/pages/home.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'package:web_socket_channel/io.dart';
 import '../components/admin_bottom_navigation.dart';
@@ -28,6 +29,7 @@ class Data {
 
 class AlertDetails extends StatefulWidget {
   const AlertDetails({Key? key}) : super(key: key);
+  static const routeName = '/alert_details';
 
   @override
   State<AlertDetails> createState() => _AlertDetailsState();
@@ -85,14 +87,20 @@ class _AlertDetailsState extends State<AlertDetails> {
                   await AlertUtils().errorAlert('Failed to send', context);
                 } else {
                   await AlertUtils().successfulAlert('Success', context);
+
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                    (route) => false,
+                  );
                 }
-                Navigator.pop(context);
               },
               child: Text('Submit'),
             ),
           ],
         ),
       ),
+      bottomNavigationBar: const BottomAppBarWidget(),
     );
   }
 }

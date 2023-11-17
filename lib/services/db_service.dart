@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../utils/login_utils.dart';
+import '../pages/nfcHome.dart';
 
 class dbResponse {
   final int statusCode;
@@ -18,9 +19,7 @@ class DbServices {
     try {
       final jsonObject = jsonDecode(inputString);
       print('what is being sent to server: $jsonObject');
-
       final response = await http.post(
-        //192.168.1.153
         Uri.parse(BaseUrl + 'logs'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
@@ -29,13 +28,22 @@ class DbServices {
       if (response.statusCode >= 399) {
         print('ERROR: ${response.body}');
         await AlertUtils().errorAlert(response.body, context);
-        Navigator.pop(context);
         return false;
       } else {
         await AlertUtils()
             .successfulAlert('Please proceed to the next tag ', context);
-        Navigator.pop(context);
-        print('OKEE: ${response}');
+        print('inputString: ${inputString}');
+        String jsonStringWithoutQuotes =
+            inputString.substring(1, inputString.length - 1);
+        print('jsonStringWithoutQuotes: ${jsonStringWithoutQuotes}');
+        Map<String, dynamic> newJsonObject =
+            json.decode('{$jsonStringWithoutQuotes}');
+        print('newJsonObject: ${newJsonObject}');
+        print('ID: ${newJsonObject['ID']}');
+        await NfcHomePageState()
+            .updateIsReadValue(newJsonObject['ID'].toString(), 'true');
+        print('Final version of orderJsonArray:${orderJsonArray}}');
+
         return true;
       }
     } catch (e) {
@@ -46,6 +54,8 @@ class DbServices {
       return false;
     }
   }
+
+/////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<int> updateArray(List<String> array) async {
@@ -59,7 +69,6 @@ class DbServices {
           'allowedOrderArray': array,
         }),
       );
-
       if (response.statusCode >= 399) {
         print('ERROR: ${response.body}');
       } else {
@@ -81,7 +90,6 @@ class DbServices {
         Uri.parse(url),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
       );
-
       if (response.statusCode >= 399) {
         print('ERROR: ${response.body}');
       } else {
