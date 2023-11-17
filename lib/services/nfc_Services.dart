@@ -3,7 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:watch_tower_flutter/pages/login.dart';
+import 'package:watch_tower_flutter/pages/nfcHome.dart';
 import 'package:watch_tower_flutter/services/payload_services.dart';
+import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import 'login_Services.dart';
 import './user_info.dart';
@@ -12,9 +15,27 @@ import '../services/device_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './device_services.dart';
 
-
 class NfcService {
   String BaseUrl = LoginUtils().baseUrl;
+  Future<bool> resetReadOrder() async {
+    try {
+      final response = await http.get(
+        Uri.parse(BaseUrl + 'reset'),
+      );
+      if (response.statusCode == 200) {
+        print(response.body);
+        return true;
+      } else {
+        print(response.body);
+        return false;
+      }
+    } catch (e) {
+      print('Error in resetReadOrder : $e');
+      return false;
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   Future<void> printAllSharedPreferences() async {
     print('================SHARED PREFERENCES================');
@@ -32,12 +53,11 @@ class NfcService {
     });
   }
 
-  Future<ApiResponse> getOrderArray() async {
+  Future<ApiResponse> getOrderArray(BuildContext context) async {
     if (await HttpServices().verifyToken()) {
       try {
         print(
             '====================================Order which the system expects==================================== ');
-
         final response = await http.get(
           Uri.parse(BaseUrl + 'order'),
         );
@@ -47,6 +67,7 @@ class NfcService {
 
         print('Response Status Code: $statusCode');
         print('Response Body: $responseBody');
+
         return ApiResponse(statusCode, responseBody);
       } catch (e) {
         print("Error in fetching ORDER : $e");
@@ -54,6 +75,10 @@ class NfcService {
         return ApiResponse(-1, "Error: $e");
       }
     } else {
+      await AlertUtils()
+          .errorAlert('Session  Timeout. Please login again', context);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
       print('JWT is not valid');
       return ApiResponse(-1, "Error: JWT is not valid");
     }
@@ -62,9 +87,7 @@ class NfcService {
   static ValueNotifier<dynamic> result = ValueNotifier(null);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  Future<bool> tagRead(context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? jwt = prefs.getString('jwt') ?? '';
+  Future<bool> tagRead(BuildContext context) async {
     if (await HttpServices().verifyToken()) {
       Completer<bool> completer = Completer<bool>();
 
@@ -105,10 +128,17 @@ class NfcService {
         // Return the Future from the Completer
         return completer.future;
       } catch (e) {
+        AlertUtils().errorAlert(
+            'Unexpected error occured ,please check your connection', context);
+        Navigator.pop(context);
         print('error in tagread :  $e');
         return false;
       }
     } else {
+      await AlertUtils()
+          .errorAlert('Session Timeout.Please login again', context);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
       print('JWT is not valid');
       return false;
     }

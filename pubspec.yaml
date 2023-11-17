@@ -53,6 +53,7 @@ dependencies:
   firebase_messaging: ^14.7.3
   flutter_local_notifications: ^16.1.0
   firebase_analytics: ^10.6.3
+  level_map: ^0.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -76,7 +77,12 @@ flutter:
     - assets/images/login.png
     - assets/images/profile_1.png
     - assets/images/nfc_reader.png
+    - assets/images/check.png
+    - assets/images/start.png
     - assets/images/nfc.png  
+    - assets/images/locked.png
+    - assets/images/current.png
+    - assets/images/finish.png
     - assets/sounds/alert.mp3
 
 

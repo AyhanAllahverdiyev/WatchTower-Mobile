@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:flutter/material.dart';
-
+import 'package:watch_tower_flutter/pages/nfcHome.dart';
+import '../services/nfc_Services.dart';
 import '../services/db_service.dart';
 import 'package:quickalert/quickalert.dart';
 
@@ -42,6 +42,61 @@ class AlertUtils {
     isDialogOpen = false;
   }
 
+  Future<void> confirmationAlert(String message, BuildContext context) async {
+    await QuickAlert.show(
+      context: context,
+      type: QuickAlertType.confirm,
+      text: message,
+      confirmBtnText: 'Yes',
+      cancelBtnText: 'No',
+      confirmBtnColor: Colors.green,
+      onConfirmBtnTap: () async {
+        Navigator.pop(context);
+        if (NfcHomePageState.session) {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.confirm,
+            text:
+                'You already have an onging session. End previous and start a new one?',
+            confirmBtnText: 'Yes',
+            cancelBtnText: 'No',
+            confirmBtnColor: Colors.green,
+            onCancelBtnTap: () {
+              Navigator.pop(context);
+              print('Previous session ongoing');
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NfcHomePage()));
+            },
+            onConfirmBtnTap: () async {
+              Navigator.pop(context);
+              NfcHomePageState.session = false;
+              if (await NfcService().resetReadOrder()) {
+                print('new sessing initialised');
+                NfcHomePageState.session = true;
+                await successfulAlert('New Session Initialised!', context);
+                Navigator.pop(context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => NfcHomePage()));
+              } else {
+                print('unable to launch new session');
+                await errorAlert(
+                    'System was not able to launch a new session', context);
+                Navigator.pop(context);
+              }
+            },
+          );
+        } else {
+          await successfulAlert('New Session Initialised!', context);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => NfcHomePage()));
+        }
+      },
+      onCancelBtnTap: () {
+        Navigator.pop(context);
+      },
+    );
+  }
+
   Future<addNewTag> addNewTagDialog(BuildContext context) async {
     String newTag = '';
     bool isConfirmed = false;
@@ -77,9 +132,5 @@ class AlertUtils {
     );
 
     return addNewTag(newTag, isConfirmed);
-
-
   }
-
-  
 }

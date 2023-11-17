@@ -75,23 +75,26 @@ class UsersListPageState extends State<UsersListPage> {
               int statusCode = await DbServices().changeAuthLevel(item);
               statusCodeList.add(statusCode);
             }
-            if(statusCodeList.isNotEmpty){
-               if (statusCodeList.contains(500)) {
-              if (!AlertUtils().isDialogOpen) {
-                await AlertUtils().errorAlert("Internal Server Error!", context);
+            if (statusCodeList.isNotEmpty) {
+              if (statusCodeList.contains(500)) {
+                if (!AlertUtils().isDialogOpen) {
+                  await AlertUtils()
+                      .errorAlert("Internal Server Error!", context);
+                }
+              } else {
+                if (!AlertUtils().isDialogOpen) {
+                  await AlertUtils().successfulAlert(
+                      "Auth Level Updated Successfully!", context);
+                }
+                Navigator.pop(context);
               }
             } else {
               if (!AlertUtils().isDialogOpen) {
-                await AlertUtils().successfulAlert(
-                    "Auth Level Updated Successfully!", context);
+                await AlertUtils()
+                    .errorAlert("Please make some changes first!", context);
               }
             }
-            }else{
-              if (!AlertUtils().isDialogOpen) {
-                await AlertUtils().errorAlert(
-                    "Please make some changes first!", context);
-              }}
-           
+
             PayloadServices().clearUpdatedAuthLevelList();
           },
           tooltip: 'Save',

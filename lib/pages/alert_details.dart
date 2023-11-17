@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/components/bottom_navigation.dart';
+import 'package:watch_tower_flutter/pages/home.dart';
+import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'package:web_socket_channel/io.dart';
 import '../components/admin_bottom_navigation.dart';
 import '../utils/login_utils.dart';
@@ -27,6 +29,7 @@ class Data {
 
 class AlertDetails extends StatefulWidget {
   const AlertDetails({Key? key}) : super(key: key);
+  static const routeName = '/alert_details';
 
   @override
   State<AlertDetails> createState() => _AlertDetailsState();
@@ -76,17 +79,28 @@ class _AlertDetailsState extends State<AlertDetails> {
                     textFieldController3.text,
                     await LoginUtils().getUserId());
                 await BottomAppBarWidgetState().sendMessage(data);
-                await WebSocketService().sendBroadcastMessageFirebase(
+                int res = await WebSocketService().sendBroadcastMessageFirebase(
                     textFieldController1.text,
                     textFieldController2.text,
                     'Broadcast_Alert');
-                Navigator.pop(context);
+                if (res >= 399) {
+                  await AlertUtils().errorAlert('Failed to send', context);
+                } else {
+                  await AlertUtils().successfulAlert('Success', context);
+
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                    (route) => false,
+                  );
+                }
               },
               child: Text('Submit'),
             ),
           ],
         ),
       ),
+      bottomNavigationBar: const BottomAppBarWidget(),
     );
   }
 }

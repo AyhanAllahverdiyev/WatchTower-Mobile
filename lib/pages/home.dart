@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/pages/login.dart';
 import 'package:watch_tower_flutter/utils/alarm_utils.dart';
+import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import './nfcHome.dart';
 import '../components/bottom_navigation.dart';
 import '../services/nfc_Services.dart';
@@ -12,6 +13,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+  static const routeName = '/home';
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -57,10 +59,16 @@ class _HomePageState extends State<HomePage> {
                       child: InkWell(
                         splashColor: Colors.grey.withAlpha(90),
                         onTap: () {
-                          Navigator.push(
+                          if (NfcHomePageState.session == false) {
+                            AlertUtils()
+                                .confirmationAlert('New Session', context);
+                          } else {
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => NfcHomePage()));
+                                  builder: (context) => NfcHomePage()),
+                            );
+                          }
                         },
                         child: Container(
                           height: 200,
@@ -90,13 +98,40 @@ class _HomePageState extends State<HomePage> {
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white)),
                                     ),
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        AlertUtils().confirmationAlert(
+                                            'New Session', context);
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 0,
+                                            right: 0,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: Text('New Session',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                      style: ButtonStyle(
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(28.0),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
                               Image(
                                 image:
                                     AssetImage('assets/images/nfc_reader.png'),
-                                    height: 180,
+                                height: 180,
                               ),
                             ],
                           ),
@@ -109,12 +144,14 @@ class _HomePageState extends State<HomePage> {
                           text: "First Card",
                           title: "Card 1",
                           imgRoute: "assets/images/nfc_reader.png",
-                          customWidth: 'half',navigatorName: ""),
+                          customWidth: 'half',
+                          navigatorName: ""),
                       CustomCard(
                           text: "Second Card",
                           title: "Card 2",
                           imgRoute: "assets/images/nfc_reader.png",
-                          customWidth: 'half',navigatorName: ""),
+                          customWidth: 'half',
+                          navigatorName: ""),
                     ],
                   ),
                   SizedBox(height: 20),
@@ -129,17 +166,20 @@ class _HomePageState extends State<HomePage> {
                           text: "First Card",
                           title: "Card 1",
                           imgRoute: "assets/images/nfc_reader.png",
-                          customWidth: 'full',navigatorName: ""),
+                          customWidth: 'full',
+                          navigatorName: ""),
                       CustomCard(
                           text: "Second Card",
                           title: "Card 2",
                           imgRoute: "assets/images/nfc_reader.png",
-                          customWidth: 'full',navigatorName: ""),
+                          customWidth: 'full',
+                          navigatorName: ""),
                       CustomCard(
                           text: "Third Card",
                           title: "Card 3",
                           imgRoute: "assets/images/nfc_reader.png",
-                          customWidth: 'full',navigatorName: ""),
+                          customWidth: 'full',
+                          navigatorName: ""),
                     ],
                   ),
                 ],

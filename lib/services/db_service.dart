@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../utils/login_utils.dart';
+import '../pages/nfcHome.dart';
 
 class dbResponse {
   final int statusCode;
@@ -17,9 +19,7 @@ class DbServices {
     try {
       final jsonObject = jsonDecode(inputString);
       print('what is being sent to server: $jsonObject');
-
       final response = await http.post(
-        //192.168.1.153
         Uri.parse(BaseUrl + 'logs'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
@@ -27,17 +27,35 @@ class DbServices {
 
       if (response.statusCode >= 399) {
         print('ERROR: ${response.body}');
-
+        await AlertUtils().errorAlert(response.body, context);
         return false;
       } else {
-        print('OKEE: ${response}');
+        await AlertUtils()
+            .successfulAlert('Please proceed to the next tag ', context);
+        print('inputString: ${inputString}');
+        String jsonStringWithoutQuotes =
+            inputString.substring(1, inputString.length - 1);
+        print('jsonStringWithoutQuotes: ${jsonStringWithoutQuotes}');
+        Map<String, dynamic> newJsonObject =
+            json.decode('{$jsonStringWithoutQuotes}');
+        print('newJsonObject: ${newJsonObject}');
+        print('ID: ${newJsonObject['ID']}');
+        await NfcHomePageState()
+            .updateIsReadValue(newJsonObject['ID'].toString(), 'true');
+        print('Final version of orderJsonArray:${orderJsonArray}}');
+
         return true;
       }
     } catch (e) {
       print("error in db_servces : $e");
+      await AlertUtils().errorAlert(
+          'Unexpected error occured, please check connection ', context);
+      Navigator.pop(context);
       return false;
     }
   }
+
+/////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<int> updateArray(List<String> array) async {
@@ -51,7 +69,6 @@ class DbServices {
           'allowedOrderArray': array,
         }),
       );
-
       if (response.statusCode >= 399) {
         print('ERROR: ${response.body}');
       } else {
@@ -62,19 +79,17 @@ class DbServices {
       print("Error in db_services: $e");
       return 500;
     }
-    
   }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<dbResponse> getAllUsers() async {
-    final url = BaseUrl + 'get_all_users'; 
+    final url = BaseUrl + 'get_all_users';
     print("======================getAllUsers======================");
     try {
       final response = await http.get(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
       );
-
       if (response.statusCode >= 399) {
         print('ERROR: ${response.body}');
       } else {
@@ -85,8 +100,8 @@ class DbServices {
       print("Error in db_services: $e");
       return dbResponse(500, "", e.toString());
     }
-    
   }
+
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<int> changeAuthLevel(String item) async {
     final url = BaseUrl + 'change_auth_level';
@@ -96,7 +111,7 @@ class DbServices {
       final response = await http.post(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body:item,
+        body: item,
       );
 
       if (response.statusCode >= 399) {
@@ -119,7 +134,8 @@ class DbServices {
       int statusCode = await changeAuthLevel(item);
       statusCodeList.add(statusCode);
     }
-    print("====================================statusCodeList====================================");
+    print(
+        "====================================statusCodeList====================================");
     print("statusCodeList: $statusCodeList");
     return statusCodeList;
   }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import '../pages/alert_screen.dart';
 import 'package:http/http.dart' as http;
+import 'alert_utils.dart';
 
 String BaseUrl = LoginUtils().baseUrl;
 
@@ -20,7 +21,6 @@ class WebSocketService {
       _channel = IOWebSocketChannel.connect('ws://192.168.1.160:3000');
 
       _channel!.stream.listen((data) async {
-        print('datadatadatadata');
         print(data);
         if (data is String) {
           if (!data.contains(await LoginUtils().getUserId())) {
@@ -41,7 +41,6 @@ class WebSocketService {
       });
     } catch (e) {
       print("WebSocket connection error: $e");
-      // Handle the error as needed
     }
   }
 
@@ -54,12 +53,12 @@ class WebSocketService {
     _channel = null;
   }
 
-  Future<bool> sendBroadcastMessageFirebase(
+  Future<int> sendBroadcastMessageFirebase(
       String content, String type, String topic) async {
     try {
       final jsonObject = {'content': content, 'type': type, 'topic': topic};
 
-      print('what is being broadcasted: $jsonObject');
+      print('what is being broadcasted from FireBase: $jsonObject');
 
       final response = await http.post(
         //192.168.1.153
@@ -69,16 +68,14 @@ class WebSocketService {
       );
 
       if (response.statusCode >= 399) {
-        print('ERROR: ${response.body}');
-
-        return false;
+        print('ERROR at FireBase: ${response.body}');
       } else {
-        print('Message sent to topic: ${response.body}');
-        return true;
+        print('Message sent to topic from FireBase: ${response.body}');
       }
+      return response.statusCode;
     } catch (e) {
-      print("error while broadcasting message : $e");
-      return false;
+      print("error while broadcasting message from FireBase: $e");
+      return 500;
     }
   }
 }

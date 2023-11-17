@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use, sort_child_properties_last
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'dart:convert';
 import '../components/bottom_navigation.dart';
 import '../components/nfc_block.dart';
@@ -12,26 +15,76 @@ class NfcHomePage extends StatefulWidget {
   const NfcHomePage({super.key});
 
   @override
-  State<NfcHomePage> createState() => _NfcHomePageState();
+  State<NfcHomePage> createState() => NfcHomePageState();
 }
 
-class _NfcHomePageState extends State<NfcHomePage> {
+List<Map<String, dynamic>> orderJsonArray = [];
+
+class NfcHomePageState extends State<NfcHomePage> {
   List<String> allowedOrderArray = [];
+  static bool session = false;
+
   @override
   void initState() {
-    _getOrderArray();
+    isSessionOn();
+    super.initState();
    }
 
-  Future _getOrderArray() async {
-    ApiResponse orderArray = await NfcService().getOrderArray();
+  void isSessionOn() {
+    if (session == false) {
+      _getOrderArray();
+      session = true;
+    } else {
+      print('Session is already on');
+    }
+  }
+
+  void addValuesToArray(String name, bool order) {
+    orderJsonArray.add({"name": name, "isRead": order});
+  }
+
+  Future<void> _getOrderArray() async {
+    ApiResponse orderArray = await NfcService().getOrderArray(context);
     Map<String, dynamic> jsonResponse = json.decode(orderArray.response);
+
     List<String> newAllowedOrderArray =
         List<String>.from(jsonResponse['allowedOrderArray']);
 
     setState(() {
       allowedOrderArray = newAllowedOrderArray;
+      orderJsonArray.clear(); // Clear the existing data
     });
+
+    newAllowedOrderArray.forEach((element) {
+      addValuesToArray(element, false);
+    });
+
+    print(
+        '////////////////////////////////TESTING////////////////////////////////');
+    print(orderJsonArray);
+    print(
+        '////////////////////////////////TESTING////////////////////////////////');
   }
+
+  Future<void> updateIsReadValue(String name, String newReadValue) async {
+    for (int i = 0; i < orderJsonArray.length; i++) {
+      print('orderJsonArray in each loop ${orderJsonArray[i]['name']}');
+      if (orderJsonArray[i]['name'] == name) {
+        orderJsonArray[i]['isRead'] = newReadValue;
+        print('Updated orderJsonArray: $orderJsonArray');
+        break;
+      }
+    }
+  }
+
+  // void checkIfAllRead() {
+  //   for (int i = 0; i < orderJsonArray.length; i++) {
+  //     if (orderJsonArray[i]['isRead'] == false) {
+  //       return;
+  //     }
+  //     AlertUtils().successfulAlert('All orders read', context);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -49,32 +102,70 @@ class _NfcHomePageState extends State<NfcHomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                for (var order in allowedOrderArray)
-                  NfcBlockWidget(order: order, isOrderDone: false),
+                for (int i = 0; i < orderJsonArray.length; i++)
+                  NfcBlockWidget(
+                    order: orderJsonArray[i]["name"],
+                    isRead: orderJsonArray[i]["isRead"].toString(),
+                  ),
                 SizedBox(height: 20),
-                 ElevatedButton(
+                ElevatedButton(
                   onPressed: () async {
                     print(
                         '==============================CONTENTS OF NFC TAG==============================');
                     bool readTagResult = await NfcService().tagRead(context);
+                    if (readTagResult == true) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => NfcHomePage()),
+                      );
+                    }
                     print("tag read result:$readTagResult");
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(left:20,right:20,top:10,bottom:10),
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 20, top: 10, bottom: 10),
                     child: Text('Read tag',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
-                            fontWeight: FontWeight.bold)
-                    ),
+                            fontWeight: FontWeight.bold)),
                   ),
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(28.0),
                       ),
-                      
-                  
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    bool result = await NfcService().resetReadOrder();
+                    if (result) {
+                      print('read order resetted');
+                      session = false;
+                      Navigator.pop(context);
+                      print('session stopped');
+                    } else {
+                      print('error while resetting read order');
+                      AlertUtils()
+                          .errorAlert("Unable to end current session", context);
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 20, top: 10, bottom: 10),
+                    child: Text('End Session',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(28.0),
+                      ),
                     ),
                   ),
                 ),

@@ -15,9 +15,10 @@ class CustomCard extends StatelessWidget {
       {Key? key,
       required this.text,
       required this.title,
-      required this.imgRoute,required this.customWidth,required this.navigatorName})
+      required this.imgRoute,
+      required this.customWidth,
+      required this.navigatorName})
       : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -28,24 +29,19 @@ class CustomCard extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.grey.withAlpha(90),
           onTap: () {
-            if(navigatorName=="AdminHomePage"){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AdminHomePage()));
-                      }else if(navigatorName=="UsersListPage"){
-  Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UsersListPage()));
-                      }
-
+            if (navigatorName == "AdminHomePage") {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AdminHomePage()));
+            } else if (navigatorName == "UsersListPage") {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => UsersListPage()));
+            }
           },
           child: Container(
             height: 180,
-               width: customWidth == 'full'
-          ? MediaQuery.of(context).size.width - 48
-           : (MediaQuery.of(context).size.width - 58) / 2,
+            width: customWidth == 'full'
+                ? MediaQuery.of(context).size.width - 48
+                : (MediaQuery.of(context).size.width - 58) / 2,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
