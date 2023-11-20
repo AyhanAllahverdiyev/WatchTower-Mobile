@@ -5,6 +5,15 @@ import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../utils/login_utils.dart';
 import '../utils/alarm_utils.dart';
 
+const List<String> list = <String>[
+  'location_report',
+  'fire',
+  'earthquake',
+  'flood',
+  'burglary',
+  'other'
+];
+
 class Data {
   String content;
   String type;
@@ -21,55 +30,120 @@ class Data {
   }
 }
 
+String capitalizeFirstLetter(String text) {
+  if (text == null || text.isEmpty) {
+    return text;
+  }
+  return text[0].toUpperCase() + text.substring(1);
+}
+
 class AlertDetails extends StatefulWidget {
   const AlertDetails({Key? key}) : super(key: key);
   static const routeName = '/alert_details';
-
   @override
   State<AlertDetails> createState() => _AlertDetailsState();
 }
 
 class _AlertDetailsState extends State<AlertDetails> {
   final TextEditingController textFieldController1 = TextEditingController();
-  final TextEditingController textFieldController2 = TextEditingController();
   final TextEditingController textFieldController3 = TextEditingController();
+  String selectedType = '';
+
+  String dropdownValue = list.first;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
+         
+           DropdownMenu<String>(
+              
+              inputDecorationTheme: InputDecorationTheme(
+                labelStyle: TextStyle(color: Colors.blue.shade700),
+                
+                filled: true,
+                fillColor: Colors.white,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+              ),
+        
+              width: MediaQuery.of(context).size.width - 36,
+              initialSelection: list.first,
+              onSelected: (String? value) {
+                setState(() {
+                  selectedType = value!;
+                });
+              },
+              dropdownMenuEntries:
+                  list.map<DropdownMenuEntry<String>>((String value) {
+                return DropdownMenuEntry<String>(
+                    value: value,
+                    label: capitalizeFirstLetter(value.replaceFirst('_', ' ').replaceFirst(
+                        value[value.indexOf('_') + 1],
+                        value[value.indexOf('_') + 1].toUpperCase())) );
+                    
+              }).toList(),
+            ),
+         
+          SizedBox(height: 20),
           TextField(
             controller: textFieldController1,
             decoration: InputDecoration(
-                labelText: 'content',
-                labelStyle: TextStyle(color: Colors.white)),
-            style: TextStyle(color: Colors.white),
+              labelText: 'Content',
+              labelStyle: TextStyle(color: Colors.blue.shade700),
+              filled: true,
+              fillColor: Colors.white,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: Colors.white),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: Colors.blue),
+              ),
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+            ),
+            style: TextStyle(color: Colors.blue),
           ),
-          TextField(
-            controller: textFieldController2,
-            decoration: InputDecoration(
-                labelText: 'type', labelStyle: TextStyle(color: Colors.white)),
-            style: TextStyle(color: Colors.white),
-          ),
+          SizedBox(height: 20),
           TextField(
             controller: textFieldController3,
             decoration: InputDecoration(
-                labelText: 'topic', labelStyle: TextStyle(color: Colors.white)),
-            style: TextStyle(color: Colors.white),
+              labelText: 'Topic',
+              labelStyle: TextStyle(color: Colors.blue.shade700),
+              filled: true,
+              fillColor: Colors.white,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: Colors.white),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: Colors.blue),
+              ),
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+            ),
+            style: TextStyle(color: Colors.blue),
           ),
+          
           ElevatedButton(
             onPressed: () async {
-              Data data = Data(
-                  textFieldController1.text,
-                  textFieldController2.text,
-                  textFieldController3.text,
-                  await LoginUtils().getUserId());
+              Data data = Data(textFieldController1.text, selectedType,
+                  textFieldController3.text, await LoginUtils().getUserId());
               await BottomAppBarWidgetState().sendMessage(data);
               int res = await WebSocketService().sendBroadcastMessageFirebase(
-                  textFieldController1.text,
-                  textFieldController2.text,
-                  'Broadcast_Alert');
+                  textFieldController1.text, selectedType, 'Broadcast_Alert');
               if (res >= 399) {
                 await AlertUtils().errorAlert('Failed to send', context);
               } else {
