@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/pages/login.dart';
 import 'package:watch_tower_flutter/utils/alarm_utils.dart';
 import './admin_nfc_order.dart';
-import '../components/admin_bottom_navigation.dart';
+import '../components/bottom_navigation.dart';
 import '../components/custom_card.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -24,17 +24,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   bool isStartSelected = false;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(40.0),
-            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
-        body: SafeArea(
-          child: SingleChildScrollView(
+    return SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -129,10 +119,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ],
             ),
-          ),
-        ),
-        bottomNavigationBar: AdminBottomAppBarWidget(),
-      ),
-    );
+          );
   }
 }

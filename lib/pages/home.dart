@@ -10,6 +10,7 @@ import '../services/nfc_Services.dart';
 import './admin_nfc_order.dart';
 import '../components/custom_card.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import '../layout.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,16 +28,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(40.0),
-            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
-        body: SingleChildScrollView(
+    return  SingleChildScrollView(
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -50,6 +42,34 @@ class _HomePageState extends State<HomePage> {
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
                             color: Colors.white)),
+                  ),
+                  SizedBox(height: 10),
+                  CarouselSlider(
+                    options: CarouselOptions(
+                      autoPlay: true,
+                      aspectRatio: 2.0,
+                      enlargeCenterPage: false,
+                    ),
+                    items: [
+                      CustomCard(
+                          text: "First Card",
+                          title: "Card 1",
+                          imgRoute: "assets/images/nfc_reader.png",
+                          customWidth: 'full',
+                          navigatorName: ""),
+                      CustomCard(
+                          text: "Second Card",
+                          title: "Card 2",
+                          imgRoute: "assets/images/nfc_reader.png",
+                          customWidth: 'full',
+                          navigatorName: ""),
+                      CustomCard(
+                          text: "Third Card",
+                          title: "Card 3",
+                          imgRoute: "assets/images/nfc_reader.png",
+                          customWidth: 'full',
+                          navigatorName: ""),
+                    ],
                   ),
                   SizedBox(height: 20),
                   Card(
@@ -66,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => NfcHomePage()),
+                                  builder: (context) => LayoutPage(index: 4)),
                             );
                           }
                         },
@@ -155,40 +175,12 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   SizedBox(height: 20),
-                  CarouselSlider(
-                    options: CarouselOptions(
-                      autoPlay: true,
-                      aspectRatio: 2.0,
-                      enlargeCenterPage: false,
-                    ),
-                    items: [
-                      CustomCard(
-                          text: "First Card",
-                          title: "Card 1",
-                          imgRoute: "assets/images/nfc_reader.png",
-                          customWidth: 'full',
-                          navigatorName: ""),
-                      CustomCard(
-                          text: "Second Card",
-                          title: "Card 2",
-                          imgRoute: "assets/images/nfc_reader.png",
-                          customWidth: 'full',
-                          navigatorName: ""),
-                      CustomCard(
-                          text: "Third Card",
-                          title: "Card 3",
-                          imgRoute: "assets/images/nfc_reader.png",
-                          customWidth: 'full',
-                          navigatorName: ""),
-                    ],
-                  ),
+                  
                 ],
               ),
             ),
           ),
-        ),
-        bottomNavigationBar: BottomAppBarWidget(),
-      ),
-    );
+        );
+      
   }
 }

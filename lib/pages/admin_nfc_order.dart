@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/pages/admin_home.dart';
 import 'dart:convert';
-import '../components/admin_bottom_navigation.dart';
+import '../components/bottom_navigation.dart';
 import '../components/admin_nfc_block.dart';
 import '../services/nfc_Services.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
@@ -202,7 +202,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
               ),
           ],
         ),
-        bottomNavigationBar: AdminBottomAppBarWidget(),
+        bottomNavigationBar: BottomAppBarWidget(),
       ),
     );
   }

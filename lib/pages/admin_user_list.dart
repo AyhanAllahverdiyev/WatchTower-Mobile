@@ -3,7 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import '../components/admin_bottom_navigation.dart';
+import '../components/bottom_navigation.dart';
 import '../services/db_service.dart';
 import '../utils/alert_utils.dart';
 import '../components/users_list_block.dart';
@@ -140,7 +140,7 @@ class UsersListPageState extends State<UsersListPage> {
                 child: Icon(Icons.save),
               )
             : null,
-        bottomNavigationBar: AdminBottomAppBarWidget(),
+        bottomNavigationBar: BottomAppBarWidget(),
       ),
     );
   }

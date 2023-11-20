@@ -90,16 +90,7 @@ class NfcHomePageState extends State<NfcHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(40.0),
-            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
-        body: SingleChildScrollView(
+    return SingleChildScrollView(
           child: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -174,9 +165,6 @@ class NfcHomePageState extends State<NfcHomePage> {
               ],
             ),
           ),
-        ),
-        bottomNavigationBar: BottomAppBarWidget(),
-      ),
-    );
+        );
   }
 }

@@ -8,6 +8,7 @@ import './home.dart';
 import './admin_home.dart';
 import "../utils/alarm_utils.dart";
 import '../utils/alert_utils.dart';
+import '../layout.dart';
 
 class LoginPage extends StatefulWidget {
   static const String id = 'login_page';
@@ -36,10 +37,19 @@ class LoginPageState extends State<LoginPage> {
   Future<bool> isJWTValid = HttpServices().checkIfTokenValid();
   Future<bool> canLogInWithJWT(BuildContext context) async {
     if (await isJWTValid) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
+      String authLevel = await LoginUtils().getAuthLevel();
+      if (authLevel == "admin" || authLevel == "super_admin") {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LayoutPage(index: 1)),
+        );
+      } else if (authLevel == "user") {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LayoutPage(index: 0)),
+        );
+      }
+
       return true;
     } else {
       return false;
@@ -286,12 +296,13 @@ class LoginPageState extends State<LoginPage> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AdminHomePage()),
+                                builder: (context) => LayoutPage(index: 1)),
                           );
                         } else if (authLevel == "user") {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
+                            MaterialPageRoute(
+                                builder: (context) => LayoutPage(index: 0)),
                           );
                         }
                       }

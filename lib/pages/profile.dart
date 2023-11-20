@@ -45,16 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(40.0),
-            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
-        body: SafeArea(
+    return SafeArea(
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -263,9 +254,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-        ),
-        bottomNavigationBar: BottomAppBarWidget(),
-      ),
-    );
+        );
   }
 }

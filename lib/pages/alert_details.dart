@@ -5,7 +5,7 @@ import 'package:watch_tower_flutter/components/bottom_navigation.dart';
 import 'package:watch_tower_flutter/pages/home.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'package:web_socket_channel/io.dart';
-import '../components/admin_bottom_navigation.dart';
+import '../components/bottom_navigation.dart';
 import '../utils/login_utils.dart';
 import '../components/bottom_navigation.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -41,12 +41,7 @@ class _AlertDetailsState extends State<AlertDetails> {
   final TextEditingController textFieldController3 = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: Text('Alert Details'),
-      ),
-      body: Padding(
+    return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -99,8 +94,6 @@ class _AlertDetailsState extends State<AlertDetails> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: const BottomAppBarWidget(),
-    );
+      );
   }
 }

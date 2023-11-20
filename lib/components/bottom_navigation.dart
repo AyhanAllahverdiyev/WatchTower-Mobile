@@ -8,6 +8,9 @@ import '../pages/home.dart';
 import '../pages/profile.dart';
 import '../pages/alert_screen.dart';
 import '../pages/alert_details.dart';
+import '../utils/login_utils.dart';
+import '../pages/admin_home.dart';
+import '../layout.dart';
 
 class BottomAppBarWidget extends StatefulWidget {
   const BottomAppBarWidget({Key? key}) : super(key: key);
@@ -18,6 +21,7 @@ class BottomAppBarWidget extends StatefulWidget {
 
 class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   bool isTorchPressed = false;
+  String authLevel = '';
   String message = ''; // Variable to store received messages
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,6 +36,7 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
 
   @override
   void initState() {
+    _getAuthLevel();
     super.initState();
     // Listen to incoming WebSocket messages
     channel.stream.listen((data) async {
@@ -67,6 +72,13 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
     super.dispose();
   }
 
+  Future<void> _getAuthLevel() async {
+    String getauthLevel = await LoginUtils().getAuthLevel();
+    setState(() {
+      authLevel = getauthLevel;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
@@ -94,7 +106,7 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => AlertDetails()),
+                  MaterialPageRoute(builder: (context) => LayoutPage(index: 2)),
                   (route) =>
                       false, // This condition always returns false, so it clears everything
                 );
@@ -105,12 +117,19 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               color: Colors.white,
               iconSize: 40,
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                  (route) =>
-                      false, // This condition always returns false, so it clears everything
-                );
+                if (authLevel == "super_admin" || authLevel == "admin") {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LayoutPage(index: 1)),
+                    (route) => false,
+                  );
+                } else if (authLevel == "user") {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LayoutPage(index: 0)),
+                    (route) => false,
+                  );
+                }
               },
             ),
             IconButton(
@@ -128,7 +147,7 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                  MaterialPageRoute(builder: (context) => LayoutPage(index: 3)),
                   (route) =>
                       false, // This condition always returns false, so it clears everything
                 );
