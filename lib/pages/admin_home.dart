@@ -111,8 +111,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   ),
                   items: [
                     CustomCard(
-                        text: "First Card",
-                        title: "Card 1",
+                        text: "Change Auth Level",
+                        title: "Change Auth Level",
                         imgRoute: "assets/images/nfc.png",
                         customWidth: 'full',navigatorName: "UsersListPage"),
                     CustomCard(
