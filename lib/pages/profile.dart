@@ -6,6 +6,7 @@ import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../components/bottom_navigation.dart';
 import './login.dart';
 import '../utils/alarm_utils.dart';
+import '../utils/login_utils.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -15,8 +16,32 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  String userName = "";
+  String userEmail = "";
+  bool light = true;
   @override
-  void initState() {}
+  void initState() {
+    loadSavedCredentials();
+  }
+
+  loadSavedCredentials() async {
+    final credentials = await LoginUtils().loadSavedCredentials();
+    String email = credentials.email;
+
+    int atIndex = email.indexOf("@");
+
+    String updatedEmail = email.substring(0, atIndex);
+    updatedEmail = updatedEmail.replaceAll(".", " ");
+    updatedEmail = updatedEmail.replaceFirst(
+        updatedEmail[0], updatedEmail[0].toUpperCase());
+    updatedEmail = updatedEmail.replaceFirst(
+        updatedEmail[updatedEmail.indexOf(' ') + 1],
+        updatedEmail[updatedEmail.indexOf(' ') + 1].toUpperCase());
+    setState(() {
+      userName = updatedEmail;
+      userEmail = credentials.email;  
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,23 +59,178 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 60),
-                Center(
-                  child: CircleAvatar(
-                    radius: 80.0,
-                    backgroundImage: AssetImage('assets/images/profile_1.png'),
-                  ),
-                ),
                 SizedBox(height: 20),
                 Text(
-                  'John Doe',
+                  'Profile',
                   style: TextStyle(
-                    fontFamily: 'Pacifico',
                     fontSize: 40.0,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                Center(
+                  child: CircleAvatar(
+                    radius: 70.0,
+                    backgroundImage: AssetImage('assets/images/profile_1.png'),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  userName,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  userEmail,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextButton(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                      backgroundColor: Color.fromARGB(57, 108, 126, 241),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      fixedSize: Size.fromHeight(60),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(
+                              Icons.location_on,
+                              color: Colors.white,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              'My Location',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Switch(
+                          value: light,
+                          activeColor: Colors.blue.shade100,
+                          onChanged: (bool value) {
+                            setState(() {
+                              light = value;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextButton(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                      backgroundColor: Color.fromARGB(57, 108, 126, 241),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      fixedSize: Size.fromHeight(60),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(
+                              Icons.bookmark,
+                              color: Colors.white,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              'My History',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                          onPressed:(){
+
+                        }, icon: 
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.white,
+                        ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextButton(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                      backgroundColor: Color.fromARGB(57, 108, 126, 241),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      fixedSize: Size.fromHeight(60),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(
+                              Icons.lock,
+                              color: Colors.white,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              'Change Password',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                          onPressed:(){
+
+                        }, icon: 
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.white,
+                        ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
                 TextButton(
                   onPressed: () async {
                     SharedPreferences prefs =
@@ -62,8 +242,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => LoginPage()),
-                      (route) =>
-                          false, 
+                      (route) => false,
                     );
                   },
                   child: Row(
@@ -71,11 +250,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       Icon(
                         Icons.logout,
-                        color: Colors.white,
+                        color: Colors.red,
                       ),
                       Text('Logout',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.red,
                             fontSize: 20.0,
                           )),
                     ],
