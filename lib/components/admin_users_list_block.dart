@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import '../pages/admin_user_list.dart';
 import '../services/payload_services.dart';
 
-class SuperUserListBlockWidget extends StatefulWidget {
+class AdminUserListBlockWidget extends StatefulWidget {
   final String email;
   final String auth_level;
   final String id;
-  const SuperUserListBlockWidget(
+  const AdminUserListBlockWidget(
       {Key? key,
       required this.email,
       required this.auth_level,
@@ -17,10 +17,10 @@ class SuperUserListBlockWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  SuperUserListBlockWidgetState createState() => SuperUserListBlockWidgetState();
+  AdminUserListBlockWidgetState createState() => AdminUserListBlockWidgetState();
 }
 
-class SuperUserListBlockWidgetState extends State<SuperUserListBlockWidget> {
+class AdminUserListBlockWidgetState extends State<AdminUserListBlockWidget> {
   String? finalAuthLevel;
 
   List<DropdownMenuItem<String>> authLevelList = [
@@ -54,36 +54,13 @@ class SuperUserListBlockWidgetState extends State<SuperUserListBlockWidget> {
                 : widget.email,
             style: TextStyle(fontSize: 20.0, color: Colors.white),
           ),
-          
-          DropdownButton<String>(
-            items: authLevelList,
-            hint: Text(
-                widget.auth_level.replaceFirst(
+          Text(
+              widget.auth_level.replaceFirst(
                     widget.auth_level[0], widget.auth_level[0].toUpperCase()),
-                style: TextStyle(color: Colors.white)),
-            onChanged: (String? value) {
-              setState(() {
-                finalAuthLevel = value!;
-                if(widget.auth_level != finalAuthLevel){
-                  PayloadServices().addToUpdatedAuthLevelList(
-                    widget.id, finalAuthLevel!);
-                }
-                
-              });
-            },
-            value: finalAuthLevel,
-            style: TextStyle(color: Colors.white),
-            dropdownColor: Colors.black,
-          ),
-          Container(
-            width: 30,
-            height: 30,
-            child: Text(
-              'X',
               style: TextStyle(color: Colors.white),
-            )
+            ),
             
-          ),
+         
         ],
       ),
     );

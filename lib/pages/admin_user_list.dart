@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables
 
 import 'dart:convert';
 
@@ -8,6 +8,8 @@ import '../services/db_service.dart';
 import '../utils/alert_utils.dart';
 import '../components/users_list_block.dart';
 import '../services/payload_services.dart';
+import '../utils/login_utils.dart';
+import '../components/admin_users_list_block.dart';
 
 class UsersListPage extends StatefulWidget {
   const UsersListPage({super.key});
@@ -20,10 +22,20 @@ class UsersListPageState extends State<UsersListPage> {
   String usersListString = '';
   List<dynamic> usersList = [];
   List<int> statusCodeList = [];
+  String mailAddress = "";
+  String authLevel = "";
   @override
   void initState() {
     _getUsersArray();
     PayloadServices().clearUpdatedAuthLevelList();
+    _getAuthLevel();
+  }
+
+  _getAuthLevel() async {
+    String getauthLevel = await LoginUtils().getAuthLevel();
+    setState(() {
+      authLevel = getauthLevel;
+    });
   }
 
   Future _getUsersArray() async {
@@ -58,12 +70,37 @@ class UsersListPageState extends State<UsersListPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 20),
+                SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("User Email",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                      Text("Auth Level",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                    ],
+                  ),
+                ),
+               
                 for (int index = 0; index < usersList.length; index++)
-                  UserListBlockWidget(
-                      email: usersList[index]['email'],
-                      auth_level: usersList[index]['auth_level'],
-                      id: usersList[index]['_id'])
+                  if (authLevel == 'admin')
+                    AdminUserListBlockWidget(
+                        email: usersList[index]['email'],
+                        auth_level: usersList[index]['auth_level'],
+                        id: usersList[index]['_id'])
+                  else if (authLevel == 'super_admin')
+                    UserListBlockWidget(
+                        email: usersList[index]['email'],
+                        auth_level: usersList[index]['auth_level'],
+                        id: usersList[index]['_id'])
               ],
             ),
           ),
