@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/components/bottom_navigation.dart';
+import 'package:watch_tower_flutter/layout.dart';
 import 'package:watch_tower_flutter/pages/home.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'package:web_socket_channel/io.dart';
@@ -82,12 +83,22 @@ class _AlertDetailsState extends State<AlertDetails> {
                   await AlertUtils().errorAlert('Failed to send', context);
                 } else {
                   await AlertUtils().successfulAlert('Success', context);
-
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                    (route) => false,
-                  );
+                  String authLevel = await LoginUtils().getAuthLevel();
+                  if (authLevel == 'admin' || authLevel == 'super_admin') {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LayoutPage(index: 1)),
+                      (route) => false,
+                    );
+                  } else if(authLevel == 'user'){
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LayoutPage(index: 0)),
+                      (route) => false,
+                    );
+                  }
                 }
               },
               child: Text('Submit'),
