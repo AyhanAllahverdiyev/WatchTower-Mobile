@@ -7,6 +7,7 @@ import '../utils/login_utils.dart';
 import './home.dart';
 import './admin_home.dart';
 import "../utils/alarm_utils.dart";
+import '../utils/alert_utils.dart';
 
 class LoginPage extends StatefulWidget {
   static const String id = 'login_page';
@@ -31,6 +32,7 @@ class LoginPageState extends State<LoginPage> {
     loginUtils.setBaseUrl('http://192.168.1.11:3000/');
     loadSavedCredentials();
   }
+
   Future<bool> isJWTValid = HttpServices().checkIfTokenValid();
   Future<bool> canLogInWithJWT(BuildContext context) async {
     if (await isJWTValid) {
@@ -259,29 +261,39 @@ class LoginPageState extends State<LoginPage> {
                         "//////////////////////////////////////////////////////////////////////////");
                     ApiResponse loginTest =
                         await HttpServices().loginPost(mail, password);
-                    LoginError loginErrorResponse =
-                        await LoginUtils().getLoginError(loginTest);
-                    setState(() {
-                      errorEmailMessage = loginErrorResponse.errorEmailMessage;
-                      errorPasswordMessage =
-                          loginErrorResponse.errorPasswordMessage;
-                    });
+                    print(loginTest.statusCode);
+                    if (loginTest.statusCode == 500 ||
+                        loginTest.statusCode == -1) {
+                      print("Login Failed!");
+                      await AlertUtils().errorAlert("Login Failed!", context);
+                    } else {
+                      LoginError loginErrorResponse =
+                          await LoginUtils().getLoginError(loginTest);
+                      setState(() {
+                        errorEmailMessage =
+                            loginErrorResponse.errorEmailMessage;
+                        errorPasswordMessage =
+                            loginErrorResponse.errorPasswordMessage;
+                      });
+                      loginUtils.saveCredentials(mail, password, checkedValue);
 
-                    loginUtils.saveCredentials(mail, password, checkedValue);
-
-                    if (loginErrorResponse.isLoginDone) {
-                      String authLevel = await LoginUtils().getAuthLevel();
-                      if (authLevel == "admin" || authLevel == "super_admin") {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AdminHomePage()),
-                        );
-                      } else if (authLevel == "user") {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
-                        );
+                      if (loginErrorResponse.isLoginDone &&
+                          loginTest.statusCode <= 399 &&
+                          loginTest.statusCode != -1) {
+                        String authLevel = await LoginUtils().getAuthLevel();
+                        if (authLevel == "admin" ||
+                            authLevel == "super_admin") {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AdminHomePage()),
+                          );
+                        } else if (authLevel == "user") {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          );
+                        }
                       }
                     }
                   },
