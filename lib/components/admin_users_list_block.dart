@@ -17,7 +17,8 @@ class AdminUserListBlockWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  AdminUserListBlockWidgetState createState() => AdminUserListBlockWidgetState();
+  AdminUserListBlockWidgetState createState() =>
+      AdminUserListBlockWidgetState();
 }
 
 class AdminUserListBlockWidgetState extends State<AdminUserListBlockWidget> {
@@ -37,6 +38,13 @@ class AdminUserListBlockWidgetState extends State<AdminUserListBlockWidget> {
       value: 'super_admin',
     ),
   ];
+  @override
+  checkUserInformations(String email, String auth_level, String id) {
+    if (email == '' || auth_level == '' || id == '') {
+      return false;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,19 +56,34 @@ class AdminUserListBlockWidgetState extends State<AdminUserListBlockWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            widget.email.length > 23
-                ? widget.email.substring(0, 20) + "..."
-                : widget.email,
-            style: TextStyle(fontSize: 20.0, color: Colors.white),
-          ),
-          Text(
-              widget.auth_level.replaceFirst(
-                    widget.auth_level[0], widget.auth_level[0].toUpperCase()),
-              style: TextStyle(color: Colors.white),
-            ),
-            
-         
+          (checkUserInformations(widget.email, widget.auth_level, widget.id))
+              ? Text(
+                  widget.email.length > 23
+                      ? widget.email.substring(0, 20) + "..."
+                      : widget.email,
+                  style: TextStyle(fontSize: 20.0, color: Colors.white),
+                )
+              : Text("Undefined", style: TextStyle(color: Colors.red)),
+          (checkUserInformations(widget.email, widget.auth_level, widget.id))
+              ? Container(
+                  height: 20,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.white,
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    widget.auth_level.replaceFirst(widget.auth_level[0],
+                        widget.auth_level[0].toUpperCase()),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              : Text(" ", style: TextStyle(color: Colors.red)),
         ],
       ),
     );

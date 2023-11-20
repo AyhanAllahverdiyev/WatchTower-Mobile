@@ -39,6 +39,14 @@ class UserListBlockWidgetState extends State<UserListBlockWidget> {
   ];
 
   @override
+  checkUserInformations(String email, String auth_level, String id) {
+    if (email == '' || auth_level == '' || id == '') {
+      return false;
+    }
+    return true;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {},
@@ -48,33 +56,35 @@ class UserListBlockWidgetState extends State<UserListBlockWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            widget.email.length > 23
-                ? widget.email.substring(0, 20) + "..."
-                : widget.email,
-            style: TextStyle(fontSize: 20.0, color: Colors.white),
-          ),
-          
-          DropdownButton<String>(
-            items: authLevelList,
-            hint: Text(
-                widget.auth_level.replaceFirst(
-                    widget.auth_level[0], widget.auth_level[0].toUpperCase()),
-                style: TextStyle(color: Colors.white)),
-            onChanged: (String? value) {
-              setState(() {
-                finalAuthLevel = value!;
-                if(widget.auth_level != finalAuthLevel){
-                  PayloadServices().addToUpdatedAuthLevelList(
-                    widget.id, finalAuthLevel!);
-                }
-                
-              });
-            },
-            value: finalAuthLevel,
-            style: TextStyle(color: Colors.white),
-            dropdownColor: Colors.black,
-          ),
+          (checkUserInformations(widget.email, widget.auth_level, widget.id))
+              ? Text(
+                  widget.email.length > 23
+                      ? widget.email.substring(0, 20) + "..."
+                      : widget.email,
+                  style: TextStyle(fontSize: 20.0, color: Colors.white),
+                )
+              : Text("Undefined", style: TextStyle(color: Colors.red)),
+          (checkUserInformations(widget.email, widget.auth_level, widget.id))
+              ? DropdownButton<String>(
+                  items: authLevelList,
+                  hint: Text(
+                      widget.auth_level.replaceFirst(widget.auth_level[0],
+                          widget.auth_level[0].toUpperCase()),
+                      style: TextStyle(color: Colors.white)),
+                  onChanged: (String? value) {
+                    setState(() {
+                      finalAuthLevel = value!;
+                      if (widget.auth_level != finalAuthLevel) {
+                        PayloadServices().addToUpdatedAuthLevelList(
+                            widget.id, finalAuthLevel!);
+                      }
+                    });
+                  },
+                  value: finalAuthLevel,
+                  style: TextStyle(color: Colors.white),
+                  dropdownColor: Colors.black,
+                )
+              : Text(" "),
         ],
       ),
     );

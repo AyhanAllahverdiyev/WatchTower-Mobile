@@ -89,7 +89,6 @@ class UsersListPageState extends State<UsersListPage> {
                     ],
                   ),
                 ),
-               
                 for (int index = 0; index < usersList.length; index++)
                   if (authLevel == 'admin')
                     AdminUserListBlockWidget(
@@ -105,39 +104,42 @@ class UsersListPageState extends State<UsersListPage> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            for (var item in PayloadServices().getUpdatedAuthLevelList()) {
-              print("item: $item");
-              int statusCode = await DbServices().changeAuthLevel(item);
-              statusCodeList.add(statusCode);
-            }
-            if (statusCodeList.isNotEmpty) {
-              if (statusCodeList.contains(500)) {
-                if (!AlertUtils().isDialogOpen) {
-                  await AlertUtils()
-                      .errorAlert("Internal Server Error!", context);
-                }
-              } else {
-                if (!AlertUtils().isDialogOpen) {
-                  await AlertUtils().successfulAlert(
-                      "Auth Level Updated Successfully!", context);
-                }
-                Navigator.pop(context);
-              }
-            } else {
-              if (!AlertUtils().isDialogOpen) {
-                await AlertUtils()
-                    .errorAlert("Please make some changes first!", context);
-              }
-            }
+        floatingActionButton: authLevel == "super_admin"
+            ? FloatingActionButton(
+                onPressed: () async {
+                  for (var item
+                      in PayloadServices().getUpdatedAuthLevelList()) {
+                    print("item: $item");
+                    int statusCode = await DbServices().changeAuthLevel(item);
+                    statusCodeList.add(statusCode);
+                  }
+                  if (statusCodeList.isNotEmpty) {
+                    if (statusCodeList.contains(500)) {
+                      if (!AlertUtils().isDialogOpen) {
+                        await AlertUtils()
+                            .errorAlert("Internal Server Error!", context);
+                      }
+                    } else {
+                      if (!AlertUtils().isDialogOpen) {
+                        await AlertUtils().successfulAlert(
+                            "Auth Level Updated Successfully!", context);
+                      }
+                      Navigator.pop(context);
+                    }
+                  } else {
+                    if (!AlertUtils().isDialogOpen) {
+                      await AlertUtils().errorAlert(
+                          "Please make some changes first!", context);
+                    }
+                  }
 
-            PayloadServices().clearUpdatedAuthLevelList();
-          },
-          tooltip: 'Save',
-          backgroundColor: Colors.green,
-          child: Icon(Icons.save),
-        ),
+                  PayloadServices().clearUpdatedAuthLevelList();
+                },
+                tooltip: 'Save',
+                backgroundColor: Colors.green,
+                child: Icon(Icons.save),
+              )
+            : null,
         bottomNavigationBar: AdminBottomAppBarWidget(),
       ),
     );
