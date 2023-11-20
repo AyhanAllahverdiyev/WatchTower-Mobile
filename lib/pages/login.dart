@@ -28,7 +28,7 @@ class LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     canLogInWithJWT(context);
-    loginUtils.setBaseUrl('http://192.168.1.160:3000/');
+    loginUtils.setBaseUrl('http://192.168.1.11:3000/');
     loadSavedCredentials();
   }
   Future<bool> isJWTValid = HttpServices().checkIfTokenValid();
