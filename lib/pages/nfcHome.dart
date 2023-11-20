@@ -32,7 +32,7 @@ class NfcHomePageState extends State<NfcHomePage> {
 
   void isSessionOn() {
     if (session == false) {
-      getOrderArray();
+      getOrderArrayForReadPage();
       session = true;
     } else {
       print('Session is already on');
@@ -43,7 +43,7 @@ class NfcHomePageState extends State<NfcHomePage> {
     orderJsonArray.add({"name": name, "isRead": order});
   }
 
-  Future<void> getOrderArray() async {
+  Future<void> getOrderArrayForReadPage() async {
     ApiResponse orderArray = await NfcService().getOrderArray(context);
     Map<String, dynamic> jsonResponse = json.decode(orderArray.response);
     print(jsonResponse);

@@ -19,7 +19,9 @@ class NfcOrderPage extends StatefulWidget {
 }
 
 class NfcOrderPageState extends State<NfcOrderPage> {
-  List<String> allowedOrderArray = [];
+  List<Map<String, dynamic>> resultArray = [];
+  List<dynamic> allowedOrderArray = [];
+  List<String> newAllowedOrderArray = [];
   int? pressedOrderIndex;
   bool isEditing = false;
   bool isDeleteSelected = false;
@@ -28,14 +30,17 @@ class NfcOrderPageState extends State<NfcOrderPage> {
   @override
   void initState() {
     super.initState();
-    _getOrderArray();
+    _getOrderArrayForAdmin();
   }
 
-  Future _getOrderArray() async {
+  Future _getOrderArrayForAdmin() async {
     ApiResponse orderArray = await NfcService().getOrderArray(context);
     Map<String, dynamic> jsonResponse = json.decode(orderArray.response);
-    List<String> newAllowedOrderArray =
-        List<String>.from(jsonResponse['allowedOrderArray']);
+    allowedOrderArray = jsonResponse['allowedOrderArray'];
+    print('allowedOrderArrayAA: $allowedOrderArray');
+    newAllowedOrderArray =
+        allowedOrderArray.map((map) => map['name'].toString()).toList();
+    print('newAllowedOrderArray: $newAllowedOrderArray');
 
     setState(() {
       allowedOrderArray = newAllowedOrderArray;
@@ -44,8 +49,12 @@ class NfcOrderPageState extends State<NfcOrderPage> {
 
   List<String> deleteTag(List<String> array, int index) {
     array.removeAt(index);
-    print('allowedOrderArray: $allowedOrderArray');
+    print('NewallowedOrderArray: $newAllowedOrderArray');
     return array;
+  }
+
+  void addValuesToArray(String name, bool order) {
+    resultArray.add({"name": name, "isRead": order});
   }
 
   @override
@@ -84,7 +93,8 @@ class NfcOrderPageState extends State<NfcOrderPage> {
 
                       if (isDeleteSelected) {
                         setState(() {
-                          allowedOrderArray = deleteTag(allowedOrderArray, i);
+                          allowedOrderArray =
+                              deleteTag(newAllowedOrderArray, i);
                         });
                       }
                     },
@@ -131,14 +141,18 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                     onPressed: () async {
                       addNewTag newTag =
                           await AlertUtils().addNewTagDialog(context);
-                      if (newTag.isConfirmed == true && newTag.tagName != '') {
-                        setState(() {
-                          allowedOrderArray.add(newTag.tagName);
-                        });
-                      }
-                      if (newTag.isConfirmed == true && newTag.tagName == '') {
-                        await AlertUtils()
-                            .errorAlert('Tag Name Cannot Be Empty!', context);
+                      if (newTag.isConfirmed) {
+                        if (newTag.tagName.isEmpty) {
+                          await AlertUtils()
+                              .errorAlert('Tag Name Cannot Be Empty!', context);
+                        } else if (allowedOrderArray.contains(newTag.tagName)) {
+                          await AlertUtils()
+                              .errorAlert('Tag names must be unique', context);
+                        } else {
+                          setState(() {
+                            allowedOrderArray.add(newTag.tagName);
+                          });
+                        }
                       }
                     },
                     tooltip: 'Add Tag',
@@ -157,8 +171,14 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                   SizedBox(height: 10),
                   FloatingActionButton(
                     onPressed: () async {
-                      dbResponse =
-                          await DbServices().updateArray(allowedOrderArray);
+                      resultArray.clear();
+
+                      newAllowedOrderArray.forEach((element) {
+                        addValuesToArray(element, false);
+                      });
+
+                      dbResponse = await DbServices().updateArray(resultArray);
+                      print('newAllowedOrderArray: $newAllowedOrderArray');
                       if (dbResponse <= 399) {
                         if (AlertUtils().isDialogOpen == false) {
                           await AlertUtils()
