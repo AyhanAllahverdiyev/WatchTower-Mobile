@@ -4,16 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:watch_tower_flutter/pages/login.dart';
-import 'package:watch_tower_flutter/pages/nfcHome.dart';
 import 'package:watch_tower_flutter/services/payload_services.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import 'login_Services.dart';
 import './user_info.dart';
 import 'db_service.dart';
-import '../services/device_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './device_services.dart';
 
 class NfcService {
   String BaseUrl = LoginUtils().baseUrl;

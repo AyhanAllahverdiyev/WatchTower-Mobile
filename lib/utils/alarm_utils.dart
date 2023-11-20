@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import '../pages/alert_screen.dart';
 import 'package:http/http.dart' as http;
-import 'alert_utils.dart';
 
 String BaseUrl = LoginUtils().baseUrl;
 

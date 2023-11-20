@@ -1,15 +1,12 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use, sort_child_properties_last
 
 import 'package:flutter/material.dart';
-import 'package:watch_tower_flutter/pages/admin_home.dart';
 import 'dart:convert';
 import '../components/bottom_navigation.dart';
-import '../components/admin_nfc_block.dart';
 import '../services/nfc_Services.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
 import '../services/db_service.dart';
 import '../utils/alert_utils.dart';
-import '../utils/alarm_utils.dart';
 
 class NfcOrderPage extends StatefulWidget {
   const NfcOrderPage({super.key});

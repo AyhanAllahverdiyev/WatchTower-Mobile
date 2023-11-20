@@ -3,10 +3,7 @@ import 'package:watch_tower_flutter/pages/alert_details.dart';
 import 'package:watch_tower_flutter/pages/nfcHome.dart';
 import '../pages/home.dart';
 import '../pages/admin_home.dart';
-import '../pages/admin_nfc_order.dart';
-import '../pages/alert_screen.dart';
 import '../pages/profile.dart';
-import '../pages/alert_details.dart';
 import 'components/bottom_navigation.dart';
 
 class LayoutPage extends StatefulWidget {
@@ -17,8 +14,6 @@ class LayoutPage extends StatefulWidget {
 }
 
 class LayoutPageState extends State<LayoutPage> {
-
-
   List<Widget> _pages = [
     HomePage(), //0
     AdminHomePage(), //1

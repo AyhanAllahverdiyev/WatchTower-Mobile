@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../utils/login_utils.dart';
 import '../pages/nfcHome.dart';
-import '../pages/nfcHome.dart';
 
 class dbResponse {
   final int statusCode;

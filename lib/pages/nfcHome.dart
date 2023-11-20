@@ -5,11 +5,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'dart:convert';
-import '../components/bottom_navigation.dart';
 import '../components/nfc_block.dart';
 import '../services/nfc_Services.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
-import '../utils/alarm_utils.dart';
 
 class NfcHomePage extends StatefulWidget {
   const NfcHomePage({super.key});
@@ -91,80 +89,80 @@ class NfcHomePageState extends State<NfcHomePage> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-          child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (int i = 0; i < orderJsonArray.length; i++)
-                  NfcBlockWidget(
-                    order: orderJsonArray[i]["name"],
-                    isRead: orderJsonArray[i]["isRead"].toString(),
-                  ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () async {
-                    print(
-                        '==============================CONTENTS OF NFC TAG==============================');
-                    bool readTagResult = await NfcService().tagRead(context);
-                    if (readTagResult == true) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => NfcHomePage()),
-                      );
-                    }
-                    print("tag read result:$readTagResult");
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 10),
-                    child: Text('Read tag',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(28.0),
-                      ),
-                    ),
+      child: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (int i = 0; i < orderJsonArray.length; i++)
+              NfcBlockWidget(
+                order: orderJsonArray[i]["name"],
+                isRead: orderJsonArray[i]["isRead"].toString(),
+              ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                print(
+                    '==============================CONTENTS OF NFC TAG==============================');
+                bool readTagResult = await NfcService().tagRead(context);
+                if (readTagResult == true) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => NfcHomePage()),
+                  );
+                }
+                print("tag read result:$readTagResult");
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, top: 10, bottom: 10),
+                child: Text('Read tag',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)),
+              ),
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(28.0),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    bool result = await NfcService().resetReadOrder();
-                    if (result) {
-                      print('read order resetted');
-                      session = false;
-                      Navigator.pop(context);
-                      print('session stopped');
-                    } else {
-                      print('error while resetting read order');
-                      AlertUtils()
-                          .errorAlert("Unable to end current session", context);
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 10),
-                    child: Text('End Session',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(28.0),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        );
+            ElevatedButton(
+              onPressed: () async {
+                bool result = await NfcService().resetReadOrder();
+                if (result) {
+                  print('read order resetted');
+                  session = false;
+                  Navigator.pop(context);
+                  print('session stopped');
+                } else {
+                  print('error while resetting read order');
+                  AlertUtils()
+                      .errorAlert("Unable to end current session", context);
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, top: 10, bottom: 10),
+                child: Text('End Session',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)),
+              ),
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(28.0),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

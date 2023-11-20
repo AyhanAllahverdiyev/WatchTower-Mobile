@@ -1,12 +1,7 @@
 import 'dart:convert';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:watch_tower_flutter/main.dart';
-import 'package:watch_tower_flutter/pages/alert_screen.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
   print('handleBackgroundMessage');
@@ -20,7 +15,6 @@ class FirebaseUtils {
   final firebaseMessaging = FirebaseMessaging.instance;
 
   Future<void> initNotifications() async {
-
     String deviceToken = await getDeviceTokenIos();
     print("###### PRINT DEVICE TOKEN TO USE FOR PUSH NOTIFCIATION######");
     print(deviceToken);
@@ -31,7 +25,7 @@ class FirebaseUtils {
     print('===================================');
     print("TOKEN: $fcmToken");
     initPushNotifications();
-   // initLocalNotifications();
+    // initLocalNotifications();
   }
 
   void handleMessage(RemoteMessage? message) {
