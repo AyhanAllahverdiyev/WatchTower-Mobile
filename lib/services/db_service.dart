@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../utils/login_utils.dart';
 import '../pages/nfcHome.dart';
+import '../pages/nfcHome.dart';
 
 class dbResponse {
   final int statusCode;
@@ -29,6 +30,27 @@ class DbServices {
         print('ERROR: ${response.body}');
         await AlertUtils().errorAlert(response.body, context);
         return false;
+      } else if (response.statusCode == 302) {
+        await AlertUtils().successfulAlert('Tour Completed', context);
+        print('inputString: ${inputString}');
+        String jsonStringWithoutQuotes =
+            inputString.substring(1, inputString.length - 1);
+        print('jsonStringWithoutQuotes: ${jsonStringWithoutQuotes}');
+        Map<String, dynamic> newJsonObject =
+            json.decode('{$jsonStringWithoutQuotes}');
+        print('newJsonObject: ${newJsonObject}');
+        print('ID: ${newJsonObject['ID']}');
+        await NfcHomePageState()
+            .updateIsReadValue(newJsonObject['ID'].toString(), 'true');
+        print('Final version of orderJsonArray:${orderJsonArray}}');
+        
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => NfcHomePage()),
+          (route) =>
+              false, // This condition always returns false, so it clears everything
+        );
+        return true;
       } else {
         await AlertUtils()
             .successfulAlert('Please proceed to the next tag ', context);
