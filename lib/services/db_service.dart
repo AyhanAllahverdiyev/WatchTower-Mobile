@@ -15,6 +15,7 @@ class dbResponse {
 }
 
 class DbServices {
+  int keyvalue = 0;
   String BaseUrl = LoginUtils().baseUrl;
   Future<bool> saveToDatabase(BuildContext context, String inputString) async {
     try {
@@ -43,7 +44,7 @@ class DbServices {
         await NfcHomePageState()
             .updateIsReadValue(newJsonObject['ID'].toString(), 'true');
         print('Final version of orderJsonArray:${orderJsonArray}}');
-        
+
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => NfcHomePage()),
@@ -80,7 +81,7 @@ class DbServices {
 /////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  Future<int> updateArray(List<String> array) async {
+  Future<int> updateArray(List<Map<String, dynamic>> array) async {
     final url = BaseUrl + 'order';
     print('trying to set read order : $array');
     try {
