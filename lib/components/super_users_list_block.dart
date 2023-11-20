@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import '../pages/admin_user_list.dart';
 import '../services/payload_services.dart';
 
-class UserListBlockWidget extends StatefulWidget {
+class SuperUserListBlockWidget extends StatefulWidget {
   final String email;
   final String auth_level;
   final String id;
-  const UserListBlockWidget(
+  const SuperUserListBlockWidget(
       {Key? key,
       required this.email,
       required this.auth_level,
@@ -17,10 +17,10 @@ class UserListBlockWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  UserListBlockWidgetState createState() => UserListBlockWidgetState();
+  SuperUserListBlockWidgetState createState() => SuperUserListBlockWidgetState();
 }
 
-class UserListBlockWidgetState extends State<UserListBlockWidget> {
+class SuperUserListBlockWidgetState extends State<SuperUserListBlockWidget> {
   String? finalAuthLevel;
 
   List<DropdownMenuItem<String>> authLevelList = [
@@ -74,6 +74,15 @@ class UserListBlockWidgetState extends State<UserListBlockWidget> {
             value: finalAuthLevel,
             style: TextStyle(color: Colors.white),
             dropdownColor: Colors.black,
+          ),
+          Container(
+            width: 30,
+            height: 30,
+            child: Text(
+              'X',
+              style: TextStyle(color: Colors.white),
+            )
+            
           ),
         ],
       ),
