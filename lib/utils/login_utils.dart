@@ -90,6 +90,7 @@ class LoginUtils {
       prefs.remove('email');
       prefs.remove('password');
       prefs.setBool('rememberMe', false);
+      prefs.setString('id', "null");
     }
   }
 

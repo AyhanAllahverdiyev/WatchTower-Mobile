@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:watch_tower_flutter/layout.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'dart:convert';
 import '../components/nfc_block.dart';
@@ -77,15 +78,6 @@ class NfcHomePageState extends State<NfcHomePage> {
     }
   }
 
-  // void checkIfAllRead() {
-  //   for (int i = 0; i < orderJsonArray.length; i++) {
-  //     if (orderJsonArray[i]['isRead'] == false) {
-  //       return;
-  //     }
-  //     AlertUtils().successfulAlert('All orders read', context);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -107,7 +99,8 @@ class NfcHomePageState extends State<NfcHomePage> {
                 if (readTagResult == true) {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => NfcHomePage()),
+                    MaterialPageRoute(
+                        builder: (context) => LayoutPage(index: 4)),
                   );
                 }
                 print("tag read result:$readTagResult");

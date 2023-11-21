@@ -14,6 +14,7 @@ class UserInfoService {
       print(jsonData);
 
       jsonData['battery_level'] = await DeviceService.getBatteryLevel();
+      jsonData['user_id'] = await LoginUtils().getUserId();
       print('after adding batttery ');
       print(jsonData);
 

@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           Image(
                             image: AssetImage('assets/images/nfc_reader.png'),
-                            height: 180,
+                            width: MediaQuery.of(context).size.width / 3,
                           ),
                         ],
                       ),
