@@ -5,6 +5,8 @@ PODS:
     - Flutter
   - audioplayers_darwin (0.0.1):
     - Flutter
+  - battery_info (0.0.1):
+    - Flutter
   - Firebase/Analytics (10.16.0):
     - Firebase/Core
   - Firebase/Core (10.16.0):
@@ -135,6 +137,7 @@ DEPENDENCIES:
   - assets_audio_player (from `.symlinks/plugins/assets_audio_player/ios`)
   - assets_audio_player_web (from `.symlinks/plugins/assets_audio_player_web/ios`)
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
+  - battery_info (from `.symlinks/plugins/battery_info/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
@@ -168,6 +171,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/assets_audio_player_web/ios"
   audioplayers_darwin:
     :path: ".symlinks/plugins/audioplayers_darwin/ios"
+  battery_info:
+    :path: ".symlinks/plugins/battery_info/ios"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_core:
@@ -195,6 +200,7 @@ SPEC CHECKSUMS:
   assets_audio_player: edee322b9cb625571b830b35872ead1a295fd917
   assets_audio_player_web: 19826380c44375761aa0b9053665c1e3fbc3b86b
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
+  battery_info: 09f5c9ee65394f2291c8c6227bedff345b8a730c
   Firebase: 25899099b77d255a636e3579c3d9dce10ec150d5
   firebase_analytics: 6b9cf6da9b2e38ace14482bd29e099b25abac4ad
   firebase_core: 68027ba03585e3efe1608e35d3ab2777a64eabe9

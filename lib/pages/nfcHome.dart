@@ -106,6 +106,8 @@ class NfcHomePageState extends State<NfcHomePage> {
                         '==============================CONTENTS OF NFC TAG==============================');
                     bool readTagResult = await NfcService().tagRead(context);
                     if (readTagResult == true) {
+                      print("tag read successfully");
+                      print("//////////////////////////////////////////");
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -137,7 +139,11 @@ class NfcHomePageState extends State<NfcHomePage> {
                     if (result) {
                       print('read order resetted');
                       session = false;
-                      Navigator.pop(context);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NfcHomePage()),
+                      );
                       print('session stopped');
                     } else {
                       print('error while resetting read order');

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:nfc_manager/nfc_manager.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../components/bottom_navigation.dart';
 import './nfcHome.dart';
@@ -20,6 +21,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -38,6 +41,8 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                
+                  SizedBox(height: 20),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text("Quick Access",
