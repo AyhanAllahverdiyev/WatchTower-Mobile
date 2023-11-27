@@ -251,7 +251,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
-        bottomNavigationBar: BottomAppBarWidget(),
+        bottomNavigationBar: BottomAppBarWidget(pageName: "ProfilePage",),
     );
   }
 }

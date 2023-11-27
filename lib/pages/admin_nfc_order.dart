@@ -199,7 +199,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
               ),
           ],
         ),
-        bottomNavigationBar: BottomAppBarWidget(),
+        bottomNavigationBar: BottomAppBarWidget(pageName: "NfcOrderPage",),
       ),
     );
   }

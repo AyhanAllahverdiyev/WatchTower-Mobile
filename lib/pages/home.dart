@@ -177,7 +177,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        bottomNavigationBar: BottomAppBarWidget(),
+        bottomNavigationBar: BottomAppBarWidget(pageName: "HomePage",),
       ),
     );
   }

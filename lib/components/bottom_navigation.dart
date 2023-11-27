@@ -13,7 +13,11 @@ import '../pages/admin_home.dart';
 
 
 class BottomAppBarWidget extends StatefulWidget {
-  const BottomAppBarWidget({Key? key}) : super(key: key);
+  final String pageName;
+  const BottomAppBarWidget({Key? key,
+    required this.pageName,
+  }) 
+  : super(key: key);
 
   @override
   BottomAppBarWidgetState createState() => BottomAppBarWidgetState();
@@ -104,12 +108,16 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               color: Colors.white,
               iconSize: 40,
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
+                if(widget.pageName!="AlertDetail"){
+                
+                   Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => AlertDetails()),
                   (route) =>
-                      false, // This condition always returns false, so it clears everything
+                      false, 
                 );
+                }
+               
               },
             ),
             IconButton(
@@ -117,7 +125,9 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               color: Colors.white,
               iconSize: 40,
               onPressed: () {
-                if (authLevel == "super_admin" || authLevel == "admin") {
+                if(widget.pageName!="HomePage" && widget.pageName!="AdminHomePage"){
+               
+                  if (authLevel == "super_admin" || authLevel == "admin") {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
@@ -132,6 +142,8 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
                     (route) => false,
                   );
                 }
+                }
+                
               },
             ),
             IconButton(
@@ -147,12 +159,15 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               color: Colors.white,
               iconSize: 40,
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
+                if(widget.pageName!="ProfilePage"){
+                    Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) =>  ProfilePage()),
                   (route) =>
                       false, // This condition always returns false, so it clears everything
                 );
+                }
+              
               },
             ),
           ],

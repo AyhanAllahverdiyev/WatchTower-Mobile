@@ -179,7 +179,7 @@ class _AlertDetailsState extends State<AlertDetails> {
             ],
           ),
         ),
-        bottomNavigationBar: BottomAppBarWidget(),
+        bottomNavigationBar: BottomAppBarWidget(pageName: "AlertDetail",),
       ),
     );
   }

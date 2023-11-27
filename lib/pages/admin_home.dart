@@ -128,7 +128,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             ],
           ),
         ),
-        bottomNavigationBar: BottomAppBarWidget(),
+        bottomNavigationBar: BottomAppBarWidget(pageName: "AdminHomePage",),
       ),
     );
   }

@@ -140,7 +140,7 @@ class UsersListPageState extends State<UsersListPage> {
                 child: Icon(Icons.save),
               )
             : null,
-        bottomNavigationBar: BottomAppBarWidget(),
+        bottomNavigationBar: BottomAppBarWidget(pageName: "UsersListPage",),
       ),
     );
   }

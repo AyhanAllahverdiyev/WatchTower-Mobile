@@ -166,7 +166,7 @@ class NfcHomePageState extends State<NfcHomePage> {
             ),
           ),
         ),
-        bottomNavigationBar: BottomAppBarWidget(),
+        bottomNavigationBar: BottomAppBarWidget(pageName: "NfcHomePage"),
       ),
     );
   }
