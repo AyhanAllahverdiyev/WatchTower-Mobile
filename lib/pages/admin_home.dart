@@ -49,7 +49,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
               ),
               SizedBox(height: 20),
               Card(
-                  color: Colors.purple.shade800,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.purpleAccent.shade700, width: 2),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  color: Colors.black,
                   clipBehavior: Clip.hardEdge,
                   shadowColor: Colors.blueGrey,
                   child: InkWell(
@@ -90,7 +94,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                           ),
                           Image(
                             image: AssetImage('assets/images/nfc_reader.png'),
-                            height: 180,
+                            width: MediaQuery.of(context).size.width / 3 ,
                           ),
                         ],
                       ),
@@ -110,19 +114,25 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       title: "Change Auth Level",
                       imgRoute: "assets/images/nfc.png",
                       customWidth: 'full',
-                      navigatorName: "UsersListPage"),
+                      navigatorName: "UsersListPage",
+
+                      
+                      ),
                   CustomCard(
                       text: "Second Card",
                       title: "Card 2",
                       imgRoute: "assets/images/nfc.png",
                       customWidth: 'full',
-                      navigatorName: ""),
+                      navigatorName: "",
+
+                      ),
                   CustomCard(
                       text: "Third Card",
                       title: "Card 3",
                       imgRoute: "assets/images/nfc.png",
                       customWidth: 'full',
-                      navigatorName: ""),
+                      navigatorName: "",
+                    ),
                 ],
               ),
             ],

@@ -64,24 +64,30 @@ class _HomePageState extends State<HomePage> {
                           title: "Card 1",
                           imgRoute: "assets/images/nfc_reader.png",
                           customWidth: 'full',
-                          navigatorName: ""),
+                          navigatorName: "",
+               ),
                       CustomCard(
                           text: "Second Card",
                           title: "Card 2",
                           imgRoute: "assets/images/nfc_reader.png",
                           customWidth: 'full',
-                          navigatorName: ""),
+                          navigatorName: "",
+     
+                          ),
                       CustomCard(
                           text: "Third Card",
                           title: "Card 3",
                           imgRoute: "assets/images/nfc_reader.png",
                           customWidth: 'full',
-                          navigatorName: ""),
+                          navigatorName: "",),
                     ],
                   ),
                   SizedBox(height: 20),
                   Card(
-                      color: Colors.purple.shade800,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          side: BorderSide(color: Colors.purpleAccent.shade700, width: 2)),
+                      color: Colors.black,
                       clipBehavior: Clip.hardEdge,
                       shadowColor: Colors.blueGrey,
                       child: InkWell(
@@ -106,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.only(top: 5),
@@ -114,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                                           style: TextStyle(
                                               fontSize: 25,
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.white)),
+                                              color: Colors.purpleAccent.shade700)),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(bottom: 15),
@@ -139,6 +145,9 @@ class _HomePageState extends State<HomePage> {
                                                 fontWeight: FontWeight.bold)),
                                       ),
                                       style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.purpleAccent.shade700),
                                         shape: MaterialStateProperty.all<
                                             RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
@@ -165,15 +174,17 @@ class _HomePageState extends State<HomePage> {
                       CustomCard(
                           text: "First Card",
                           title: "Card 1",
-                          imgRoute: "assets/images/nfc_reader.png",
+                          imgRoute: "assets/images/nfc.png",
                           customWidth: 'half',
-                          navigatorName: ""),
+                          navigatorName: "",
+                   ),
                       CustomCard(
                           text: "Second Card",
                           title: "Card 2",
-                          imgRoute: "assets/images/nfc_reader.png",
+                          imgRoute: "assets/images/nfc.png",
                           customWidth: 'half',
-                          navigatorName: ""),
+                          navigatorName: "",
+                      ),
                     ],
                   ),
                   SizedBox(height: 20),
