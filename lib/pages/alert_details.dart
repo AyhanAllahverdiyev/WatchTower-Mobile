@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/components/bottom_navigation.dart';
-import 'package:watch_tower_flutter/layout.dart';
+import 'package:watch_tower_flutter/pages/admin_home.dart';
+import 'package:watch_tower_flutter/pages/home.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../utils/login_utils.dart';
 import '../utils/alarm_utils.dart';
@@ -52,123 +53,133 @@ class _AlertDetailsState extends State<AlertDetails> {
   String dropdownValue = list.first;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-         
-           DropdownMenu<String>(
-              
-              inputDecorationTheme: InputDecorationTheme(
-                labelStyle: TextStyle(color: Colors.blue.shade700),
-                
-                filled: true,
-                fillColor: Colors.white,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(color: Colors.white),
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(40.0),
+            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              DropdownMenu<String>(
+                inputDecorationTheme: InputDecorationTheme(
+                  labelStyle: TextStyle(color: Colors.blue.shade700),
+                  filled: true,
+                  fillColor: Colors.white,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(color: Colors.blue),
+                width: MediaQuery.of(context).size.width - 36,
+                initialSelection: list.first,
+                onSelected: (String? value) {
+                  setState(() {
+                    selectedType = value!;
+                  });
+                },
+                dropdownMenuEntries:
+                    list.map<DropdownMenuEntry<String>>((String value) {
+                  return DropdownMenuEntry<String>(
+                      value: value,
+                      label: capitalizeFirstLetter(value
+                          .replaceFirst('_', ' ')
+                          .replaceFirst(value[value.indexOf('_') + 1],
+                              value[value.indexOf('_') + 1].toUpperCase())));
+                }).toList(),
+              ),
+              SizedBox(height: 20),
+              TextField(
+                controller: textFieldController1,
+                decoration: InputDecoration(
+                  labelText: 'Content',
+                  labelStyle: TextStyle(color: Colors.blue.shade700),
+                  filled: true,
+                  fillColor: Colors.white,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
                 ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                style: TextStyle(color: Colors.blue),
               ),
-        
-              width: MediaQuery.of(context).size.width - 36,
-              initialSelection: list.first,
-              onSelected: (String? value) {
-                setState(() {
-                  selectedType = value!;
-                });
-              },
-              dropdownMenuEntries:
-                  list.map<DropdownMenuEntry<String>>((String value) {
-                return DropdownMenuEntry<String>(
-                    value: value,
-                    label: capitalizeFirstLetter(value.replaceFirst('_', ' ').replaceFirst(
-                        value[value.indexOf('_') + 1],
-                        value[value.indexOf('_') + 1].toUpperCase())) );
-                    
-              }).toList(),
-            ),
-         
-          SizedBox(height: 20),
-          TextField(
-            controller: textFieldController1,
-            decoration: InputDecoration(
-              labelText: 'Content',
-              labelStyle: TextStyle(color: Colors.blue.shade700),
-              filled: true,
-              fillColor: Colors.white,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(color: Colors.white),
+              SizedBox(height: 20),
+              TextField(
+                controller: textFieldController3,
+                decoration: InputDecoration(
+                  labelText: 'Topic',
+                  labelStyle: TextStyle(color: Colors.blue.shade700),
+                  filled: true,
+                  fillColor: Colors.white,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                ),
+                style: TextStyle(color: Colors.blue),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(color: Colors.blue),
+              ElevatedButton(
+                onPressed: () async {
+                  Data data = Data(
+                      textFieldController1.text,
+                      selectedType,
+                      textFieldController3.text,
+                      await LoginUtils().getUserId());
+                  await BottomAppBarWidgetState().sendMessage(data);
+                  int res = await WebSocketService()
+                      .sendBroadcastMessageFirebase(textFieldController1.text,
+                          selectedType, 'Broadcast_Alert');
+                  if (res >= 399) {
+                    await AlertUtils().errorAlert('Failed to send', context);
+                  } else {
+                    await AlertUtils().successfulAlert('Success', context);
+                    String authLevel = await LoginUtils().getAuthLevel();
+                    if (authLevel == 'admin' || authLevel == 'super_admin') {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AdminHomePage()),
+                        (route) => false,
+                      );
+                    } else if (authLevel == 'user') {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HomePage()),
+                        (route) => false,
+                      );
+                    }
+                  }
+                },
+                child: Text('Submit'),
               ),
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-            ),
-            style: TextStyle(color: Colors.blue),
+            ],
           ),
-          SizedBox(height: 20),
-          TextField(
-            controller: textFieldController3,
-            decoration: InputDecoration(
-              labelText: 'Topic',
-              labelStyle: TextStyle(color: Colors.blue.shade700),
-              filled: true,
-              fillColor: Colors.white,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(color: Colors.white),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(color: Colors.blue),
-              ),
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-            ),
-            style: TextStyle(color: Colors.blue),
-          ),
-          
-          ElevatedButton(
-            onPressed: () async {
-              Data data = Data(textFieldController1.text, selectedType,
-                  textFieldController3.text, await LoginUtils().getUserId());
-              await BottomAppBarWidgetState().sendMessage(data);
-              int res = await WebSocketService().sendBroadcastMessageFirebase(
-                  textFieldController1.text, selectedType, 'Broadcast_Alert');
-              if (res >= 399) {
-                await AlertUtils().errorAlert('Failed to send', context);
-              } else {
-                await AlertUtils().successfulAlert('Success', context);
-                String authLevel = await LoginUtils().getAuthLevel();
-                if (authLevel == 'admin' || authLevel == 'super_admin') {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LayoutPage(index: 1)),
-                    (route) => false,
-                  );
-                } else if (authLevel == 'user') {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LayoutPage(index: 0)),
-                    (route) => false,
-                  );
-                }
-              }
-            },
-            child: Text('Submit'),
-          ),
-        ],
+        ),
+        bottomNavigationBar: BottomAppBarWidget(),
       ),
     );
   }

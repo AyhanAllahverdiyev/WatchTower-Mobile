@@ -1,11 +1,12 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:watch_tower_flutter/pages/admin_home.dart';
+import 'package:watch_tower_flutter/pages/home.dart';
 import './signUp.dart';
 import '../services/login_Services.dart';
 import '../utils/login_utils.dart';
 import '../utils/alert_utils.dart';
-import '../layout.dart';
 
 class LoginPage extends StatefulWidget {
   static const String id = 'login_page';
@@ -38,12 +39,12 @@ class LoginPageState extends State<LoginPage> {
       if (authLevel == "admin" || authLevel == "super_admin") {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LayoutPage(index: 1)),
+          MaterialPageRoute(builder: (context) => AdminHomePage()),
         );
       } else if (authLevel == "user") {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LayoutPage(index: 0)),
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       }
 
@@ -297,13 +298,13 @@ class LoginPageState extends State<LoginPage> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LayoutPage(index: 1)),
+                                builder: (context) => AdminHomePage()),
                           );
                         } else if (authLevel == "user") {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LayoutPage(index: 0)),
+                                builder: (context) => HomePage()),
                           );
                         }
                       }

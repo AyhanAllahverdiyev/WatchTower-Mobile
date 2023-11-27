@@ -10,7 +10,7 @@ import '../pages/alert_screen.dart';
 import '../pages/alert_details.dart';
 import '../utils/login_utils.dart';
 import '../pages/admin_home.dart';
-import '../layout.dart';
+
 
 class BottomAppBarWidget extends StatefulWidget {
   const BottomAppBarWidget({Key? key}) : super(key: key);
@@ -106,7 +106,7 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => LayoutPage(index: 2)),
+                  MaterialPageRoute(builder: (context) => AlertDetails()),
                   (route) =>
                       false, // This condition always returns false, so it clears everything
                 );
@@ -121,14 +121,14 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => LayoutPage(index: 1)),
+                        builder: (context) => AdminHomePage()),
                     (route) => false,
                   );
                 } else if (authLevel == "user") {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => LayoutPage(index: 0)),
+                        builder: (context) => HomePage(),),
                     (route) => false,
                   );
                 }
@@ -149,7 +149,7 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => LayoutPage(index: 3)),
+                  MaterialPageRoute(builder: (context) =>  ProfilePage()),
                   (route) =>
                       false, // This condition always returns false, so it clears everything
                 );

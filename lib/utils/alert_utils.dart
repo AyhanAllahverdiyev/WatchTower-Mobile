@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:watch_tower_flutter/layout.dart';
 import 'package:watch_tower_flutter/pages/nfcHome.dart';
 import '../services/nfc_Services.dart';
 import 'package:quickalert/quickalert.dart';
@@ -67,7 +66,7 @@ class AlertUtils {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => LayoutPage(index: 4)));
+                      builder: (context) => NfcHomePage()));
             },
             onConfirmBtnTap: () async {
               Navigator.pop(context);
@@ -80,7 +79,7 @@ class AlertUtils {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => LayoutPage(index: 4)));
+                        builder: (context) => NfcHomePage()));
               } else {
                 print('unable to launch new session');
                 await errorAlert(
@@ -92,7 +91,7 @@ class AlertUtils {
         } else {
           await successfulAlert('New Session Initialised!', context);
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => LayoutPage(index: 4)));
+              MaterialPageRoute(builder: (context) => NfcHomePage()));
         }
       },
       onCancelBtnTap: () {
