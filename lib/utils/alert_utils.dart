@@ -77,23 +77,19 @@ class AlertUtils {
             onCancelBtnTap: () {
               Navigator.pop(context);
               print('Previous session ongoing');
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NfcHomePage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NfcHomePage()));
             },
             onConfirmBtnTap: () async {
-              Navigator.pop(context);
-              NfcHomePageState.session = false;
-              if (await NfcService().resetReadOrder()) {
-                print('new sessing initialised');
-                NfcHomePageState.session = true;
-                await successfulAlert('New Session Initialised!', context);
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NfcHomePage()));
+              bool result = await NfcService().resetReadOrder();
+              if (result) {
+                print('read order resetted');
+                NfcHomePageState.session = false;
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => NfcHomePage()),
+                );
+                print('session stopped');
               } else {
                 print('unable to launch new session');
                 await errorAlert(
@@ -104,8 +100,8 @@ class AlertUtils {
           );
         } else {
           await successfulAlert('New Session Initialised!', context);
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => NfcHomePage()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => NfcHomePage()));
         }
       },
       onCancelBtnTap: () {

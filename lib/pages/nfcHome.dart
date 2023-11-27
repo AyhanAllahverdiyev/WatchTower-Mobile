@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:watch_tower_flutter/pages/home.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'dart:convert';
 import '../components/bottom_navigation.dart';
@@ -22,7 +23,7 @@ List<Map<String, dynamic>> orderJsonArray = [];
 class NfcHomePageState extends State<NfcHomePage> {
   List<String> allowedOrderArray = [];
   static bool session = false;
-
+  static bool tour = false;
   @override
   void initState() {
     isSessionOn();
@@ -30,11 +31,14 @@ class NfcHomePageState extends State<NfcHomePage> {
   }
 
   void isSessionOn() {
-    if (session == false) {
+    if (session == false && tour == false) {
       getOrderArrayForReadPage();
       session = true;
-    } else {
+    } else if (session == true && tour == false) {
       print('Session is already on');
+    } else {
+      getOrderArrayForReadPage();
+      tour = false;
     }
   }
 
@@ -104,14 +108,18 @@ class NfcHomePageState extends State<NfcHomePage> {
                   onPressed: () async {
                     print(
                         '==============================CONTENTS OF NFC TAG==============================');
-                    bool readTagResult = await NfcService().tagRead(context);
-                    if (readTagResult == true) {
+                    int readTagResult = await NfcService().tagRead(context);
+                    if (readTagResult == 302) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => NfcHomePage()),
+                      );
+                    } else if (readTagResult < 400) {
                       print("tag read successfully");
                       print("//////////////////////////////////////////");
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => NfcHomePage()),
+                        MaterialPageRoute(builder: (context) => NfcHomePage()),
                       );
                     }
                     print("tag read result:$readTagResult");
@@ -141,8 +149,7 @@ class NfcHomePageState extends State<NfcHomePage> {
                       session = false;
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => NfcHomePage()),
+                        MaterialPageRoute(builder: (context) => HomePage()),
                       );
                       print('session stopped');
                     } else {

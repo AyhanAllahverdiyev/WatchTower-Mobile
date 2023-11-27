@@ -17,7 +17,7 @@ class dbResponse {
 class DbServices {
   int keyvalue = 0;
   String BaseUrl = LoginUtils().baseUrl;
-  Future<bool> saveToDatabase(BuildContext context, String inputString) async {
+  Future<int> saveToDatabase(BuildContext context, String inputString) async {
     try {
       final jsonObject = jsonDecode(inputString);
       print('what is being sent to server: $jsonObject');
@@ -26,32 +26,21 @@ class DbServices {
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(jsonObject),
       );
-
       if (response.statusCode >= 399) {
         print('ERROR: ${response.body}');
         await AlertUtils().errorAlert(response.body, context);
-        return false;
+        return response.statusCode;
       } else if (response.statusCode == 302) {
-        await AlertUtils().successfulAlert('Tour Completed', context);
-        print('inputString: ${inputString}');
         String jsonStringWithoutQuotes =
             inputString.substring(1, inputString.length - 1);
-        print('jsonStringWithoutQuotes: ${jsonStringWithoutQuotes}');
         Map<String, dynamic> newJsonObject =
             json.decode('{$jsonStringWithoutQuotes}');
-        print('newJsonObject: ${newJsonObject}');
-        print('ID: ${newJsonObject['ID']}');
         await NfcHomePageState()
             .updateIsReadValue(newJsonObject['ID'].toString(), 'true');
-        print('Final version of orderJsonArray:${orderJsonArray}}');
 
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => NfcHomePage()),
-          (route) =>
-              false, // This condition always returns false, so it clears everything
-        );
-        return true;
+        await AlertUtils().successfulAlert('Tour Completed', context);
+        NfcHomePageState.tour = true;
+        return response.statusCode;
       } else {
         await AlertUtils()
             .successfulAlert('Please proceed to the next tag ', context);
@@ -67,14 +56,15 @@ class DbServices {
             .updateIsReadValue(newJsonObject['ID'].toString(), 'true');
         print('Final version of orderJsonArray:${orderJsonArray}}');
 
-        return true;
+        return response.statusCode;
       }
     } catch (e) {
       print("error in db_servces : $e");
       await AlertUtils().errorAlert(
           'Unexpected error occured, please check connection ', context);
       Navigator.pop(context);
-      return false;
+      return 500;
+      ;
     }
   }
 
@@ -162,6 +152,7 @@ class DbServices {
     print("statusCodeList: $statusCodeList");
     return statusCodeList;
   }
+
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<ApiResponse> getUserHistory(String userId) async {
     final url = BaseUrl + 'logs/user_history';
@@ -185,5 +176,4 @@ class DbServices {
       return ApiResponse(500, e.toString());
     }
   }
-
 }
