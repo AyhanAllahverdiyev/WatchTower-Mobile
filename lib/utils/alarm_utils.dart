@@ -17,7 +17,7 @@ class WebSocketService {
     }
 
     try {
-      _channel = IOWebSocketChannel.connect('ws://192.168.1.73:3000');
+      _channel = IOWebSocketChannel.connect('ws://192.168.1.11:3000');
 
       _channel!.stream.listen((data) async {
         print(data);
