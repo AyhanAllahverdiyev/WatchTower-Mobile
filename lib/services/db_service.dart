@@ -163,10 +163,9 @@ class DbServices {
     return statusCodeList;
   }
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  Future<ApiResponse> getUserHistory() async {
+  Future<ApiResponse> getUserHistory(String userId) async {
     final url = BaseUrl + 'logs/user_history';
     print('======================getUserHistory======================');
-    String userId= await LoginUtils().getUserId();
     try {
       final response = await http.post(
         Uri.parse(url),

@@ -41,6 +41,20 @@ class AlertUtils {
     isDialogOpen = false;
   }
 
+  Future<void> InfoAlert(
+      String infoMessage, BuildContext context) async {
+    isDialogOpen = true;
+    await QuickAlert.show(
+      context: context,
+      type: QuickAlertType.info,
+      showConfirmBtn: false,
+      title: infoMessage,
+      autoCloseDuration: Duration(milliseconds: 1500),
+      titleColor: Colors.yellow,
+    );
+    isDialogOpen = false;
+  }
+
   Future<void> confirmationAlert(String message, BuildContext context) async {
     await QuickAlert.show(
       context: context,
