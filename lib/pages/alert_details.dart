@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last
+
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/components/bottom_navigation.dart';
 import 'package:watch_tower_flutter/pages/admin_home.dart';
@@ -7,7 +9,7 @@ import '../utils/login_utils.dart';
 import '../utils/alarm_utils.dart';
 
 const List<String> list = <String>[
-  'location_report',
+  'select_an_alert_type',
   'fire',
   'earthquake',
   'flood',
@@ -47,7 +49,7 @@ class AlertDetails extends StatefulWidget {
 
 class _AlertDetailsState extends State<AlertDetails> {
   final TextEditingController textFieldController1 = TextEditingController();
-  final TextEditingController textFieldController3 = TextEditingController();
+  final TextEditingController textFieldController = TextEditingController();
   String selectedType = '';
 
   String dropdownValue = list.first;
@@ -66,9 +68,17 @@ class _AlertDetailsState extends State<AlertDetails> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
+              SizedBox(height: 20),
+              Text("Send an Alert Message!",
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white)),
+              SizedBox(height: 20),
               DropdownMenu<String>(
                 inputDecorationTheme: InputDecorationTheme(
-                  labelStyle: TextStyle(color: Colors.blue.shade700),
+                  labelStyle:
+                      TextStyle(color: const Color.fromARGB(242, 25, 118, 210)),
                   filled: true,
                   fillColor: Colors.white,
                   enabledBorder: OutlineInputBorder(
@@ -92,19 +102,24 @@ class _AlertDetailsState extends State<AlertDetails> {
                 dropdownMenuEntries:
                     list.map<DropdownMenuEntry<String>>((String value) {
                   return DropdownMenuEntry<String>(
-                      value: value,
-                      label: capitalizeFirstLetter(value
-                          .replaceFirst('_', ' ')
-                          .replaceFirst(value[value.indexOf('_') + 1],
-                              value[value.indexOf('_') + 1].toUpperCase())));
+                      value: value, label: capitalizeFirstLetter(value).replaceAll('_', ' '));
                 }).toList(),
               ),
+         
+              
+              SizedBox(height: 20),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Content:",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white))
+              ),
               SizedBox(height: 20),
               TextField(
-                controller: textFieldController1,
+                controller: textFieldController,
                 decoration: InputDecoration(
-                  labelText: 'Content',
-                  labelStyle: TextStyle(color: Colors.blue.shade700),
+              
                   filled: true,
                   fillColor: Colors.white,
                   enabledBorder: OutlineInputBorder(
@@ -113,44 +128,32 @@ class _AlertDetailsState extends State<AlertDetails> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.blue),
+                    borderSide: BorderSide(color: Colors.black),
                   ),
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
                 ),
-                style: TextStyle(color: Colors.blue),
+                style: TextStyle(color: Colors.black),
               ),
-              SizedBox(height: 20),
-              TextField(
-                controller: textFieldController3,
-                decoration: InputDecoration(
-                  labelText: 'Topic',
-                  labelStyle: TextStyle(color: Colors.blue.shade700),
-                  filled: true,
-                  fillColor: Colors.white,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.blue),
-                  ),
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-                ),
-                style: TextStyle(color: Colors.blue),
-              ),
+              SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () async {
-                  Data data = Data(
-                      textFieldController1.text,
+                  if (selectedType=="select_an_alert_type" || selectedType.isEmpty) {
+                    await AlertUtils()
+                        .errorAlert('Please select a type', context);
+                  } else if (textFieldController.text.isEmpty) {
+                    await AlertUtils()
+                        .errorAlert('Please enter a message', context);
+                  }else {
+                    Data data = Data(
+                      "content",
                       selectedType,
-                      textFieldController3.text,
+                      textFieldController.text,
                       await LoginUtils().getUserId());
+
                   await BottomAppBarWidgetState().sendMessage(data);
                   int res = await WebSocketService()
-                      .sendBroadcastMessageFirebase(textFieldController1.text,
+                      .sendBroadcastMessageFirebase(textFieldController.text,
                           selectedType, 'Broadcast_Alert');
                   if (res >= 399) {
                     await AlertUtils().errorAlert('Failed to send', context);
@@ -167,19 +170,40 @@ class _AlertDetailsState extends State<AlertDetails> {
                     } else if (authLevel == 'user') {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => HomePage()),
+                        MaterialPageRoute(builder: (context) => HomePage()),
                         (route) => false,
                       );
                     }
                   }
+                  }
+                  
                 },
-                child: Text('Submit'),
+
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Send!',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold)),
+                ),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+
+                    ),
+                ),
               ),
             ],
           ),
         ),
-        bottomNavigationBar: BottomAppBarWidget(pageName: "AlertDetail",),
+        bottomNavigationBar: BottomAppBarWidget(
+          pageName: "AlertDetail",
+        ),
       ),
     );
   }
