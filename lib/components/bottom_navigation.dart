@@ -120,13 +120,15 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
                 if (authLevel == "super_admin" || authLevel == "admin") {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => LayoutPage(index: 1)),
+                    MaterialPageRoute(
+                        builder: (context) => LayoutPage(index: 1)),
                     (route) => false,
                   );
                 } else if (authLevel == "user") {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => LayoutPage(index: 0)),
+                    MaterialPageRoute(
+                        builder: (context) => LayoutPage(index: 0)),
                     (route) => false,
                   );
                 }

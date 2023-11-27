@@ -9,7 +9,6 @@ import '../layout.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-  static const routeName = '/home';
 
   @override
   State<HomePage> createState() => _HomePageState();
