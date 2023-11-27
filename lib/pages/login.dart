@@ -282,7 +282,11 @@ class LoginPageState extends State<LoginPage> {
                         errorPasswordMessage =
                             loginErrorResponse.errorPasswordMessage;
                       });
-                      loginUtils.saveCredentials(mail, password, checkedValue);
+                      loginUtils.saveCredentials(
+                        mail,
+                        password,
+                        checkedValue,
+                      );
 
                       if (loginErrorResponse.isLoginDone &&
                           loginTest.statusCode <= 399 &&

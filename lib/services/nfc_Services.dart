@@ -102,7 +102,7 @@ class NfcService {
 
             payload_as_String =
                 await UserInfoService().updateUserInfo(payload_as_String);
-
+                
             if (payload_as_String.length > 2) {
               if (await DbServices()
                   .saveToDatabase(context, payload_as_String)) {
