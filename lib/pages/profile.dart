@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:watch_tower_flutter/pages/history.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../components/bottom_navigation.dart';
 import './login.dart';
@@ -45,11 +46,10 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-         backgroundColor: Colors.black,
-       appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(40.0),
-            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
-     
+      backgroundColor: Colors.black,
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(40.0),
+          child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -166,7 +166,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HistoryPage()),
+                          );
+                        },
                         icon: Icon(
                           Icons.arrow_forward_ios,
                           color: Colors.white,
@@ -222,10 +228,12 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(height: 10),
               TextButton(
                 onPressed: () async {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
                   prefs.remove('jwt');
-                  await AlertUtils().successfulAlert('Logging  out...', context);
-    
+                  await AlertUtils()
+                      .successfulAlert('Logging  out...', context);
+
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => LoginPage()),
@@ -251,7 +259,9 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
-        bottomNavigationBar: BottomAppBarWidget(pageName: "ProfilePage",),
+      bottomNavigationBar: BottomAppBarWidget(
+        pageName: "ProfilePage",
+      ),
     );
   }
 }

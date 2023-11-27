@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:watch_tower_flutter/services/login_Services.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../utils/login_utils.dart';
 import '../pages/nfcHome.dart';
@@ -161,4 +162,29 @@ class DbServices {
     print("statusCodeList: $statusCodeList");
     return statusCodeList;
   }
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Future<ApiResponse> getUserHistory() async {
+    final url = BaseUrl + 'logs/user_history';
+    print('======================getUserHistory======================');
+    String userId= await LoginUtils().getUserId();
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: jsonEncode({
+          '_id': userId,
+        }),
+      );
+      if (response.statusCode >= 399) {
+        print('ERROR: ${response.body}');
+      } else {
+        print('OK: ${response.body}');
+      }
+      return ApiResponse(response.statusCode, response.body);
+    } catch (e) {
+      print("Error in db_services: $e");
+      return ApiResponse(500, e.toString());
+    }
+  }
+
 }
