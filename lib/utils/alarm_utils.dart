@@ -52,18 +52,12 @@ class WebSocketService {
     _channel = null;
   }
 
-  Future<int> sendBroadcastMessageFirebase(
-      String content, String type, String topic) async {
+  Future<int> sendBroadcastMessageFirebase() async {
     try {
-      final jsonObject = {'content': content, 'type': type, 'topic': topic};
+      print('what is being broadcasted from FireBase: ');
 
-      print('what is being broadcasted from FireBase: $jsonObject');
-
-      final response = await http.post(
-        //192.168.1.153
-        Uri.parse(BaseUrl + 'sendBroadcastMessage'),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: jsonEncode(jsonObject),
+      final response = await http.get(
+        Uri.parse(BaseUrl + 'sendHelloMessage'),
       );
 
       if (response.statusCode >= 399) {

@@ -99,23 +99,11 @@ class FirebaseUtils {
     String? deviceToken = await _firebaseMessage.getToken();
     return (deviceToken == null) ? "" : deviceToken;
   }
+
+  void requestNotificationPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission();
+    print("User granted permission: ${settings.authorizationStatus}");
+  }
+ 
 }
-
-// Future<void> configure() async {
-//   // Subscribe to a topic (optional)
-//   firebaseMessaging.subscribeToTopic('your_topic_name');
-
-//   // Configure the background message handler
-//   FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
-// }
-
-// // Handle background messages
-// Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-//   print('Handling a background message ${message.messageId}');
-// }
-
-// void requestNotificationPermission() async {
-//   FirebaseMessaging messaging = FirebaseMessaging.instance;
-//   NotificationSettings settings = await messaging.requestPermission();
-//   print("User granted permission: ${settings.authorizationStatus}");
-// }
