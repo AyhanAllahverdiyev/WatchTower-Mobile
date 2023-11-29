@@ -11,7 +11,6 @@ class CustomCard extends StatelessWidget {
   final String customWidth;
   final String navigatorName;
 
-
   const CustomCard(
       {Key? key,
       required this.text,
@@ -24,8 +23,9 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15),
-      side: BorderSide(color: Colors.purpleAccent.shade700, width: 2)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+            side: BorderSide(color: Colors.purpleAccent.shade700, width: 2)),
         color: Colors.black,
         clipBehavior: Clip.hardEdge,
         shadowColor: Colors.blueGrey,
@@ -72,8 +72,7 @@ class CustomCard extends StatelessWidget {
                 if (imgRoute != '')
                   Image(
                     image: AssetImage(imgRoute),
-                    width: (MediaQuery.of(context).size.width / 3)-20,
-                    
+                    width: (MediaQuery.of(context).size.width / 3) - 30,
                   ),
               ],
             ),

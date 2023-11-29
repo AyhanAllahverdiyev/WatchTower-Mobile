@@ -16,6 +16,7 @@ class NfcService {
   String BaseUrl = LoginUtils().baseUrl;
   Future<bool> resetReadOrder() async {
     try {
+      print('inside reset read order');
       final response = await http.get(
         Uri.parse(BaseUrl + 'reset'),
       );
@@ -56,7 +57,7 @@ class NfcService {
         print(
             '====================================Order which the system expects==================================== ');
         final response = await http.get(
-          Uri.parse(BaseUrl + 'order'),
+          Uri.parse(BaseUrl + 'order/getArray'),
         );
 
         final statusCode = response.statusCode;
@@ -84,56 +85,57 @@ class NfcService {
   static ValueNotifier<dynamic> result = ValueNotifier(null);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- Future<int> tagRead(BuildContext context) async {
-  if (await HttpServices().verifyToken()) {
-    Completer<int> completer = Completer<int>();
+  Future<int> tagRead(BuildContext context) async {
+    if (await HttpServices().verifyToken()) {
+      Completer<int> completer = Completer<int>();
 
-    try {
-      NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-        try {
-          result.value = tag.data;
+      try {
+        NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
+          try {
+            result.value = tag.data;
 
-          List<int> intList = PayloadServices().convertStringToArray(
-              PayloadServices().getPayload(result.toString()));
-          String payload_as_String =
-              PayloadServices().decodedResultPayload((intList));
+            List<int> intList = PayloadServices().convertStringToArray(
+                PayloadServices().getPayload(result.toString()));
+            String payload_as_String =
+                PayloadServices().decodedResultPayload((intList));
 
-          result.value = payload_as_String;
+            result.value = payload_as_String;
 
-          payload_as_String =
-              await UserInfoService().updateUserInfo(payload_as_String);
+            payload_as_String =
+                await UserInfoService().updateUserInfo(payload_as_String);
 
-          if (payload_as_String.length > 2) {
-            int statusCode =
-                await DbServices().saveToDatabase(context, payload_as_String);
+            if (payload_as_String.length > 2) {
+              int statusCode =
+                  await DbServices().saveToDatabase(context, payload_as_String);
+              NfcManager.instance.stopSession();
+              completer
+                  .complete(statusCode); // Complete the Future with status code
+            }
+          } catch (e) {
             NfcManager.instance.stopSession();
-            completer.complete(statusCode); // Complete the Future with status code
+            completer.complete(
+                -1); // Complete the Future with -1 in case of an exception
           }
-        } catch (e) {
-          NfcManager.instance.stopSession();
-          completer.complete(-1); // Complete the Future with -1 in case of an exception
-        }
-      });
+        });
 
-      // Return the Future from the Completer
-      return completer.future;
-    } catch (e) {
-      AlertUtils().errorAlert(
-          'Unexpected error occurred, please check your connection', context);
-      Navigator.pop(context);
-      print('error in tagread: $e');
+        // Return the Future from the Completer
+        return completer.future;
+      } catch (e) {
+        AlertUtils().errorAlert(
+            'Unexpected error occurred, please check your connection', context);
+        Navigator.pop(context);
+        print('error in tagread: $e');
+        return -1;
+      }
+    } else {
+      await AlertUtils()
+          .errorAlert('Session Timeout. Please login again', context);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+      print('JWT is not valid');
       return -1;
     }
-  } else {
-    await AlertUtils()
-        .errorAlert('Session Timeout. Please login again', context);
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginPage()));
-    print('JWT is not valid');
-    return -1;
   }
-}
-
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

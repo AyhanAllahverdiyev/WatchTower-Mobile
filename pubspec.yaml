@@ -55,6 +55,7 @@ dependencies:
   firebase_analytics: ^10.6.3
   level_map: ^0.2.0
   battery_info: ^1.1.1
+  flutter_spinkit: ^5.2.0
   intl: ^0.18.1
   provider: ^6.1.1
 dev_dependencies:
