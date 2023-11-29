@@ -60,30 +60,26 @@ class _AlertDetailsState extends State<AlertDetails> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-        backgroundColor: Colors.black,
         appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(40.0),
-            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
+            preferredSize: const Size.fromHeight(40.0), child: AppBar()),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               SizedBox(height: 20),
-              Text("Send an Alert Message!",
+              Text("Send an Alert Message",
                   style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white)),
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  )),
               SizedBox(height: 20),
               DropdownMenu<String>(
                 inputDecorationTheme: InputDecorationTheme(
-                  labelStyle:
-                      TextStyle(color: const Color.fromARGB(242, 25, 118, 210)),
-                  filled: true,
-                  fillColor: Colors.white,
+                  labelStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.background),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.white),
+                    borderSide: BorderSide(color: Colors.blue, width: 3),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -102,6 +98,13 @@ class _AlertDetailsState extends State<AlertDetails> {
                 dropdownMenuEntries:
                     list.map<DropdownMenuEntry<String>>((String value) {
                   return DropdownMenuEntry<String>(
+                      style: ButtonStyle(
+                        textStyle: MaterialStateProperty.all<TextStyle>(
+                            TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                      ),
                       value: value,
                       label: capitalizeFirstLetter(value).replaceAll('_', ' '));
                 }).toList(),
@@ -110,25 +113,23 @@ class _AlertDetailsState extends State<AlertDetails> {
               Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Content:",
-                      style: TextStyle(fontSize: 20, color: Colors.white))),
-              SizedBox(height: 20),
+                      style: TextStyle(fontSize: 20,))),
+              SizedBox(height: 10),
               TextField(
                 controller: textFieldController,
                 decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.white),
+                    borderSide: BorderSide(color: Colors.blue, width: 3),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.black),
+                    borderSide: BorderSide(color: Colors.blue,width: 3),
                   ),
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
                 ),
-                style: TextStyle(color: Colors.black),
+              
               ),
               SizedBox(height: 30),
               ElevatedButton(

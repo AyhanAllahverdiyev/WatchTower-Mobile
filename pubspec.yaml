@@ -89,6 +89,7 @@ flutter:
     - assets/images/finish.png
     - assets/images/logo.png
     - assets/sounds/alert.mp3
+    - assets/gifs/alarm.gif
 
 
   uses-material-design: true

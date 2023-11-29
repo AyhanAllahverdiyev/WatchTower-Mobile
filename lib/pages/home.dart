@@ -83,12 +83,13 @@ int createMonth(int index) {
               actions: [
                 IconButton(
                   icon: Icon(
-                    isLightModeSelected ? Icons.light_mode : Icons.dark_mode,
+                    !isLightModeSelected ? Icons.light_mode : Icons.dark_mode,
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   onPressed: () async {
                     Provider.of<ThemeProvider>(context, listen: false)
                         .toggleThemeMode();
+                 
                     setState(() {
                       isLightModeSelected = !isLightModeSelected;
                     });
@@ -98,80 +99,85 @@ int createMonth(int index) {
             )),
         body: SingleChildScrollView(
           child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+          
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundImage:
-                            AssetImage('assets/images/profile_1.png'),
-                      ),
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Welcome',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                  Padding(
+                    padding: const EdgeInsets.only(top:20, left: 20, right: 20),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundImage:
+                              AssetImage('assets/images/profile_1.png'),
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Welcome',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            userName,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              userName,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      for (int i = 0; i < 4; i++)
-                        Card(
-                            color: (i == 0)
-                                ? Colors.blue
-                                : Theme.of(context).colorScheme.background,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color:
-                                      Theme.of(context).colorScheme.onSecondary,
-                                  width: 2),
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.width / 5,
-                              width: MediaQuery.of(context).size.width / 5,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    createDate(i),
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    englishMonthAbbreviations[createMonth(i)],
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
+                  Padding(
+                     padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        for (int i = 0; i < 4; i++)
+                          Card(
+                              color: (i == 0)
+                                  ? Colors.blue
+                                  : Theme.of(context).colorScheme.background,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.onSecondary,
+                                    width: 2),
+                                borderRadius: BorderRadius.circular(15.0),
                               ),
-                            ))
-                    ],
+                              child: SizedBox(
+                                height: MediaQuery.of(context).size.width / 5,
+                                width: MediaQuery.of(context).size.width / 5,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      createDate(i),
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      englishMonthAbbreviations[createMonth(i)],
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ))
+                      ],
+                    ),
                   ),
                   SizedBox(height: 10),
                   CarouselSlider(
@@ -203,8 +209,8 @@ int createMonth(int index) {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                           side: BorderSide(
-                              color: Colors.purpleAccent.shade700, width: 2)),
-                      color: Colors.black,
+                              color: Colors.blue, width: 2)),
+                      color: Theme.of(context).colorScheme.background,
                       clipBehavior: Clip.hardEdge,
                       shadowColor: Colors.blueGrey,
                       child: InkWell(
@@ -240,7 +246,7 @@ int createMonth(int index) {
                                               fontSize: 25,
                                               fontWeight: FontWeight.bold,
                                               color: Colors
-                                                  .purpleAccent.shade700)),
+                                                  .blue)),
                                     ),
                                     Padding(
                                       padding:
@@ -249,7 +255,7 @@ int createMonth(int index) {
                                           style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.white)),
+                                              )),
                                     ),
                                     ElevatedButton(
                                       onPressed: () async {
@@ -271,7 +277,7 @@ int createMonth(int index) {
                                       style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
-                                                Colors.purpleAccent.shade700),
+                                                Colors.blue),
                                         shape: MaterialStateProperty.all<
                                             RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
@@ -294,28 +300,31 @@ int createMonth(int index) {
                         ),
                       )),
                   SizedBox(height: 20),
-                  Row(
-                    children: [
-                      CustomCard(
-                        text: "First Card",
-                        title: "Card 1",
-                        imgRoute: "assets/images/nfc.png",
-                        customWidth: 'half',
-                        navigatorName: "",
-                      ),
-                      CustomCard(
-                        text: "Second Card",
-                        title: "Card 2",
-                        imgRoute: "assets/images/nfc.png",
-                        customWidth: 'half',
-                        navigatorName: "",
-                      ),
-                    ],
+                  Padding(
+                     padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Row(
+                      children: [
+                        CustomCard(
+                          text: "First Card",
+                          title: "Card 1",
+                          imgRoute: "assets/images/nfc.png",
+                          customWidth: 'half',
+                          navigatorName: "",
+                        ),
+                        CustomCard(
+                          text: "Second Card",
+                          title: "Card 2",
+                          imgRoute: "assets/images/nfc.png",
+                          customWidth: 'half',
+                          navigatorName: "",
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 20),
                 ],
               ),
-            ),
+       
           ),
         ),
         bottomNavigationBar: BottomAppBarWidget(

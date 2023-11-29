@@ -59,10 +59,10 @@ class HistoryPageState extends State<HistoryPage> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-        backgroundColor: Colors.black,
+
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(40.0),
-          child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241)),
+          child: AppBar(),
         ),
         body: Stack(
           children: [
@@ -77,7 +77,7 @@ class HistoryPageState extends State<HistoryPage> {
                       child: Text(
                         "History",
                         style: TextStyle(
-                          color: Colors.white,
+                   
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
@@ -111,7 +111,7 @@ class HistoryPageState extends State<HistoryPage> {
           ],
         ),
         bottomNavigationBar: BottomAppBarWidget(
-          pageName: "HomePage",
+          pageName: "HistoryPage",
         ),
       ),
     );

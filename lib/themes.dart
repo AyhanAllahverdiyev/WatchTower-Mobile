@@ -6,7 +6,7 @@ class ThemeClass {
   static Color primaryColor = Colors.blue;
   static Color lightSecondaryColor = Colors.grey.shade900;
   static Color darkSecondaryColor = Colors.grey.shade500;
-  static Color lightTextColor = Colors.black; 
+  static Color lightTextColor = Colors.black;
   static Color darkTextColor = Colors.white;
   static Color lightIconColor = Colors.black;
   static Color darkIconColor = Colors.white;
@@ -21,15 +21,16 @@ class ThemeClass {
     bottomAppBarTheme: BottomAppBarTheme(
       color: lightBackgroundColor,
     ),
-       iconTheme: IconThemeData(
-        color: lightIconColor,
-      ),
+    iconTheme: IconThemeData(
+      color: lightIconColor,
+    ),
     colorScheme: ColorScheme.light(
       onPrimary: lightTextColor,
       primary: primaryColor,
       background: lightBackgroundColor,
       secondary: lightSecondaryColor,
-      onSecondary: Colors.grey.shade100, 
+      onSecondary: Colors.grey.shade100,
+      onBackground: Colors.purpleAccent.shade200,
     ),
   );
 
@@ -44,15 +45,15 @@ class ThemeClass {
       color: darkBackgroundColor,
     ),
     iconTheme: IconThemeData(
-        color: darkIconColor,
-      ),
+      color: darkIconColor,
+    ),
     colorScheme: ColorScheme.dark(
       onPrimary: darkTextColor,
       primary: primaryColor,
       background: darkBackgroundColor,
-      onBackground: darkSecondaryColor,
       secondary: darkSecondaryColor,
       onSecondary: lightSecondaryColor,
+      onBackground: Colors.purpleAccent.shade700,
     ),
   );
 }

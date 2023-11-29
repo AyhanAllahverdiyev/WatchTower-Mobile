@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:watch_tower_flutter/firebase_options.dart';
 import 'package:watch_tower_flutter/pages/alert_screen.dart';
+import 'package:watch_tower_flutter/pages/nfcHome.dart';
 import 'package:watch_tower_flutter/themes.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import './pages/login.dart';
@@ -11,13 +12,13 @@ import 'package:firebase_core/firebase_core.dart';
 import "./utils/firebase_utils.dart";
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseUtils().requestNotificationPermission();
   await FirebaseUtils().initNotifications();
   await FirebaseMessaging.instance.subscribeToTopic('Broadcast_Alert');
+ 
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),

@@ -25,8 +25,8 @@ class CustomCard extends StatelessWidget {
     return Card(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
-            side: BorderSide(color: Colors.purpleAccent.shade700, width: 2)),
-        color: Colors.black,
+            side: BorderSide(color: Colors.blue, width: 2)),
+        color: Theme.of(context).colorScheme.background,
         clipBehavior: Clip.hardEdge,
         shadowColor: Colors.blueGrey,
         child: InkWell(
@@ -59,13 +59,13 @@ class CustomCard extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white)),
+                               )),
                       ),
                       Text(text,
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white)),
+                             )),
                     ],
                   ),
                 ),

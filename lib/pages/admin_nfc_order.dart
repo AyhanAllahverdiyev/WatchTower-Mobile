@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:watch_tower_flutter/main.dart';
+import 'package:watch_tower_flutter/utils/login_utils.dart';
 import 'dart:convert';
 import '../components/bottom_navigation.dart';
 import '../services/nfc_Services.dart';
@@ -23,11 +26,17 @@ class NfcOrderPageState extends State<NfcOrderPage> {
   bool isEditing = false;
   bool isDeleteSelected = false;
   int dbResponse = 500;
+  bool isLightModeSelected = true;
 
   @override
   void initState() {
     super.initState();
     _getOrderArrayForAdmin();
+    LoginUtils().getThemeMode().then((value) {
+      setState(() {
+        isLightModeSelected = value;
+      });
+    });
   }
 
   Future _getOrderArrayForAdmin() async {
@@ -64,10 +73,26 @@ class NfcOrderPageState extends State<NfcOrderPage> {
         });
       },
       child: Scaffold(
-        backgroundColor: Colors.black,
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(40.0),
-            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
+            child: AppBar(
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    !isLightModeSelected ? Icons.light_mode : Icons.dark_mode,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  onPressed: () async {
+                    Provider.of<ThemeProvider>(context, listen: false)
+                        .toggleThemeMode();
+               
+                    setState(() {
+                      isLightModeSelected = !isLightModeSelected;
+                    });
+                  },
+                ),
+              ],
+            )),
         body: Container(
           margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: ReorderableListView(
@@ -83,35 +108,70 @@ class NfcOrderPageState extends State<NfcOrderPage> {
             children: [
               for (var i = 0; i < allowedOrderArray.length; i++)
                 Container(
+                
                   key: ValueKey(allowedOrderArray[i]),
-                  child: TextButton(
-                    onPressed: () {
-                      print('pressed delete button at index $i');
-
-                      if (isDeleteSelected) {
-                        setState(() {
-                          allowedOrderArray =
-                              deleteTag(newAllowedOrderArray, i);
-                        });
-                      }
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: Color.fromARGB(57, 108, 126, 241),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          allowedOrderArray[i],
-                          style: TextStyle(fontSize: 20.0, color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: TextButton(
+                      onPressed: () {
+                        print('pressed delete button at index $i');
+                  
+                        if (isDeleteSelected) {
+                          setState(() {
+                            allowedOrderArray =
+                                deleteTag(newAllowedOrderArray, i);
+                          });
+                        }
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                     
                         ),
-                        if (isDeleteSelected)
-                          Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                            size: 20,
-                          ),
-                      ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          
+                          children: [
+                            
+                            Row(
+                              children: [
+                               
+                                Icon(
+                                  Icons.nfc_outlined,
+                                  color: Colors.blue,
+                                  size: 20,
+                                
+                                ),
+                                SizedBox(width: 10),
+                                Text("Tag Name: ",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .background)),
+                                Text(
+                                  allowedOrderArray[i],
+                                  style: TextStyle(
+                                    fontSize: 25.0,
+                                 
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (isDeleteSelected)
+                              Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                                size: 28,
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -128,8 +188,8 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                     isEditing = !isEditing;
                   });
                 },
-                child: Icon(Icons.edit, color: Colors.black),
-                backgroundColor: Colors.white,
+                child: Icon(Icons.edit, color:Theme.of(context).colorScheme.background),
+                backgroundColor: Theme.of(context).colorScheme.onPrimary,
               ),
             if (isEditing)
               Column(
@@ -153,7 +213,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                       }
                     },
                     tooltip: 'Add Tag',
-                    child: Icon(Icons.add),
+                    child: Icon(Icons.add, color: Colors.white),
                   ),
                   SizedBox(height: 10),
                   FloatingActionButton(
@@ -164,7 +224,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                       },
                       tooltip: 'Delete',
                       backgroundColor: Colors.red,
-                      child: Icon(Icons.delete)),
+                      child: Icon(Icons.delete, color: Colors.white)),
                   SizedBox(height: 10),
                   FloatingActionButton(
                     onPressed: () async {
@@ -193,13 +253,15 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                     },
                     tooltip: 'Save',
                     backgroundColor: Colors.green,
-                    child: Icon(Icons.save),
+                    child: Icon(Icons.save, color: Colors.white),
                   ),
                 ],
               ),
           ],
         ),
-        bottomNavigationBar: BottomAppBarWidget(pageName: "NfcOrderPage",),
+        bottomNavigationBar: BottomAppBarWidget(
+          pageName: "NfcOrderPage",
+        ),
       ),
     );
   }

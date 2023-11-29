@@ -82,12 +82,13 @@ int createMonth(int index) {
               actions: [
                 IconButton(
                   icon: Icon(
-                    isLightModeSelected ? Icons.light_mode : Icons.dark_mode,
+                    !isLightModeSelected ? Icons.light_mode : Icons.dark_mode,
                     color: Theme.of(context).colorScheme.onPrimary,
                   ),
                   onPressed: () async {
                     Provider.of<ThemeProvider>(context, listen: false)
                         .toggleThemeMode();
+             
                     setState(() {
                       isLightModeSelected = !isLightModeSelected;
                     });
@@ -184,7 +185,7 @@ int createMonth(int index) {
                   Card(
                       shape: RoundedRectangleBorder(
                         side: BorderSide(
-                            color: Colors.purpleAccent.shade700, width: 2),
+                            color: Colors.blue, width: 2),
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                 
@@ -201,6 +202,7 @@ int createMonth(int index) {
                         child: Container(
                           height: 200,
                           width: MediaQuery.of(context).size.width - 48,
+                          color: Theme.of(context).colorScheme.background,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [

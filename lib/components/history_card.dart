@@ -37,7 +37,7 @@ class HistoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.onPrimary,
       child: SizedBox(
         width: MediaQuery.of(context).size.width - 48,
         height: 100,
@@ -69,7 +69,11 @@ class HistoryCard extends StatelessWidget {
                         children: [
                           Text(changeDateFormate(),
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                                  fontSize: 20, 
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .background,
+                                  fontWeight: FontWeight.bold)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             mainAxisSize: MainAxisSize
@@ -86,6 +90,9 @@ class HistoryCard extends StatelessWidget {
                                 '$batteryLevel%',
                                 style: TextStyle(
                                   fontSize: 14,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .background,
                                 ),
                               ),
                             ],
@@ -105,19 +112,7 @@ class HistoryCard extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue.shade700
                                   )),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Icon(Icons.qr_code_scanner,
-                              size: 24,
-                              color: Colors.purpleAccent.shade700,),
-                              SizedBox(width: 4,),
-                              Text(tagId,
-                                  style: TextStyle(
-                                      fontSize: 22,
-                                      color: Colors.purpleAccent.shade700,)),
-                            ],
-                          ),
+                          
                           SizedBox(
                             width: 10,)
                         ],
@@ -126,17 +121,45 @@ class HistoryCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(children: [
-                            Icon(Icons.access_time,
-                            size: 19,),
-                            Text(changeTimeFormate(),
-                                style: TextStyle(
-                                    fontSize: 18,)),
-                         
-                          ],),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(Icons.qr_code_scanner,
+                              size: 24,
+                              color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground),
+                              SizedBox(width: 4,),
+                              Text(tagId,
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground)),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Row(children: [
+                                Icon(Icons.access_time,
+                                size: 19,
+                                color: Theme.of(context)
+                                          .colorScheme
+                                          .background),
+                                Text(changeTimeFormate(),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                         color: Theme.of(context)
+                                          .colorScheme
+                                          .background,)),
+                             
+                              ],),
         
+                            ],
+                          ),
                         ],
                       ),
                     ),

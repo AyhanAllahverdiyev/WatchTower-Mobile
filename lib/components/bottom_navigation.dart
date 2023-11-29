@@ -154,6 +154,11 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               iconSize: 40,
               onPressed: () async {
                 LoginUtils().printAllSharedPreferences();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AlertScreen(data:"kdjkldjkljdkjdkjdkd")),
+                 
+                );
               },
             ),
             IconButton(

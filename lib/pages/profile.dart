@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:watch_tower_flutter/main.dart';
 import 'package:watch_tower_flutter/pages/history.dart';
 import 'package:watch_tower_flutter/services/logout_services.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
@@ -20,9 +22,15 @@ class _ProfilePageState extends State<ProfilePage> {
   String userName = "";
   String userEmail = "";
   bool light = true;
+  bool isLightModeSelected = true;
   @override
   void initState() {
     loadSavedCredentials();
+    LoginUtils().getThemeMode().then((value) {
+      setState(() {
+        isLightModeSelected = value;
+      });
+    });
   }
 
   loadSavedCredentials() async {
@@ -47,10 +55,8 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(40.0),
-          child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
+          preferredSize: const Size.fromHeight(40.0), child: AppBar()),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -61,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 'Profile',
                 style: TextStyle(
                   fontSize: 40.0,
-                  color: Colors.white,
+                  color: Colors.teal.shade600,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -76,7 +82,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 userName,
                 style: TextStyle(
                   fontSize: 20.0,
-                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -84,7 +89,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 userEmail,
                 style: TextStyle(
                   fontSize: 20.0,
-                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -94,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: TextButton(
                   onPressed: () {},
                   style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(57, 108, 126, 241),
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
                     ),
@@ -107,12 +111,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Icon(
-                            Icons.location_on,
+                            Icons.dark_mode,
                             color: Colors.white,
                           ),
                           SizedBox(width: 10),
                           Text(
-                            'My Location',
+                            'Dark Mode',
                             style: TextStyle(
                               fontSize: 20.0,
                               color: Colors.white,
@@ -122,11 +126,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                       Switch(
-                        value: light,
+                        value: isLightModeSelected,
                         activeColor: Colors.blue.shade100,
                         onChanged: (bool value) {
+                          Provider.of<ThemeProvider>(context, listen: false)
+                              .toggleThemeMode();
+                          LoginUtils().changeThemeMode();
                           setState(() {
-                            light = value;
+                            isLightModeSelected = value;
                           });
                         },
                       ),
@@ -139,7 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: TextButton(
                   onPressed: () {},
                   style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(57, 108, 126, 241),
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
                     ),
@@ -188,7 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: TextButton(
                   onPressed: () {},
                   style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(57, 108, 126, 241),
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
                     ),
