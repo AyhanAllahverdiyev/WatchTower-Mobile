@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:watch_tower_flutter/pages/login.dart';
 import 'package:watch_tower_flutter/pages/nfcHome.dart';
+import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import 'nfc_Services.dart';
 import 'package:http/http.dart' as http;
@@ -122,6 +125,44 @@ class HttpServices {
     } catch (e) {
       print("Error while saving user to DB : $e");
       return ApiResponse(-1, "Error: $e");
+    }
+  }
+
+  Future<ApiResponse> changePassword(BuildContext context, String email,
+      String currentPassword, String newPassword) async {
+    if (await HttpServices().verifyToken()) {
+      try {
+        final jsonObject = {
+          "email": email,
+          "password": currentPassword,
+          "newPassword": newPassword,
+        };
+        print('what is being sent to Password Update: $jsonObject');
+
+        final response = await http.post(
+          Uri.parse(BaseUrl + 'password/update'),
+          headers: {'Content-Type': 'application/json; charset=UTF-8'},
+          body: jsonEncode(jsonObject),
+        );
+
+        final statusCode = response.statusCode;
+        final responseBody = response.body;
+
+        print('Response Status Code: $statusCode');
+        print('Response Body: $responseBody');
+
+        return ApiResponse(statusCode, responseBody);
+      } catch (e) {
+        print("Error while updating Password : $e");
+        return ApiResponse(-1, "Error: $e");
+      }
+    } else {
+      await AlertUtils()
+          .errorAlert('Session  Timeout. Please login again', context);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+      print('JWT is not valid');
+      return ApiResponse(-1, "Error: JWT is not valid");
     }
   }
 }

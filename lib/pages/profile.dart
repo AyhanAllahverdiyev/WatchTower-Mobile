@@ -10,6 +10,7 @@ import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../components/bottom_navigation.dart';
 import './login.dart';
 import '../utils/login_utils.dart';
+import '../pages/change_password.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -223,7 +224,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChangePassword()),
+                          );
+                        },
                         icon: Icon(
                           Icons.arrow_forward_ios,
                           color: Colors.white,
