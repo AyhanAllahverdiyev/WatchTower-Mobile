@@ -86,15 +86,16 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Color.fromARGB(57, 108, 126, 241),
+   elevation: 30.0,
+
       child: Padding(
         padding: const EdgeInsets.only(top: 10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
-              icon: Icon(Icons.flashlight_on),
-              color: Colors.white,
+              icon: Icon(Icons.flashlight_on_outlined),
+       
               iconSize: 40,
               onPressed: () async {
                 setState(() {
@@ -104,8 +105,8 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
               },
             ),
             IconButton(
-              icon: Icon(Icons.add_alert_sharp),
-              color: Colors.white,
+              icon: Icon(Icons.add_alert_outlined),
+  
               iconSize: 40,
               onPressed: () {
                 if(widget.pageName!="AlertDetail"){
@@ -120,43 +121,48 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
                
               },
             ),
-            IconButton(
-              icon: Icon(Icons.home),
-              color: Colors.white,
-              iconSize: 40,
-              onPressed: () {
-                if(widget.pageName!="HomePage" && widget.pageName!="AdminHomePage"){
-               
-                  if (authLevel == "super_admin" || authLevel == "admin") {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AdminHomePage()),
-                    (route) => false,
-                  );
-                } else if (authLevel == "user") {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomePage(),),
-                    (route) => false,
-                  );
-                }
-                }
-                
-              },
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.blue, width: 2.0),
+                color: Colors.blue,
+              
+              ),
+              child: IconButton(
+                icon: Icon(Icons.home_outlined),
+                color: Theme.of(context).colorScheme.background,
+                iconSize: 40,
+                onPressed: () {
+                  if (widget.pageName != "HomePage" &&
+                      widget.pageName != "AdminHomePage") {
+                    if (authLevel == "super_admin" || authLevel == "admin") {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => AdminHomePage()),
+                        (route) => false,
+                      );
+                    } else if (authLevel == "user") {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                        (route) => false,
+                      );
+                    }
+                  }
+                },
+              ),
             ),
             IconButton(
-              icon: Icon(Icons.location_on),
-              color: Colors.white,
+              icon: Icon(Icons.location_on_outlined),
+       
               iconSize: 40,
               onPressed: () async {
                 LoginUtils().printAllSharedPreferences();
               },
             ),
             IconButton(
-              icon: Icon(Icons.person),
-              color: Colors.white,
+              icon: Icon(Icons.person_outlined),
+  
               iconSize: 40,
               onPressed: () {
                 if(widget.pageName!="ProfilePage"){

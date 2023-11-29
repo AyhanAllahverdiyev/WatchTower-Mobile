@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:watch_tower_flutter/main.dart';
 import 'package:watch_tower_flutter/pages/admin_home.dart';
 import 'package:watch_tower_flutter/pages/home.dart';
+import 'package:watch_tower_flutter/themes.dart';
 import './signUp.dart';
 import '../services/login_Services.dart';
 import '../utils/login_utils.dart';
@@ -79,10 +82,6 @@ class LoginPageState extends State<LoginPage> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(40.0),
-            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
         body: SingleChildScrollView(
           child: SafeArea(
               child: Column(children: [
@@ -97,46 +96,53 @@ class LoginPageState extends State<LoginPage> {
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
+                      child: Image(
+                        height: 100,
+                        image: AssetImage('assets/images/logo.png'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
                       child: Text(
-                        'Login',
+                        'Welcome Back',
                         style: TextStyle(
-                          color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 45,
+                          fontSize: 30,
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Sign in to continue',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 18,
                         ),
                       ),
                     ),
                     SizedBox(
                       height: 20.0,
                     ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'E-mail',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 18,
-                        ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.blue, width: 2),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    TextField(
-                      controller: mailController,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Mail',
-                          prefixIconColor: Colors.grey,
-                          filled: true,
-                          fillColor: Color.fromARGB(57, 108, 126, 241),
+                      child: TextField(
+                        controller: mailController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: 'E-mail',
+                          labelStyle:
+                              TextStyle(color: Colors.blue, fontSize: 20),
+                          prefixIconColor:
+                              Theme.of(context).colorScheme.secondary,
                           prefixIcon: Icon(Icons.person_rounded),
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                          )),
-                      style: TextStyle(
-                        color: Colors.white,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -151,33 +157,26 @@ class LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     SizedBox(
-                      height: 18.0,
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Password',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
                       height: 10.0,
                     ),
-                    TextField(
-                      obscureText: !isPasswordVisible,
-                      controller: passwordController,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Password',
-                          prefixIconColor: Colors.grey,
-                          suffixIconColor: Colors.grey,
-                          filled: true,
-                          fillColor: Color.fromARGB(57, 108, 126, 241),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.blue, width: 2),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: TextField(
+                        obscureText: !isPasswordVisible,
+                        controller: passwordController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: 'Password',
+                          labelStyle:
+                              TextStyle(color: Colors.blue, fontSize: 20),
                           prefixIcon: Icon(Icons.lock),
+                          prefixIconColor:
+                              Theme.of(context).colorScheme.secondary,
+                          suffixIconColor:
+                              Theme.of(context).colorScheme.secondary,
                           suffixIcon: IconButton(
                             icon: Icon(
                               isPasswordVisible
@@ -190,11 +189,7 @@ class LoginPageState extends State<LoginPage> {
                               });
                             },
                           ),
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                          )),
-                      style: TextStyle(
-                        color: Colors.white,
+                        ),
                       ),
                     ),
                   ],
@@ -211,35 +206,60 @@ class LoginPageState extends State<LoginPage> {
               ),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.grey,
-                  textStyle: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
-                ),
-                onPressed: () {
-                  setState(() {
-                    checkedValue = !checkedValue;
-                  });
-                },
-                child: Row(
-                  children: [
-                    Icon(
-                      checkedValue
-                          ? Icons.check_box
-                          : Icons.check_box_outline_blank,
-                      size: 16,
-                      color: Colors.grey,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      primary: Theme.of(context).colorScheme.secondary,
+                      textStyle: TextStyle(
+                        fontSize: 17,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
-                    Text(' Remember me'),
-                  ],
-                ),
+                    onPressed: () {
+                      setState(() {
+                        checkedValue = !checkedValue;
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          checkedValue
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
+                          size: 17,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        Text(' Remember me'),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    child: Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignUpPage()));
+                    },
+                  ),
+                ],
               ),
+            ),
+            SizedBox(
+              height: 40.0,
             ),
             Center(
               child: Container(
+                width: MediaQuery.of(context).size.width - 40,
+                height: 50,
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color?>(
@@ -303,8 +323,7 @@ class LoginPageState extends State<LoginPage> {
                         } else if (authLevel == "user") {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()),
+                            MaterialPageRoute(builder: (context) => HomePage()),
                           );
                         }
                       }
@@ -313,32 +332,8 @@ class LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            Center(
-              child: SizedBox(
-                height: 30.0,
-                child: TextButton(
-                  child: Text(
-                    'Forgot Password?',
-                    style: TextStyle(
-                      color: Colors.lightBlueAccent,
-                      height: 1.0,
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignUpPage()));
-                  },
-                ),
-              ),
-            ),
             SizedBox(
               height: 20.0,
-            ),
-            Center(
-              child: Image(
-                height: 250,
-                image: AssetImage('assets/images/login.png'),
-              ),
             ),
           ])),
         ),
@@ -367,7 +362,7 @@ class LoginPageState extends State<LoginPage> {
                   child: Text(
                     'Sign up',
                     style: TextStyle(
-                      color: Colors.lightBlueAccent,
+                      color: Colors.blue,
                       height: 0.05,
                     ),
                   ),
