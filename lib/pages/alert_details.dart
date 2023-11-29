@@ -102,24 +102,19 @@ class _AlertDetailsState extends State<AlertDetails> {
                 dropdownMenuEntries:
                     list.map<DropdownMenuEntry<String>>((String value) {
                   return DropdownMenuEntry<String>(
-                      value: value, label: capitalizeFirstLetter(value).replaceAll('_', ' '));
+                      value: value,
+                      label: capitalizeFirstLetter(value).replaceAll('_', ' '));
                 }).toList(),
               ),
-         
-              
               SizedBox(height: 20),
               Align(
-                alignment: Alignment.centerLeft,
-                child: Text("Content:",
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white))
-              ),
+                  alignment: Alignment.centerLeft,
+                  child: Text("Content:",
+                      style: TextStyle(fontSize: 20, color: Colors.white))),
               SizedBox(height: 20),
               TextField(
                 controller: textFieldController,
                 decoration: InputDecoration(
-              
                   filled: true,
                   fillColor: Colors.white,
                   enabledBorder: OutlineInputBorder(
@@ -138,47 +133,45 @@ class _AlertDetailsState extends State<AlertDetails> {
               SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () async {
-                  if (selectedType=="select_an_alert_type" || selectedType.isEmpty) {
+                  if (selectedType == "select_an_alert_type" ||
+                      selectedType.isEmpty) {
                     await AlertUtils()
                         .errorAlert('Please select a type', context);
                   } else if (textFieldController.text.isEmpty) {
                     await AlertUtils()
                         .errorAlert('Please enter a message', context);
-                  }else {
-                    Data data = Data(
-                      "content",
-                      selectedType,
-                      textFieldController.text,
-                      await LoginUtils().getUserId());
-
-                  await BottomAppBarWidgetState().sendMessage(data);
-                  int res = await WebSocketService()
-                      .sendBroadcastMessageFirebase(textFieldController.text,
-                          selectedType, 'Broadcast_Alert');
-                  if (res >= 399) {
-                    await AlertUtils().errorAlert('Failed to send', context);
                   } else {
-                    await AlertUtils().successfulAlert('Success', context);
-                    String authLevel = await LoginUtils().getAuthLevel();
-                    if (authLevel == 'admin' || authLevel == 'super_admin') {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AdminHomePage()),
-                        (route) => false,
-                      );
-                    } else if (authLevel == 'user') {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                        (route) => false,
-                      );
+                    Data data = Data(
+                        "content",
+                        selectedType,
+                        textFieldController.text,
+                        await LoginUtils().getUserId());
+
+                    await BottomAppBarWidgetState().sendMessage(data);
+                    int res =
+                        await WebSocketService().sendBroadcastMessageFirebase();
+                    if (res >= 399) {
+                      await AlertUtils().errorAlert('Failed to send', context);
+                    } else {
+                      await AlertUtils().successfulAlert('Success', context);
+                      String authLevel = await LoginUtils().getAuthLevel();
+                      if (authLevel == 'admin' || authLevel == 'super_admin') {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AdminHomePage()),
+                          (route) => false,
+                        );
+                      } else if (authLevel == 'user') {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePage()),
+                          (route) => false,
+                        );
+                      }
                     }
                   }
-                  }
-                  
                 },
-
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Send!',
@@ -189,13 +182,11 @@ class _AlertDetailsState extends State<AlertDetails> {
                 ),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50.0),
                     ),
-
-                    ),
+                  ),
                 ),
               ),
             ],

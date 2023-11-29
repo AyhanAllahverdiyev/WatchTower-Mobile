@@ -15,6 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseUtils().requestNotificationPermission();
   await FirebaseUtils().initNotifications();
   await FirebaseMessaging.instance.subscribeToTopic('Broadcast_Alert');
   runApp(
@@ -67,5 +68,6 @@ class ThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+
 
 

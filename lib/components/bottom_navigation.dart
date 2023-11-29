@@ -25,7 +25,7 @@ class BottomAppBarWidget extends StatefulWidget {
 class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   bool isTorchPressed = false;
   String authLevel = '';
-  String message = '';  
+  String message = '';
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,12 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   Future<void> sendMessage(Data message) async {
-    channel.sink.add(message.getJson(message).toString());
+    try {
+      channel.sink.add(message.getJson(message).toString());
+    } catch (error) {
+      print("error first time sending message:$error");
+      channel.sink.add(message.getJson(message).toString());
+    }
   }
 
   @override
@@ -70,7 +75,7 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
 
   @override
   void dispose() {
-     channel.sink.close();
+    channel.sink.close();
     super.dispose();
   }
 
@@ -84,8 +89,7 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-   elevation: 30.0,
-
+      elevation: 30.0,
       child: Padding(
         padding: const EdgeInsets.only(top: 10.0),
         child: Row(
@@ -93,7 +97,6 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
           children: [
             IconButton(
               icon: Icon(Icons.flashlight_on_outlined),
-       
               iconSize: 40,
               onPressed: () async {
                 setState(() {
@@ -104,7 +107,6 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
             ),
             IconButton(
               icon: Icon(Icons.add_alert_outlined),
-  
               iconSize: 40,
               onPressed: () {
                 if (widget.pageName != "AlertDetail") {
@@ -121,7 +123,6 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.blue, width: 2.0),
                 color: Colors.blue,
-              
               ),
               child: IconButton(
                 icon: Icon(Icons.home_outlined),
@@ -133,7 +134,8 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
                     if (authLevel == "super_admin" || authLevel == "admin") {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => AdminHomePage()),
+                        MaterialPageRoute(
+                            builder: (context) => AdminHomePage()),
                         (route) => false,
                       );
                     } else if (authLevel == "user") {
@@ -149,7 +151,6 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
             ),
             IconButton(
               icon: Icon(Icons.location_on_outlined),
-       
               iconSize: 40,
               onPressed: () async {
                 LoginUtils().printAllSharedPreferences();
@@ -157,7 +158,6 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
             ),
             IconButton(
               icon: Icon(Icons.person_outlined),
-  
               iconSize: 40,
               onPressed: () {
                 if (widget.pageName != "ProfilePage") {
