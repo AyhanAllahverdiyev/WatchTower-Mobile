@@ -22,6 +22,7 @@ class AlertUtils {
       type: QuickAlertType.success,
       showConfirmBtn: false,
       title: successMessage,
+      backgroundColor: Theme.of(context).colorScheme.background,
       autoCloseDuration: Duration(milliseconds: 1500),
       titleColor: Colors.green,
     );
@@ -34,6 +35,7 @@ class AlertUtils {
       context: context,
       type: QuickAlertType.error,
       title: errorMessage,
+      backgroundColor: Theme.of(context).colorScheme.background,
       titleColor: Colors.red,
       showConfirmBtn: false,
       autoCloseDuration: Duration(milliseconds: 1500),
@@ -48,6 +50,7 @@ class AlertUtils {
       type: QuickAlertType.info,
       showConfirmBtn: false,
       title: infoMessage,
+      backgroundColor: Theme.of(context).colorScheme.background,
       autoCloseDuration: Duration(milliseconds: 1500),
       titleColor: Colors.yellow,
     );
@@ -60,6 +63,7 @@ class AlertUtils {
       context: context,
       type: QuickAlertType.loading,
       showConfirmBtn: false,
+      backgroundColor: Theme.of(context).colorScheme.background,
       title: 'Loading',
       autoCloseDuration: Duration(milliseconds: 1500),
       titleColor: Colors.yellow,
@@ -75,6 +79,7 @@ class AlertUtils {
       confirmBtnText: 'Yes',
       cancelBtnText: 'No',
       confirmBtnColor: Colors.green,
+      backgroundColor: Theme.of(context).colorScheme.background,
       onConfirmBtnTap: () async {
         Navigator.pop(context);
         if (NfcHomePageState.session) {

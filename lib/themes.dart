@@ -29,7 +29,7 @@ class ThemeClass {
       primary: primaryColor,
       background: lightBackgroundColor,
       secondary: lightSecondaryColor,
-      onSecondary: lightTextColor, 
+      onSecondary: Colors.grey.shade100, 
     ),
   );
 
@@ -51,8 +51,8 @@ class ThemeClass {
       primary: primaryColor,
       background: darkBackgroundColor,
       onBackground: darkSecondaryColor,
-
       secondary: darkSecondaryColor,
+      onSecondary: lightSecondaryColor,
     ),
   );
 }

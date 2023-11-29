@@ -130,16 +130,18 @@ class LoginUtils {
     SharedPreferences themeMode = await SharedPreferences.getInstance();
     themeMode.setBool('isLightModeSelected', isLightModeSelected);
   }
-   Future<bool> getThemeMode() async {
+
+  Future<bool> getThemeMode() async {
     SharedPreferences themeMode = await SharedPreferences.getInstance();
     bool isLightModeSelected = themeMode.getBool('isLightModeSelected') ?? true;
     return isLightModeSelected;
   }
+
   Future<void> changeThemeMode() async {
     SharedPreferences themeMode = await SharedPreferences.getInstance();
     bool isLightModeSelected = themeMode.getBool('isLightModeSelected') ?? true;
     themeMode.setBool('isLightModeSelected', !isLightModeSelected);
-
   }
+
 }
 

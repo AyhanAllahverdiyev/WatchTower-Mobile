@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:watch_tower_flutter/firebase_options.dart';
 import 'package:watch_tower_flutter/pages/alert_screen.dart';
@@ -27,26 +28,42 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+bool isLightMode = brightness == Brightness.light;
+ LoginUtils().saveThemeMode(isLightMode);
+
     return MaterialApp(
       title: 'Watch Tower',
       home: LoginPage(),
+
       theme: Provider.of<ThemeProvider>(context).isLightModeSelected
           ? ThemeClass.lightTheme
           : ThemeClass.darkTheme,
-      darkTheme: ThemeClass.darkTheme,
+  
       debugShowCheckedModeBanner: false,
     );
   }
 }
-
 class ThemeProvider with ChangeNotifier {
   bool _isLightModeSelected = true;
 
   bool get isLightModeSelected => _isLightModeSelected;
 
+  ThemeProvider() {
+    _initThemeMode();
+  }
+
+  Future<void> _initThemeMode() async {
+    var brightness = SchedulerBinding.instance!.platformDispatcher.platformBrightness;
+    _isLightModeSelected = brightness == Brightness.light;
+    await LoginUtils().saveThemeMode(_isLightModeSelected);
+    notifyListeners();
+  }
+
   Future<void> toggleThemeMode() async {
     _isLightModeSelected = !_isLightModeSelected;
-    await LoginUtils().saveThemeMode(_isLightModeSelected);
+    await LoginUtils().changeThemeMode();
+
     notifyListeners();
   }
 }

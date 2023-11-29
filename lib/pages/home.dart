@@ -23,8 +23,12 @@ class _HomePageState extends State<HomePage> {
   bool isLightModeSelected = true;
   String userName = "";
 
-  String formattedDay = DateFormat('dd').format(DateTime.now());
-  String formattedMonth = DateFormat('dd').format(DateTime.now());
+  List<String> englishMonthAbbreviations = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+  ];
+
+
   @override
   void initState() {
     LoginUtils().getThemeMode().then((value) {
@@ -35,6 +39,18 @@ class _HomePageState extends State<HomePage> {
     _loadSavedCredentials();
     super.initState();
   }
+
+  String createDate(int index) {
+    DateTime now = DateTime.now().add(Duration(days: index));
+    String formattedDate = DateFormat('dd').format(now);
+    return formattedDate;
+  }
+int createMonth(int index) {
+  DateTime now = DateTime.now().add(Duration(days: index));
+  String formatted = DateFormat('MM').format(now);
+  int formattedMonth = int.parse(formatted);
+  return formattedMonth - 1;
+}
 
   void _loadSavedCredentials() async {
     final credentials = await LoginUtils().loadSavedCredentials();
@@ -117,6 +133,47 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      for (int i = 0; i < 4; i++)
+                        Card(
+                            color: (i == 0)
+                                ? Colors.blue
+                                : Theme.of(context).colorScheme.background,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.onSecondary,
+                                  width: 2),
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.width / 5,
+                              width: MediaQuery.of(context).size.width / 5,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    createDate(i),
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    englishMonthAbbreviations[createMonth(i)],
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ))
+                    ],
+                  ),
+                  SizedBox(height: 10),
                   CarouselSlider(
                     options: CarouselOptions(
                       autoPlay: true,
@@ -124,13 +181,7 @@ class _HomePageState extends State<HomePage> {
                       enlargeCenterPage: false,
                     ),
                     items: [
-                      CustomCard(
-                        text: "First Card",
-                        title: formattedDay,
-                        imgRoute: "assets/images/nfc_reader.png",
-                        customWidth: 'full',
-                        navigatorName: "",
-                      ),
+                
                       CustomCard(
                         text: "Second Card",
                         title: "Card 2",
