@@ -41,14 +41,26 @@ class AlertUtils {
     isDialogOpen = false;
   }
 
-  Future<void> InfoAlert(
-      String infoMessage, BuildContext context) async {
+  Future<void> InfoAlert(String infoMessage, BuildContext context) async {
     isDialogOpen = true;
     await QuickAlert.show(
       context: context,
       type: QuickAlertType.info,
       showConfirmBtn: false,
       title: infoMessage,
+      autoCloseDuration: Duration(milliseconds: 1500),
+      titleColor: Colors.yellow,
+    );
+    isDialogOpen = false;
+  }
+
+  Future<void> loadingAlert(BuildContext context) async {
+    isDialogOpen = true;
+    await QuickAlert.show(
+      context: context,
+      type: QuickAlertType.loading,
+      showConfirmBtn: false,
+      title: 'Loading',
       autoCloseDuration: Duration(milliseconds: 1500),
       titleColor: Colors.yellow,
     );

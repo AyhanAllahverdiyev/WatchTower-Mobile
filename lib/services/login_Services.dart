@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:watch_tower_flutter/pages/nfcHome.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import 'nfc_Services.dart';
 import 'package:http/http.dart' as http;
@@ -83,10 +84,15 @@ class HttpServices {
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode({"jwt": jwt}),
     );
+    print(
+        '-------------------------------------------- JWT TOKEN --------------------------------------------');
+    print(jwt);
+
     print(response.body);
     if (response.statusCode == 200) {
       return true;
     } else {
+      NfcHomePageState().endSession();
       return false;
     }
   }
@@ -117,17 +123,5 @@ class HttpServices {
       print("Error while saving user to DB : $e");
       return ApiResponse(-1, "Error: $e");
     }
-  }
-
-  Future<bool> logout() async {
-    print(
-        '==========================Before LOGOUT============================');
-    await NfcService().printAllSharedPreferences();
-    await SharedPreferences.getInstance().then((prefs) {
-      prefs.remove('jwt');
-    });
-    print('==========================After LOGOUT============================');
-    NfcService().printAllSharedPreferences();
-    return Future.value(true);
   }
 }

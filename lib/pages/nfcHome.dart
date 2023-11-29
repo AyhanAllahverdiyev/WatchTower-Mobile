@@ -42,6 +42,10 @@ class NfcHomePageState extends State<NfcHomePage> {
     }
   }
 
+  void endSession() {
+    session = false;
+  }
+
   void addValuesToArray(String name, bool order) {
     orderJsonArray.add({"name": name, "isRead": order});
   }

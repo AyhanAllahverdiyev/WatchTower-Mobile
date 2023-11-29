@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watch_tower_flutter/pages/history.dart';
+import 'package:watch_tower_flutter/services/logout_services.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import '../components/bottom_navigation.dart';
 import './login.dart';
@@ -228,12 +229,12 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(height: 10),
               TextButton(
                 onPressed: () async {
+                  await AlertUtils()
+                      .successfulAlert('Logging  out...', context);
+                  await logoutServices().logout();
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
                   prefs.remove('jwt');
-                  await AlertUtils()
-                      .successfulAlert('Logging  out...', context);
-
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => LoginPage()),
