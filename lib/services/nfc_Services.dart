@@ -51,36 +51,32 @@ class NfcService {
     });
   }
 
-  Future<ApiResponse> getOrderArray(BuildContext context) async {
-    if (await HttpServices().verifyToken()) {
-      try {
-        print(
-            '====================================Order which the system expects==================================== ');
-        final response = await http.get(
-          Uri.parse(BaseUrl + 'tagOrder/get'),
-        );
+ Future<ApiResponse> getOrderArray() async {
+  if (await HttpServices().verifyToken()) {
+    try {
+      print(
+          '====================================Order which the system expects==================================== ');
+      final response = await http.get(
+        Uri.parse(BaseUrl + 'tagOrder/get'),
+      );
 
-        final statusCode = response.statusCode;
-        final responseBody = response.body;
+      final statusCode = response.statusCode;
+      final responseBody = response.body;
 
-        print('Response Status Code: $statusCode');
-        print('Response Body: $responseBody');
+      print('Response Status Code: $statusCode');
+      print('Response Body: $responseBody');
 
-        return ApiResponse(statusCode, responseBody);
-      } catch (e) {
-        print("Error in fetching ORDER : $e");
-        print("Error in fetching ORDER : $e");
-        return ApiResponse(-1, "Error: $e");
-      }
-    } else {
-      await AlertUtils()
-          .errorAlert('Session  Timeout. Please login again', context);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
-      print('JWT is not valid');
-      return ApiResponse(-1, "Error: JWT is not valid");
+      return ApiResponse(statusCode, responseBody);
+    } catch (e) {
+      print("Error in fetching ORDER : $e");
+      return ApiResponse(-1, "Error: $e");
     }
+  } else {
+    print('JWT is not valid');
+    return ApiResponse(-1, "Error: JWT is not valid");
   }
+}
+
 
   static ValueNotifier<dynamic> result = ValueNotifier(null);
 
@@ -186,5 +182,5 @@ class NfcService {
       print('JWT is not valid');
     }
   }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 }

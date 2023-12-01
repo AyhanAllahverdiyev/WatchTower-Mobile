@@ -95,7 +95,7 @@ class HttpServices {
     if (response.statusCode == 200) {
       return true;
     } else {
-      NfcHomePageState().endSession();
+
       return false;
     }
   }

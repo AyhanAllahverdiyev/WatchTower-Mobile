@@ -69,7 +69,7 @@ class DbServices {
         print('ID: ${newJsonObject['ID']}');
         await NfcHomePageState()
             .updateIsReadValue(newJsonObject['ID'].toString(), 'true');
-        print('Final version of orderJsonArray:${orderJsonArray}}');
+
 
         return response.statusCode;
       }

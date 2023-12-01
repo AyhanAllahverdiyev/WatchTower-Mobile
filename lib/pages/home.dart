@@ -1,10 +1,14 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use, sort_child_properties_last
 
+
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:watch_tower_flutter/main.dart';
+import 'package:watch_tower_flutter/services/login_Services.dart';
+import 'package:watch_tower_flutter/services/session_services.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import '../components/bottom_navigation.dart';
@@ -22,7 +26,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool isLightModeSelected = true;
   String userName = "";
-
+  bool isSessionActive = false;
   List<String> englishMonthAbbreviations = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
@@ -31,15 +35,31 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+
+   
     LoginUtils().getThemeMode().then((value) {
       setState(() {
         isLightModeSelected = value;
       });
     });
+    
+    _checkSessionStatus();
     _loadSavedCredentials();
     super.initState();
-  }
 
+  }
+  Future _checkSessionStatus() async{
+    ApiResponse sessionStatusResponse= await   SessionService().checkSessionStatus();
+    if (sessionStatusResponse.statusCode<400) {
+      setState(() {
+        isSessionActive = true;
+      });
+    } else if(sessionStatusResponse.statusCode>400){
+      setState(() {
+        isSessionActive = false;
+      });
+    }
+  }
   String createDate(int index) {
     DateTime now = DateTime.now().add(Duration(days: index));
     String formattedDate = DateFormat('dd').format(now);
@@ -215,18 +235,18 @@ int createMonth(int index) {
                       shadowColor: Colors.blueGrey,
                       child: InkWell(
                         splashColor: Colors.grey.withAlpha(90),
-                        onTap: () {
-                          if (NfcHomePageState.session == false) {
-                            AlertUtils()
-                                .confirmationAlert('New Session', context);
-                          } else {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => NfcHomePage()),
-                            );
-                          }
-                        },
+                        // onTap: () {
+                        //   if (isSessionActive) {
+                        //     AlertUtils()
+                        //         .confirmationAlert('New Session', context);
+                        //   } else {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: (context) => NfcHomePage()),
+                        //     );
+                        //   }
+                        // },
                         child: Container(
                           height: 200,
                           width: MediaQuery.of(context).size.width - 48,
@@ -257,10 +277,13 @@ int createMonth(int index) {
                                               fontWeight: FontWeight.bold,
                                               )),
                                     ),
+
                                     ElevatedButton(
                                       onPressed: () async {
-                                        AlertUtils().confirmationAlert(
-                                            'New Session', context);
+                                        String newSessionMessage = (isSessionActive) ? 'Your current session data will be cleared' : 'You will start a new session';
+                                         AlertUtils().confirmNewSessionAlert(
+                                            newSessionMessage,isSessionActive, context);
+                                     
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.only(
@@ -278,6 +301,36 @@ int createMonth(int index) {
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
                                                 Colors.blue),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(28.0),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    if(isSessionActive) ElevatedButton(
+                                      onPressed: () async {
+                                        AlertUtils().handleActiveSession(
+                                            context);
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 0,
+                                            right: 0,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: Text('Continue session',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.purpleAccent),
                                         shape: MaterialStateProperty.all<
                                             RoundedRectangleBorder>(
                                           RoundedRectangleBorder(

@@ -124,6 +124,7 @@ class AlertScreenState extends State<AlertScreen> {
                       ),
                     ),
                     onPressed: () {
+                
                       assetsAudioPlayer.dispose();
                     },
                     child: Row(

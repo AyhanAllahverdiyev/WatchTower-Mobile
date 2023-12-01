@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use, sort_child_properties_last
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watch_tower_flutter/main.dart';
@@ -13,83 +11,78 @@ import '../components/nfc_block.dart';
 import '../services/nfc_Services.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
 
+import '../services/session_services.dart';
 import '../utils/login_utils.dart';
 
 class NfcHomePage extends StatefulWidget {
-  const NfcHomePage({super.key});
+  final bool isOldSessionOn;
+  const NfcHomePage({super.key, required this.isOldSessionOn});
 
   @override
   State<NfcHomePage> createState() => NfcHomePageState();
 }
 
-List<Map<String, dynamic>> orderJsonArray = [];
+
+List<Map<String, dynamic>> finalOrderArray = [];
 
 class NfcHomePageState extends State<NfcHomePage> {
   List<String> allowedOrderArray = [];
   static bool session = false;
   static bool tour = false;
-    bool isLightModeSelected = true;
+
+  bool isLightModeSelected = true;
   @override
   void initState() {
-    isSessionOn();
-      LoginUtils().getThemeMode().then((value) {
+
+    print(widget.isOldSessionOn);
+    LoginUtils().getThemeMode().then((value) {
       setState(() {
         isLightModeSelected = value;
       });
     });
+    getOrderArrayForReadPage();
   }
 
-  void isSessionOn() {
-    if (session == false && tour == false) {
-      getOrderArrayForReadPage();
-      session = true;
-    } else if (session == true && tour == false) {
-      print('Session is already on');
-    } else {
-      getOrderArrayForReadPage();
-      tour = false;
-    }
-  }
 
-  void endSession() {
-    session = false;
-  }
 
-  void addValuesToArray(String name, bool order) {
-    orderJsonArray.add({"name": name, "isRead": order});
-  }
 
   Future<void> getOrderArrayForReadPage() async {
-    ApiResponse orderArray = await NfcService().getOrderArray(context);
-    Map<String, dynamic> jsonResponse = json.decode(orderArray.response);
-    print(jsonResponse);
+    print("!!!!!!!!!!!!!!!!!!!! GET ORDER ARRAY FOR READ PAGE !!!!!!!!!!!!!!!!!!!!!!");
+    ApiResponse jsonResponse = await SessionService().checkSessionStatus();
+    Map<String, dynamic> orderArray = json.decode(jsonResponse.response);
 
-    List<dynamic> allowedOrderMaps = jsonResponse['allowedOrderArray'];
+
+    List<dynamic> allowedOrderMaps = orderArray['data'];
+      finalOrderArray = allowedOrderMaps.map((item) {
+    return {
+      'name': item['name'],
+      'isRead': item['isRead'],
+    };
+  }).toList();
+  print("+++++++++++++++++++++++++++++++++");
+  setState(() {
+    finalOrderArray = finalOrderArray;
+  });
+  print(finalOrderArray);
+
     List<String> newAllowedOrderArray =
         allowedOrderMaps.map((map) => map['name'].toString()).toList();
-
+    print("newAllowedOrderArray: $newAllowedOrderArray");
     setState(() {
       allowedOrderArray = newAllowedOrderArray;
-      orderJsonArray.clear(); // Clear the existing data
+
     });
 
-    newAllowedOrderArray.forEach((element) {
-      addValuesToArray(element, false);
-    });
+ 
 
-    print(
-        '////////////////////////////////TESTING////////////////////////////////');
-    print(orderJsonArray);
-    print(
-        '////////////////////////////////TESTING////////////////////////////////');
   }
 
   Future<void> updateIsReadValue(String name, String newReadValue) async {
-    for (int i = 0; i < orderJsonArray.length; i++) {
-      print('orderJsonArray in each loop ${orderJsonArray[i]['name']}');
-      if (orderJsonArray[i]['name'] == name) {
-        orderJsonArray[i]['isRead'] = newReadValue;
-        print('Updated orderJsonArray: $orderJsonArray');
+    for (int i = 0; i < finalOrderArray.length; i++) {
+      print('finalOrderArray in each loop ${finalOrderArray[i]['name']}');
+      if (finalOrderArray[i]['name'] == name) {
+        finalOrderArray[i]['isRead'] = newReadValue;
+        print('Updated finalOrderArray: $finalOrderArray');
         break;
       }
     }
@@ -102,7 +95,6 @@ class NfcHomePageState extends State<NfcHomePage> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
- 
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(40.0),
             child: AppBar(
@@ -115,29 +107,30 @@ class NfcHomePageState extends State<NfcHomePage> {
                   onPressed: () async {
                     Provider.of<ThemeProvider>(context, listen: false)
                         .toggleThemeMode();
-               
+
                     setState(() {
                       isLightModeSelected = !isLightModeSelected;
                     });
                   },
                 ),
               ],
-            )),      body: SingleChildScrollView(
+            )),
+        body: SingleChildScrollView(
           child: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                for (int i = 0; i < orderJsonArray.length; i++)
+                for (int i = 0; i < finalOrderArray.length; i++)
                   NfcBlockWidget(
-                    order: orderJsonArray[i]["name"],
-                    isRead: orderJsonArray[i]["isRead"].toString(),
+                    order: finalOrderArray[i]["name"],
+                    isRead: finalOrderArray[i]["isRead"].toString(),
                     index: i,
                   ),
                 SizedBox(height: 20),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width -40,
+                    width: MediaQuery.of(context).size.width - 40,
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () async {
@@ -147,14 +140,20 @@ class NfcHomePageState extends State<NfcHomePage> {
                         if (readTagResult == 302) {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => NfcHomePage()),
+                            MaterialPageRoute(
+                                builder: (context) => NfcHomePage(
+                                      isOldSessionOn: true,
+                                    )),
                           );
                         } else if (readTagResult < 400) {
                           print("tag read successfully");
                           print("//////////////////////////////////////////");
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => NfcHomePage()),
+                            MaterialPageRoute(
+                                builder: (context) => NfcHomePage(
+                                      isOldSessionOn: true,
+                                    )),
                           );
                         }
                         print("tag read result:$readTagResult");
@@ -169,7 +168,8 @@ class NfcHomePageState extends State<NfcHomePage> {
                                 fontWeight: FontWeight.bold)),
                       ),
                       style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -182,14 +182,16 @@ class NfcHomePageState extends State<NfcHomePage> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width -40,
+                    width: MediaQuery.of(context).size.width - 40,
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () async {
-                        bool result = await NfcService().resetReadOrder();
-                        if (result) {
+                        int result = await SessionService()
+                            .endActiveSessionStatus();
+                                print("nfc Home 2");
+                        if (result<400) {
                           print('read order resetted');
-                          session = false;
+                    
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (context) => HomePage()),
@@ -197,8 +199,8 @@ class NfcHomePageState extends State<NfcHomePage> {
                           print('session stopped');
                         } else {
                           print('error while resetting read order');
-                          AlertUtils()
-                              .errorAlert("Unable to end current session", context);
+                          AlertUtils().errorAlert(
+                              "Unable to end current session", context);
                         }
                       },
                       child: Padding(
@@ -211,7 +213,8 @@ class NfcHomePageState extends State<NfcHomePage> {
                                 fontWeight: FontWeight.bold)),
                       ),
                       style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),

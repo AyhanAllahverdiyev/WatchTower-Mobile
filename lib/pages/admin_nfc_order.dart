@@ -41,22 +41,18 @@ class NfcOrderPageState extends State<NfcOrderPage> {
   }
 
   Future _getOrderArrayForAdmin() async {
-    ApiResponse orderArray = await NfcService().getOrderArray(context);
+    ApiResponse orderArray = await NfcService().getOrderArray();
     List<dynamic> jsonResponse = jsonDecode(orderArray.response);
-    print('jsonResponse: $jsonResponse');
-    jsonResponse.forEach((element) {
-      allowedOrderArray.add(element['name']);
-    });
+ 
 
     for (var item in jsonResponse) {
       if (item.containsKey('name')) {
         newAllowedOrderArray.add(item['name']);
       }
     }
-    print('newAllowedOrderArray: $newAllowedOrderArray');
+
     if (newAllowedOrderArray.length == 0) {
       await AlertUtils().InfoAlert('No Tags Found!', context);
-      print(newAllowedOrderArray);
     }
 
     setState(() {

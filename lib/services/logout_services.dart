@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:watch_tower_flutter/pages/nfcHome.dart';
 import 'package:watch_tower_flutter/services/nfc_Services.dart';
+import 'package:watch_tower_flutter/services/session_services.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -22,7 +23,7 @@ class logoutServices {
     if (response.statusCode == 200) {
       prefs.remove('jwt');
       print('Logged out successfully');
-      NfcHomePageState().endSession();
+      await SessionService().endActiveSessionStatus();
     } else {
       print('Logout failed: ${response.body}');
     }
