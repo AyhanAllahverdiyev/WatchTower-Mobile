@@ -57,7 +57,7 @@ class NfcService {
         print(
             '====================================Order which the system expects==================================== ');
         final response = await http.get(
-          Uri.parse(BaseUrl + 'order/'),
+          Uri.parse(BaseUrl + 'tagOrder/get/'),
         );
 
         final statusCode = response.statusCode;
@@ -103,6 +103,8 @@ class NfcService {
 
             payload_as_String =
                 await UserInfoService().updateUserInfo(payload_as_String);
+
+
 
             if (payload_as_String.length > 2) {
               int statusCode =
