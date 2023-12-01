@@ -43,11 +43,13 @@ class NfcOrderPageState extends State<NfcOrderPage> {
   Future _getOrderArrayForAdmin() async {
     ApiResponse orderArray = await NfcService().getOrderArray();
     List<dynamic> jsonResponse = jsonDecode(orderArray.response);
- 
+    print('-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=');
+    print('jsonResponse: $jsonResponse');
 
     for (var item in jsonResponse) {
       if (item.containsKey('name')) {
         newAllowedOrderArray.add(item['name']);
+        print(item['name']);
       }
     }
 
@@ -56,7 +58,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
     }
 
     setState(() {
-      //  allowedOrderArray = newAllowedOrderArray;
+      allowedOrderArray = newAllowedOrderArray;
     });
   }
 
@@ -67,7 +69,6 @@ class NfcOrderPageState extends State<NfcOrderPage> {
   }
 
   void addValuesToArray(String name, bool order, int index) {
-    resultArray.add({'name': name, 'isRead': order, 'index': index});
     resultArray.add({'name': name, 'isRead': order, 'index': index});
   }
 
@@ -93,7 +94,6 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                   onPressed: () async {
                     Provider.of<ThemeProvider>(context, listen: false)
                         .toggleThemeMode();
-
 
                     setState(() {
                       isLightModeSelected = !isLightModeSelected;
@@ -124,7 +124,6 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                       onPressed: () {
                         print('pressed delete button at index $i');
 
-
                         if (isDeleteSelected) {
                           setState(() {
                             allowedOrderArray =
@@ -135,7 +134,6 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                       style: TextButton.styleFrom(
                         backgroundColor:
                             Theme.of(context).colorScheme.onPrimary,
-                
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -193,7 +191,6 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                     isEditing = !isEditing;
                   });
                 },
-           
                 child: Icon(Icons.edit,
                     color: Theme.of(context).colorScheme.background),
                 backgroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -238,7 +235,6 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                       resultArray.clear();
                       index = 0;
                       newAllowedOrderArray.forEach((element) {
-                        addValuesToArray(element, false, index++);
                         addValuesToArray(element, false, index++);
                       });
                       index = 0;
