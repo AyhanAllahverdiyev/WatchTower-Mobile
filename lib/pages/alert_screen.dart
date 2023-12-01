@@ -74,8 +74,8 @@ class AlertScreenState extends State<AlertScreen> {
                           ),
                           Image.asset(
                             "assets/gifs/alarm.gif",
-                            height: MediaQuery.of(context).size.width / 2,
-                            width: MediaQuery.of(context).size.width / 2,
+                            height: MediaQuery.of(context).size.width / 2 - 30,
+                            width: MediaQuery.of(context).size.width / 2 - 30,
                           ),
                         ],
                       )),
@@ -88,28 +88,27 @@ class AlertScreenState extends State<AlertScreen> {
                 width: MediaQuery.of(context).size.width - 40,
                 height: 50,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Close",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
-                      SizedBox(width: 10),
-                      Icon(Icons.close,
-                          color: Colors.white, size: 30.0),
-                  ],)
-                ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Close",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                        SizedBox(width: 10),
+                        Icon(Icons.close, color: Colors.white, size: 30.0),
+                      ],
+                    )),
               ),
               SizedBox(
                 height: 20,
@@ -118,31 +117,28 @@ class AlertScreenState extends State<AlertScreen> {
                 width: MediaQuery.of(context).size.width - 40,
                 height: 50,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
-                  ),
-                  onPressed: () {
-                     assetsAudioPlayer.dispose();
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Mute",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
-                      SizedBox(width: 10),
-                      Icon(Icons.volume_off,
-                          color: Colors.white, size: 30.0),
-                  ],)
-                          ),
-                ),
-             
-           
+                    onPressed: () {
+                      assetsAudioPlayer.dispose();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Mute",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                        SizedBox(width: 10),
+                        Icon(Icons.volume_off, color: Colors.white, size: 30.0),
+                      ],
+                    )),
+              ),
             ],
           ),
         ),

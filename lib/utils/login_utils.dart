@@ -31,14 +31,12 @@ class Credentials {
   Credentials(this.email, this.password, this.rememberMe);
 }
 
-
-
 class LoginUtils {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  String baseUrl = 'http://192.168.1.119:3000/';
+  String baseUrl = 'http://192.168.208.155:3000/';
   Future<void> setBaseUrl(String newBaseUrl) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('baseUrl', newBaseUrl);
@@ -125,6 +123,7 @@ class LoginUtils {
     String user = prefsUser.getString('user') ?? 'user';
     return user;
   }
+
   //////////////////////////////////////////////////////////////////////////////////////
   Future<void> saveThemeMode(bool isLightModeSelected) async {
     SharedPreferences themeMode = await SharedPreferences.getInstance();
@@ -142,6 +141,4 @@ class LoginUtils {
     bool isLightModeSelected = themeMode.getBool('isLightModeSelected') ?? true;
     themeMode.setBool('isLightModeSelected', !isLightModeSelected);
   }
-
 }
-

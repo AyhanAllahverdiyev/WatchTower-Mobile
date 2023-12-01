@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:watch_tower_flutter/components/bottom_navigation.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:flutter/material.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
@@ -7,6 +8,7 @@ import '../pages/alert_screen.dart';
 import 'package:http/http.dart' as http;
 
 String BaseUrl = LoginUtils().baseUrl;
+String UrlForWebSocket = BottomAppBarWidgetState.UrlForWebSocket;
 
 class WebSocketService {
   static IOWebSocketChannel? _channel;
@@ -17,7 +19,7 @@ class WebSocketService {
     }
 
     try {
-      _channel = IOWebSocketChannel.connect('ws://192.168.1.73:3000');
+      _channel = IOWebSocketChannel.connect(UrlForWebSocket);
 
       _channel!.stream.listen((data) async {
         print(data);

@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:watch_tower_flutter/services/device_services.dart';
@@ -26,10 +27,11 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
   bool isTorchPressed = false;
   String authLevel = '';
   String message = '';
+  static String UrlForWebSocket = 'ws://192.168.208.155:3000';
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-  final channel = IOWebSocketChannel.connect('ws://192.168.1.73:3000');
+  final channel = IOWebSocketChannel.connect(UrlForWebSocket);
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,8 +158,8 @@ class BottomAppBarWidgetState extends State<BottomAppBarWidget> {
                 LoginUtils().printAllSharedPreferences();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AlertScreen(data:"kdjkldjkljdkjdkjdkd")),
-                 
+                  MaterialPageRoute(
+                      builder: (context) => AlertScreen(data: "Warning Alert")),
                 );
               },
             ),

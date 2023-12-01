@@ -31,7 +31,6 @@ class LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     canLogInWithJWT(context);
-    loginUtils.setBaseUrl('http://192.168.1.11:3000/');
     loadSavedCredentials();
   }
 
@@ -117,7 +116,7 @@ class LoginPageState extends State<LoginPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Sign in to continue',
+                        'Log in to continue',
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 18,
