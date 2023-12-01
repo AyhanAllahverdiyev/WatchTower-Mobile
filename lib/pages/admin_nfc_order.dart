@@ -42,12 +42,22 @@ class NfcOrderPageState extends State<NfcOrderPage> {
 
   Future _getOrderArrayForAdmin() async {
     ApiResponse orderArray = await NfcService().getOrderArray(context);
-    Map<String, dynamic> jsonResponse = json.decode(orderArray.response);
-    allowedOrderArray = jsonResponse['allowedOrderArray'];
-    print('allowedOrderArrayAA: $allowedOrderArray');
-    newAllowedOrderArray =
-        allowedOrderArray.map((map) => map['name'].toString()).toList();
+    List<dynamic> jsonResponse = jsonDecode(orderArray.response);
+    print('jsonResponse: $jsonResponse');
+    jsonResponse.forEach((element) {
+      allowedOrderArray.add(element['name']);
+    });
+
+    for (var item in jsonResponse) {
+      if (item.containsKey('name')) {
+        newAllowedOrderArray.add(item['name']);
+      }
+    }
     print('newAllowedOrderArray: $newAllowedOrderArray');
+    if (newAllowedOrderArray.length == 0) {
+      await AlertUtils().InfoAlert('No Tags Found!', context);
+      print(newAllowedOrderArray);
+    }
 
     setState(() {
       allowedOrderArray = newAllowedOrderArray;
@@ -61,7 +71,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
   }
 
   void addValuesToArray(String name, bool order, int index) {
-    resultArray.add({'name': name, 'isRead': order,'index': index});
+    resultArray.add({'name': name, 'isRead': order, 'index': index});
   }
 
   @override
@@ -86,7 +96,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                   onPressed: () async {
                     Provider.of<ThemeProvider>(context, listen: false)
                         .toggleThemeMode();
-               
+
                     setState(() {
                       isLightModeSelected = !isLightModeSelected;
                     });
@@ -109,14 +119,13 @@ class NfcOrderPageState extends State<NfcOrderPage> {
             children: [
               for (var i = 0; i < allowedOrderArray.length; i++)
                 Container(
-                
                   key: ValueKey(allowedOrderArray[i]),
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: TextButton(
                       onPressed: () {
                         print('pressed delete button at index $i');
-                  
+
                         if (isDeleteSelected) {
                           setState(() {
                             allowedOrderArray =
@@ -125,27 +134,23 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                         }
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                     
                         ),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          
                           children: [
-                            
                             Row(
                               children: [
-                               
                                 Icon(
                                   Icons.nfc_outlined,
                                   color: Colors.blue,
                                   size: 20,
-                                
                                 ),
                                 SizedBox(width: 10),
                                 Text("Tag Name: ",
@@ -159,7 +164,6 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                                   allowedOrderArray[i],
                                   style: TextStyle(
                                     fontSize: 25.0,
-                                 
                                   ),
                                 ),
                               ],
@@ -189,7 +193,8 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                     isEditing = !isEditing;
                   });
                 },
-                child: Icon(Icons.edit, color:Theme.of(context).colorScheme.background),
+                child: Icon(Icons.edit,
+                    color: Theme.of(context).colorScheme.background),
                 backgroundColor: Theme.of(context).colorScheme.onPrimary,
               ),
             if (isEditing)
@@ -232,12 +237,9 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                       resultArray.clear();
                       index = 0;
                       newAllowedOrderArray.forEach((element) {
-                        addValuesToArray(element, false,index++);
+                        addValuesToArray(element, false, index++);
                       });
                       index = 0;
-  
-              
-                
 
                       dbResponse = await DbServices().updateArray(resultArray);
                       print('newAllowedOrderArray: $newAllowedOrderArray');

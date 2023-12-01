@@ -57,7 +57,7 @@ class NfcService {
         print(
             '====================================Order which the system expects==================================== ');
         final response = await http.get(
-          Uri.parse(BaseUrl + 'order/'),
+          Uri.parse(BaseUrl + 'tagOrder/get'),
         );
 
         final statusCode = response.statusCode;
