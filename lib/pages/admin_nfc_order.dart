@@ -56,7 +56,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
     }
 
     setState(() {
-      allowedOrderArray = newAllowedOrderArray;
+      //  allowedOrderArray = newAllowedOrderArray;
     });
   }
 
@@ -67,6 +67,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
   }
 
   void addValuesToArray(String name, bool order, int index) {
+    resultArray.add({'name': name, 'isRead': order, 'index': index});
     resultArray.add({'name': name, 'isRead': order, 'index': index});
   }
 
@@ -92,6 +93,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                   onPressed: () async {
                     Provider.of<ThemeProvider>(context, listen: false)
                         .toggleThemeMode();
+
 
                     setState(() {
                       isLightModeSelected = !isLightModeSelected;
@@ -122,6 +124,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                       onPressed: () {
                         print('pressed delete button at index $i');
 
+
                         if (isDeleteSelected) {
                           setState(() {
                             allowedOrderArray =
@@ -130,6 +133,8 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                         }
                       },
                       style: TextButton.styleFrom(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
                         backgroundColor:
                             Theme.of(context).colorScheme.onPrimary,
                         shape: RoundedRectangleBorder(
@@ -191,6 +196,8 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                 },
                 child: Icon(Icons.edit,
                     color: Theme.of(context).colorScheme.background),
+                child: Icon(Icons.edit,
+                    color: Theme.of(context).colorScheme.background),
                 backgroundColor: Theme.of(context).colorScheme.onPrimary,
               ),
             if (isEditing)
@@ -233,6 +240,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                       resultArray.clear();
                       index = 0;
                       newAllowedOrderArray.forEach((element) {
+                        addValuesToArray(element, false, index++);
                         addValuesToArray(element, false, index++);
                       });
                       index = 0;
