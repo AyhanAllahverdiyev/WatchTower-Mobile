@@ -135,8 +135,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                       style: TextButton.styleFrom(
                         backgroundColor:
                             Theme.of(context).colorScheme.onPrimary,
-                        backgroundColor:
-                            Theme.of(context).colorScheme.onPrimary,
+                
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -194,8 +193,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                     isEditing = !isEditing;
                   });
                 },
-                child: Icon(Icons.edit,
-                    color: Theme.of(context).colorScheme.background),
+           
                 child: Icon(Icons.edit,
                     color: Theme.of(context).colorScheme.background),
                 backgroundColor: Theme.of(context).colorScheme.onPrimary,
