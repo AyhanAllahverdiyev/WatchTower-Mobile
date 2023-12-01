@@ -81,7 +81,7 @@ class NfcService {
   static ValueNotifier<dynamic> result = ValueNotifier(null);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  Future<int> tagRead(BuildContext context) async {
+  Future<int> tagRead(BuildContext context,String sessionId) async {
     if (await HttpServices().verifyToken()) {
       Completer<int> completer = Completer<int>();
 
@@ -98,7 +98,7 @@ class NfcService {
             result.value = payload_as_String;
 
             payload_as_String =
-                await UserInfoService().updateUserInfo(payload_as_String);
+                await UserInfoService().updateUserInfo(payload_as_String,sessionId);
 
 
 

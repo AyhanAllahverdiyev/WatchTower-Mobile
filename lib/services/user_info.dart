@@ -9,7 +9,7 @@ import '../services/device_services.dart';
 class UserInfoService {
   String BaseUrl = LoginUtils().baseUrl;
 
-  Future<String> updateUserInfo(String jsonString) async {
+  Future<String> updateUserInfo(String jsonString,String sessionId) async {
     try {
       Map<String, dynamic> jsonData = jsonDecode(jsonString);
 
@@ -19,12 +19,13 @@ class UserInfoService {
         print('inside the android if statement');
 
         jsonData['battery_level'] = await DeviceService.getBatteryLevel();
+
       } else if (Platform.isIOS) {
         print('inside the ios if statement');
         int? level = (await BatteryInfoPlugin().iosBatteryInfo)?.batteryLevel;
         jsonData['battery_level'] = level;  
       }
-     
+     jsonData['session_id'] = sessionId;
       jsonData['user_id'] = await LoginUtils().getUserId();
       print('after adding batttery ');
       print(jsonData);

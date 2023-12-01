@@ -29,6 +29,7 @@ class NfcHomePageState extends State<NfcHomePage> {
   List<String> allowedOrderArray = [];
   static bool session = false;
   static bool tour = false;
+  String sessionId = '';
 
   bool isLightModeSelected = true;
   @override
@@ -51,7 +52,7 @@ class NfcHomePageState extends State<NfcHomePage> {
     ApiResponse jsonResponse = await SessionService().checkSessionStatus();
     Map<String, dynamic> orderArray = json.decode(jsonResponse.response);
 
-
+    sessionId = orderArray['sessionId'];
     List<dynamic> allowedOrderMaps = orderArray['data'];
       finalOrderArray = allowedOrderMaps.map((item) {
     return {
@@ -61,6 +62,7 @@ class NfcHomePageState extends State<NfcHomePage> {
   }).toList();
 
   setState(() {
+    sessionId = sessionId;
     finalOrderArray = finalOrderArray;
   });
 
@@ -136,17 +138,19 @@ class NfcHomePageState extends State<NfcHomePage> {
                       onPressed: () async {
                         print(
                             '==============================CONTENTS OF NFC TAG==============================');
-                        int readTagResult = await NfcService().tagRead(context);
+                        int readTagResult = await NfcService().tagRead(context,sessionId);
                         if (readTagResult == 302) {
                           await AlertUtils().successfulAlert(
                               "Tour Completed", context);
-                       Navigator.pushReplacement(
+                          getOrderArrayForReadPage();
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => NfcHomePage(
                                       isOldSessionOn: true,
                                     )),
                           );
+              
                         } else if (readTagResult < 400) {
                           print("tag read successfully");
                           print("//////////////////////////////////////////");
