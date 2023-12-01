@@ -59,11 +59,11 @@ class NfcHomePageState extends State<NfcHomePage> {
       'isRead': item['isRead'],
     };
   }).toList();
-  print("+++++++++++++++++++++++++++++++++");
+
   setState(() {
     finalOrderArray = finalOrderArray;
   });
-  print(finalOrderArray);
+
 
     List<String> newAllowedOrderArray =
         allowedOrderMaps.map((map) => map['name'].toString()).toList();
@@ -138,7 +138,9 @@ class NfcHomePageState extends State<NfcHomePage> {
                             '==============================CONTENTS OF NFC TAG==============================');
                         int readTagResult = await NfcService().tagRead(context);
                         if (readTagResult == 302) {
-                          Navigator.pushReplacement(
+                          await AlertUtils().successfulAlert(
+                              "Tour Completed", context);
+                       Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => NfcHomePage(
