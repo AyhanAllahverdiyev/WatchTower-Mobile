@@ -27,6 +27,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
   bool isDeleteSelected = false;
   int dbResponse = 500;
   bool isLightModeSelected = true;
+  int index = 0;
 
   @override
   void initState() {
@@ -59,8 +60,8 @@ class NfcOrderPageState extends State<NfcOrderPage> {
     return array;
   }
 
-  void addValuesToArray(String name, bool order) {
-    resultArray.add({"name": name, "isRead": order});
+  void addValuesToArray(String name, bool order, int index) {
+    resultArray.add({'name': name, 'isRead': order,'index': index});
   }
 
   @override
@@ -229,10 +230,14 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                   FloatingActionButton(
                     onPressed: () async {
                       resultArray.clear();
-
+                      index = 0;
                       newAllowedOrderArray.forEach((element) {
-                        addValuesToArray(element, false);
+                        addValuesToArray(element, false,index++);
                       });
+                      index = 0;
+  
+              
+                
 
                       dbResponse = await DbServices().updateArray(resultArray);
                       print('newAllowedOrderArray: $newAllowedOrderArray');

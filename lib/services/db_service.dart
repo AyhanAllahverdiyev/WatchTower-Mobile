@@ -13,6 +13,21 @@ class dbResponse {
 
   dbResponse(this.statusCode, this.response, [this.error = ""]);
 }
+class Tag {
+  String name;
+  bool isRead;
+  int index;
+
+  Tag(this.name, this.isRead, this.index);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'isRead': isRead,
+      'index': index,
+    };
+  }
+}
 
 class DbServices {
   int keyvalue = 0;
@@ -72,15 +87,20 @@ class DbServices {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<int> updateArray(List<Map<String, dynamic>> array) async {
-    final url = BaseUrl + 'order';
+    final url = BaseUrl + 'tagOrder/new';
+    print("//////////////////////////////////////////////");
     print('trying to set read order : $array');
+
+
     try {
+      List<Tag> tags = array.map((tagData) =>
+      Tag(tagData["name"], tagData["isRead"], tagData["index"])).toList();
+      String jsonString = jsonEncode(tags.map((tag) => tag.toJson()).toList());
+      print('jsonString: $jsonString');
       final response = await http.post(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: jsonEncode({
-          'allowedOrderArray': array,
-        }),
+        body: jsonString,
       );
       if (response.statusCode >= 399) {
         print('ERROR: ${response.body}');

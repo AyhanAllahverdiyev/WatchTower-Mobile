@@ -72,8 +72,9 @@ int createMonth(int index) {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
+        FocusScope.of(context).unfocus();
       },
       child: Scaffold(
         appBar: PreferredSize(
