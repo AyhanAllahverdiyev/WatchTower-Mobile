@@ -255,86 +255,116 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         height: 200,
                         width: MediaQuery.of(context).size.width - 48,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 5),
-                                    child: Text("Start Tour!",
-                                        style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.blue)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 15),
-                                    child: Text("Scan NFC Tags Now",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
+                        child: InkWell(
+                          onTap: () async {
+                            if (isSessionActive) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NfcHomePage(
+                                          isOldSessionOn: true,
                                         )),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      String newSessionMessage = (isSessionActive)
-                                          ? 'Your current session data will be cleared'
-                                          : 'You will start a new session';
-                                      bool isConfirmed = await AlertUtils()
-                                          .confirmSessionAlert(
-                                              newSessionMessage, context);
+                              );
+                            } else {
+                              String newSessionMessage = (isSessionActive)
+                                  ? 'Your current session data will be cleared'
+                                  : 'You will start a new session';
+                              bool isConfirmed = await AlertUtils()
+                                  .confirmSessionAlert(
+                                      newSessionMessage, context);
 
-                                      if (isSessionActive) {
-                                        if (isConfirmed) {
-                                          SessionService()
-                                              .startNewSessionAndEndTheLatest(
-                                                  context);
-                                        }
-                                      } else {
-                                        if (isConfirmed) {
-                                          SessionService()
-                                              .startNewSession(context);
-                                        }
-                                      }
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 0,
-                                          right: 0,
-                                          top: 10,
-                                          bottom: 10),
-                                      child: Text('New Session',
+                              if (isSessionActive) {
+                                if (isConfirmed) {
+                                  SessionService()
+                                      .startNewSessionAndEndTheLatest(context);
+                                }
+                              } else {
+                                if (isConfirmed) {
+                                  SessionService().startNewSession(context);
+                                }
+                              }
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 5),
+                                      child: Text(
+                                          isSessionActive
+                                              ? "Continue Session!"
+                                              : "Start Session!",
                                           style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold)),
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blue)),
                                     ),
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Colors.blue),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(28.0),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 15),
+                                      child: Text("Scan NFC Tags Now",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ),
+                                    if (!isSessionActive)
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          String newSessionMessage = (isSessionActive)
+                                              ? 'Your current session data will be cleared'
+                                              : 'You will start a new session';
+                                          bool isConfirmed = await AlertUtils()
+                                              .confirmSessionAlert(
+                                                  newSessionMessage, context);
+
+                                          if (isSessionActive) {
+                                            if (isConfirmed) {
+                                              SessionService()
+                                                  .startNewSessionAndEndTheLatest(
+                                                      context);
+                                            }
+                                          } else {
+                                            if (isConfirmed) {
+                                              SessionService()
+                                                  .startNewSession(context);
+                                            }
+                                          }
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 0,
+                                              right: 0,
+                                              top: 10,
+                                              bottom: 10),
+                                          child: Text('New Session',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.blue),
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(28.0),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  if (isSessionActive)
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        bool isConfirmed = await AlertUtils()
-                                            .confirmSessionAlert(
-                                                "Continue from where you left off in the last session.",
-                                                context);
-                                        if (isConfirmed) {
+                                    if (isSessionActive)
+                                      ElevatedButton(
+                                        onPressed: () async {
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
@@ -343,41 +373,42 @@ class _HomePageState extends State<HomePage> {
                                                       isOldSessionOn: true,
                                                     )),
                                           );
-                                        }
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 0,
-                                            right: 0,
-                                            top: 10,
-                                            bottom: 10),
-                                        child: Text('Continue session',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                Colors.purpleAccent),
-                                        shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(28.0),
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 0,
+                                              right: 0,
+                                              top: 10,
+                                              bottom: 10),
+                                          child: Text('Continue Session',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.blue),
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(28.0),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Image(
-                              image: AssetImage('assets/images/nfc_reader.png'),
-                              width: MediaQuery.of(context).size.width / 3,
-                            ),
-                          ],
+                              Image(
+                                image:
+                                    AssetImage('assets/images/nfc_reader.png'),
+                                width: MediaQuery.of(context).size.width / 3.6,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     )),
@@ -387,7 +418,7 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     children: [
                       CustomCard(
-                        text: "First Card",
+                        text: "Start New Session",
                         title: "Card 1",
                         imgRoute: "assets/images/nfc.png",
                         customWidth: 'half',
