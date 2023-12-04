@@ -10,6 +10,7 @@ import '../services/nfc_Services.dart';
 import 'package:watch_tower_flutter/services/login_Services.dart';
 import '../services/db_service.dart';
 import '../utils/alert_utils.dart';
+import 'package:uuid/uuid.dart';
 
 class NfcOrderPage extends StatefulWidget {
   const NfcOrderPage({super.key});
@@ -19,6 +20,7 @@ class NfcOrderPage extends StatefulWidget {
 }
 
 class NfcOrderPageState extends State<NfcOrderPage> {
+  var uuid = Uuid();
   List<Map<String, dynamic>> resultArray = [];
   List<dynamic> allowedOrderArray = [];
   List<String> newAllowedOrderArray = [];
@@ -38,6 +40,12 @@ class NfcOrderPageState extends State<NfcOrderPage> {
         isLightModeSelected = value;
       });
     });
+  }
+
+  int a = 0;
+  int generateID() {
+    a++;
+    return a;
   }
 
   Future _getOrderArrayForAdmin() async {
@@ -117,7 +125,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
             children: [
               for (var i = 0; i < allowedOrderArray.length; i++)
                 Container(
-                  key: ValueKey(allowedOrderArray[i]),
+                  key: ValueKey(generateID()),
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: TextButton(
@@ -210,9 +218,17 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                           await AlertUtils()
                               .errorAlert('Tag names must be unique', context);
                         } else {
-                          setState(() {
-                            allowedOrderArray.add(newTag.tagName);
-                          });
+                          bool resultOfNfcWrite =
+                              await NfcService().writeService(newTag.tagName);
+                          if (resultOfNfcWrite) {
+                            setState(() {
+                              allowedOrderArray.add(newTag.tagName);
+                            });
+                          } else {
+                            await AlertUtils()
+                                .errorAlert('Error Writing to Tag', context);
+                            Navigator.pop(context);
+                          }
                         }
                       }
                     },

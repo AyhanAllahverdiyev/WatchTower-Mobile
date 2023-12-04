@@ -23,7 +23,6 @@ class PayloadServices {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   List<int> convertStringToArray(String arrayString) {
-    // Split the string by commas and convert to integers
     List<int> intList = arrayString.split(',').map(int.parse).toList();
     return intList;
   }
@@ -32,21 +31,16 @@ class PayloadServices {
 
   String getPayload(String jsonString) {
     try {
-      // Find the index of the "payload" keyword
       int payloadIndex = jsonString.indexOf('payload');
 
-      // Check if "payload" keyword was found
       if (payloadIndex == -1) {
         print('Error: "payload"  not found.');
       }
 
-      // Find the index of the first '[' after the "payload" keyword
       int startIndex = jsonString.indexOf('[', payloadIndex);
 
-      // Find the index of the first ']' after the "payload" keyword
       int endIndex = jsonString.indexOf(']', startIndex);
 
-      // Extract the "payload" array substring
       String payloadSubstring = jsonString.substring(startIndex + 1, endIndex);
 
       return payloadSubstring;
@@ -59,7 +53,6 @@ class PayloadServices {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   void addToUpdatedAuthLevelList(String id, String auth_level) {
     _updatedAuthLevelList.add('{"_id": "$id","auth_level": "$auth_level"}');
-  
   }
 
   List<String> getUpdatedAuthLevelList() {
@@ -72,11 +65,9 @@ class PayloadServices {
   void setUpdatedAuthLevelList(List<String> list) {
     updatedAuthLevelList = list;
   }
+
   void clearUpdatedAuthLevelList() {
     updatedAuthLevelList.clear();
     _updatedAuthLevelList.clear();
   }
-
-
-  
 }

@@ -6,6 +6,7 @@ import 'package:watch_tower_flutter/pages/nfcHome.dart';
 import 'package:watch_tower_flutter/services/session_services.dart';
 import '../services/nfc_Services.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:uuid/uuid.dart';
 
 class addNewTag {
   String tagName;
