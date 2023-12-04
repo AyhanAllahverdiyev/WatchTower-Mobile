@@ -7,7 +7,7 @@ import 'package:nfc_manager/nfc_manager.dart';
 import '../utils/login_utils.dart';
 
 class DeviceService {
-    String BaseUrl = LoginUtils().baseUrl;
+  String BaseUrl = LoginUtils().baseUrl;
 
   static const platform = MethodChannel('battery');
 
@@ -20,24 +20,23 @@ class DeviceService {
     }
   }
 
-  Future<List<String>?> getLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Check if location services are enabled
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      throw Exception('Location services are disabled.');
-    }
-
-    // Request location permission
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      throw Exception('Location permissions are denied.');
-    }
-
+  Future<List<String>> getLocation() async {
     try {
-      // Get the current position
+      LocationPermission permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        LocationPermission permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw Exception('Location permissions are denied');
+        }
+      }
+
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+      if (!serviceEnabled) {
+        throw Exception('Location services are disabled.');
+      }
+
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
       );
@@ -45,10 +44,10 @@ class DeviceService {
       String lat = position.latitude.toString();
       String long = position.longitude.toString();
 
-      // Return latitude and longitude as an array
       return [lat, long];
     } catch (e) {
-      throw Exception('Error getting location: $e');
+      print('Error getting location: $e');
+      return ['err'];
     }
   }
 
@@ -75,52 +74,6 @@ class DeviceService {
       await TorchLight.disableTorch();
     } on Exception catch (_) {
       print('Could not disable torch');
-    }
-  }
-
-  Future<bool> writeService(
-      ValueNotifier<dynamic> result, String jsonData) async {
-    try {
-      bool tagFound = false;
-      bool writeSuccess = false;
-
-      await NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-        tagFound = true;
-        var ndef = Ndef.from(tag);
-        if (ndef == null || !ndef.isWritable) {
-          result.value = 'Tag is not ndef writable';
-          NfcManager.instance.stopSession(errorMessage: result.value);
-          return;
-        }
-
-        NdefMessage message = NdefMessage([
-          NdefRecord.createText(jsonData.toString()),
-        ]);
-        print('messagedata inside ndef write:');
-        print(message.toString());
-
-        try {
-          await ndef.write(message);
-          result.value = 'Success to "Ndef Write"';
-          print('Success to ndef write');
-          writeSuccess = true;
-        } on PlatformException catch (e) {
-          result.value = 'PlatformException: $e';
-        } catch (e) {
-          result.value = 'An error occurred: $e';
-        } finally {
-          NfcManager.instance.stopSession();
-        }
-      });
-
-      if (!tagFound) {
-        result.value = 'No NFC tag found. Please scan an NFC tag.';
-      }
-
-      return writeSuccess;
-    } catch (e) {
-      result.value = 'An error occurred while starting the NFC session: $e';
-      return false;
     }
   }
 }
