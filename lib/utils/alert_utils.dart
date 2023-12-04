@@ -72,8 +72,6 @@ class AlertUtils {
     isDialogOpen = false;
   }
 
-  
-
   Future<addNewTag> addNewTagDialog(BuildContext context) async {
     String newTag = '';
     bool isConfirmed = false;
@@ -85,6 +83,7 @@ class AlertUtils {
       confirmBtnText: 'Save',
       cancelBtnText: 'Cancel',
       showCancelBtn: true,
+      backgroundColor: Theme.of(context).colorScheme.background,
       title: 'Add a Tag',
       widget: TextFormField(
         decoration: InputDecoration(
@@ -112,83 +111,32 @@ class AlertUtils {
   }
 
   ////////////////////////////////////////////////////////////////////////
- Future<void> confirmNewSessionAlert(String message, bool isSessionActive, BuildContext context) async {
-  await QuickAlert.show(
-    context: context,
-    type: QuickAlertType.confirm,
-    text: message,
-    confirmBtnText: 'Yes',
-    cancelBtnText: 'No',
-    confirmBtnColor: Colors.green,
-    backgroundColor: Theme.of(context).colorScheme.background,
-    onConfirmBtnTap: () async {
-      Navigator.pop(context);
-
-      if (isSessionActive) {
-        int endSessionResult = await SessionService().endActiveSessionStatus();
-        print("Alert utils end session result: $endSessionResult");
-        if (endSessionResult < 400) {
-          print('Session ended successfully');
-          
-          var startSessionResult = await SessionService().createNewSession();
-          if (startSessionResult.statusCode < 400) {
-            print('New session started');
-            await successfulAlert('New Session Initialized!', context);
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => NfcHomePage(isOldSessionOn: false)),
-            );
-          } else {
-            print('Error starting a new session');
-            await errorAlert('System was not able to launch a new session', context);
-            Navigator.pop(context);
-          }
-        } else {
-          print('Error ending the active session');
-          await errorAlert('Unable to end the current session', context);
-          Navigator.pop(context);
-        }
-      } else {
-        var startSessionResult = await SessionService().createNewSession();
-        if (startSessionResult.statusCode < 400) {
-          print('New session started');
-          await successfulAlert('New Session Initialized!', context);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => NfcHomePage(isOldSessionOn: false)),
-          );
-        } else {
-          print('Error starting a new session');
-          await errorAlert('System was not able to launch a new session', context);
-          Navigator.pop(context);
-        }
-      }
-    },
-    onCancelBtnTap: () {
-      Navigator.pop(context);
-    },
-  );
-}
-
-
-  Future<void> handleActiveSession(BuildContext context) async {
-    QuickAlert.show(
+  Future<bool> confirmSessionAlert(
+      String message, BuildContext context) async {
+    bool isConfirmed = false;
+    await QuickAlert.show(
       context: context,
       type: QuickAlertType.confirm,
-      text: 'Continue from where you left off in the last session.',
+      text: message,
       confirmBtnText: 'Yes',
       cancelBtnText: 'No',
       confirmBtnColor: Colors.green,
+      backgroundColor: Theme.of(context).colorScheme.background,
+      onConfirmBtnTap: () async {
+        Navigator.pop(context);
+        isConfirmed = true;
+
+      
+      
+  
+      },
       onCancelBtnTap: () {
         Navigator.pop(context);
-    
-      },
-      onConfirmBtnTap: () async {
-             Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => NfcHomePage(isOldSessionOn: true,)),
-          );
+        isConfirmed = false;
       },
     );
+    return isConfirmed;
   }
+
+  
 }

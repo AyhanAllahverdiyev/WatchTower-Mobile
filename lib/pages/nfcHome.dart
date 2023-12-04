@@ -30,7 +30,7 @@ class NfcHomePageState extends State<NfcHomePage> {
   static bool session = false;
   static bool tour = false;
   String sessionId = '';
-
+  bool isOldSessionOn=false;
   bool isLightModeSelected = true;
   @override
   void initState() {
@@ -39,6 +39,7 @@ class NfcHomePageState extends State<NfcHomePage> {
     LoginUtils().getThemeMode().then((value) {
       setState(() {
         isLightModeSelected = value;
+        isOldSessionOn=widget.isOldSessionOn;
       });
     });
     getOrderArrayForReadPage();
@@ -122,6 +123,9 @@ class NfcHomePageState extends State<NfcHomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+               (isOldSessionOn)?
+               Text("The session is ongoing"):Text("New Sesiion Started"),
+
                 for (int i = 0; i < finalOrderArray.length; i++)
                   NfcBlockWidget(
                     order: finalOrderArray[i]["name"],
