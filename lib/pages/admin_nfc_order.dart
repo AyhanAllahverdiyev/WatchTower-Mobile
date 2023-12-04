@@ -227,7 +227,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                           } else {
                             await AlertUtils()
                                 .errorAlert('Error Writing to Tag', context);
-                            Navigator.pop(context);
+                
                           }
                         }
                       }
