@@ -220,13 +220,14 @@ class NfcService {
   Future<bool> writeService(String name) async {
     if (await HttpServices().verifyToken()) {
       try {
-        bool tagFound = false;
-        bool writeSuccess = false;
         String json = await createNfcData(name);
+        bool tagFound = false;
+
         await NfcManager.instance.startSession(
             onDiscovered: (NfcTag tag) async {
           tagFound = true;
           var ndef = Ndef.from(tag);
+
           if (ndef == null || !ndef.isWritable) {
             result.value = 'Tag is not ndef writable';
             NfcManager.instance.stopSession(errorMessage: result.value);
@@ -236,16 +237,11 @@ class NfcService {
           NdefMessage message = NdefMessage([
             NdefRecord.createText(json),
           ]);
-          print('======================NFC DATA======================');
-          print('Final Message DATA');
-          print(message.toString());
-          print('======================END OF NFC DATA======================');
 
           try {
             await ndef.write(message);
             result.value = 'Success to "Ndef Write"';
             print('Success to ndef write');
-            writeSuccess = true;
           } on PlatformException catch (e) {
             result.value = 'PlatformException: $e';
           } catch (e) {
@@ -259,7 +255,7 @@ class NfcService {
           result.value = 'No NFC tag found. Please scan an NFC tag.';
         }
 
-        return writeSuccess;
+        return tagFound;
       } catch (e) {
         result.value = 'An error occurred while starting the NFC session: $e';
         return false;

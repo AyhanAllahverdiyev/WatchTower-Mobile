@@ -42,12 +42,10 @@ class NfcOrderPageState extends State<NfcOrderPage> {
     });
   }
 
-  String generateID() {
-    var uid = Uuid();
-    String id = uid.v4();
-    print('-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=');
-    print(id);
-    return id;
+  int a = 0;
+  int generateID() {
+    a++;
+    return a;
   }
 
   Future _getOrderArrayForAdmin() async {
