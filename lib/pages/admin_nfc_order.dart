@@ -34,7 +34,6 @@ class NfcOrderPageState extends State<NfcOrderPage> {
 
   @override
   void initState() {
-   
     super.initState();
     _getOrderArrayForAdmin();
 
@@ -59,19 +58,14 @@ class NfcOrderPageState extends State<NfcOrderPage> {
 
     for (var item in jsonResponse) {
       if (item.containsKey('name')) {
-
         newAllowedOrderArray.add(item['name']);
-      
-        addValuesToArray(item['name'], false, item['index'], item['card_id'], Location(lat: "", long: ""));
 
-
-  
+        addValuesToArray(item['name'], false, item['index'], item['card_id'],
+            Location(lat: item['loc']['lat'], long: item['loc']['long']));
       }
     }
 
-
-
-    if (newAllowedOrderArray.length == 0) {
+    if (resultArray.isEmpty) {
       await AlertUtils().InfoAlert('No Tags Found!', context);
     }
 
@@ -82,24 +76,22 @@ class NfcOrderPageState extends State<NfcOrderPage> {
 
   List<String> deleteTag(List<String> array, int index) {
     array.removeAt(index);
-    print('NewallowedOrderArray: $newAllowedOrderArray');
+
     return array;
   }
 
   void addValuesToArray(
       String name, bool order, int index, String card_id, Location loc) {
-   setState(() {
-       resultArray.add({
-      'name': name,
-      'isRead': order,
-      'index': index,
-      'card_id': card_id,
-      'loc': loc.toJson()
+    setState(() {
+      resultArray.add({
+        'name': name,
+        'isRead': order,
+        'index': index,
+        'card_id': card_id,
+        'loc': loc.toJson()
+      });
     });
-   });
-  
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -157,6 +149,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                           setState(() {
                             allowedOrderArray =
                                 deleteTag(newAllowedOrderArray, i);
+                            resultArray.removeAt(i);
                           });
                         }
                       },
@@ -243,21 +236,15 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                           var resultOfNfcWrite = await NfcService()
                               .writeService(newTagName.tagName);
                           if (resultOfNfcWrite.status) {
-                            print("1");
-                             
                             setState(() {
                               allowedOrderArray.add(newTagName.tagName);
-                           addValuesToArray(
-                                newTagName.tagName,
-                                false,
-                                index++,
-                                resultOfNfcWrite.nfcData.card_id,
-                                resultOfNfcWrite.nfcData.loc);
+                              addValuesToArray(
+                                  newTagName.tagName,
+                                  false,
+                                  index++,
+                                  resultOfNfcWrite.nfcData.card_id,
+                                  resultOfNfcWrite.nfcData.loc);
                             });
-                           
-                            print(
-                                "////////////////////////////////////////////");
-                            print('resultArray: $resultArray');
                           } else {
                             await AlertUtils()
                                 .errorAlert('Error Writing to Tag', context);
@@ -281,19 +268,15 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                   SizedBox(height: 10),
                   FloatingActionButton(
                     onPressed: () async {
-                      isDeleteSelected = !isDeleteSelected;
-                
+                     
+
                       index = 0;
-                      // newAllowedOrderArray.forEach((element) {
-                      //   addValuesToArray(element, false, index++);
-                      // });
-                      print("////////////////////////////////////////////");
-                      print('resultArray: $resultArray');
+
                       index = 0;
 
                       dbResponse = await DbServices().updateArray(resultArray);
                       print('newAllowedOrderArray: $newAllowedOrderArray');
-                     
+
                       if (dbResponse <= 399) {
                         if (AlertUtils().isDialogOpen == false) {
                           await AlertUtils()
