@@ -37,6 +37,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
    
     super.initState();
     _getOrderArrayForAdmin();
+
     LoginUtils().getThemeMode().then((value) {
       setState(() {
         isLightModeSelected = value;
@@ -58,14 +59,17 @@ class NfcOrderPageState extends State<NfcOrderPage> {
 
     for (var item in jsonResponse) {
       if (item.containsKey('name')) {
+
         newAllowedOrderArray.add(item['name']);
-        addValuesToArray(item['name'], item['order'], item['index'], item['card_id'], item['loc']);
+      
+        addValuesToArray(item['name'], false, item['index'], item['card_id'], Location(lat: "", long: ""));
+
 
   
       }
     }
-    print('newAllowedOrderArray: $newAllowedOrderArray');
-    print("resultArray: $resultArray");
+
+
 
     if (newAllowedOrderArray.length == 0) {
       await AlertUtils().InfoAlert('No Tags Found!', context);
