@@ -22,6 +22,7 @@ class NfcOrderPage extends StatefulWidget {
 class NfcOrderPageState extends State<NfcOrderPage> {
   var uuid = Uuid();
   List<Map<String, dynamic>> resultArray = [];
+
   List<dynamic> allowedOrderArray = [];
   List<String> newAllowedOrderArray = [];
   int? pressedOrderIndex;
@@ -33,6 +34,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
 
   @override
   void initState() {
+   
     super.initState();
     _getOrderArrayForAdmin();
     LoginUtils().getThemeMode().then((value) {
@@ -57,9 +59,13 @@ class NfcOrderPageState extends State<NfcOrderPage> {
     for (var item in jsonResponse) {
       if (item.containsKey('name')) {
         newAllowedOrderArray.add(item['name']);
-        print(item['name']);
+        addValuesToArray(item['name'], item['order'], item['index'], item['card_id'], item['loc']);
+
+  
       }
     }
+    print('newAllowedOrderArray: $newAllowedOrderArray');
+    print("resultArray: $resultArray");
 
     if (newAllowedOrderArray.length == 0) {
       await AlertUtils().InfoAlert('No Tags Found!', context);
@@ -78,14 +84,18 @@ class NfcOrderPageState extends State<NfcOrderPage> {
 
   void addValuesToArray(
       String name, bool order, int index, String card_id, Location loc) {
-    resultArray.add({
+   setState(() {
+       resultArray.add({
       'name': name,
       'isRead': order,
       'index': index,
       'card_id': card_id,
       'loc': loc.toJson()
     });
+   });
+  
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -230,15 +240,15 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                               .writeService(newTagName.tagName);
                           if (resultOfNfcWrite.status) {
                             print("1");
-                             addValuesToArray(
+                             
+                            setState(() {
+                              allowedOrderArray.add(newTagName.tagName);
+                           addValuesToArray(
                                 newTagName.tagName,
                                 false,
                                 index++,
                                 resultOfNfcWrite.nfcData.card_id,
                                 resultOfNfcWrite.nfcData.loc);
-                            setState(() {
-                              allowedOrderArray.add(newTagName.tagName);
-                             resultArray=resultArray;
                             });
                            
                             print(
@@ -268,7 +278,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                   FloatingActionButton(
                     onPressed: () async {
                       isDeleteSelected = !isDeleteSelected;
-                      resultArray.clear();
+                
                       index = 0;
                       // newAllowedOrderArray.forEach((element) {
                       //   addValuesToArray(element, false, index++);
@@ -279,6 +289,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
 
                       dbResponse = await DbServices().updateArray(resultArray);
                       print('newAllowedOrderArray: $newAllowedOrderArray');
+                     
                       if (dbResponse <= 399) {
                         if (AlertUtils().isDialogOpen == false) {
                           await AlertUtils()

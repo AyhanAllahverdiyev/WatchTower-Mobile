@@ -17,14 +17,19 @@ class Tag {
   String name;
   bool isRead;
   int index;
+  String card_id;
+  Map<String,dynamic> loc;
 
-  Tag(this.name, this.isRead, this.index);
+
+  Tag(this.name, this.isRead, this.index,this.card_id,this.loc);
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'isRead': isRead,
       'index': index,
+      'card_id': card_id,
+      'loc': loc,
     };
   }
 }
@@ -96,7 +101,7 @@ class DbServices {
 
     try {
       List<Tag> tags = array.map((tagData) =>
-      Tag(tagData["name"], tagData["isRead"], tagData["index"])).toList();
+      Tag(tagData["name"], tagData["isRead"], tagData["index"],tagData["card_id"],tagData["loc"])).toList();
       String jsonString = jsonEncode(tags.map((tag) => tag.toJson()).toList());
       print('jsonString: $jsonString');
       final response = await http.post(
