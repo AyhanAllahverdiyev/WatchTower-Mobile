@@ -59,9 +59,8 @@ class HistoryPageState extends State<HistoryPage> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(40.0),
+          preferredSize: const Size.fromHeight(30.0),
           child: AppBar(),
         ),
         body: Stack(
@@ -77,7 +76,6 @@ class HistoryPageState extends State<HistoryPage> {
                       child: Text(
                         "History",
                         style: TextStyle(
-                   
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
@@ -96,7 +94,7 @@ class HistoryPageState extends State<HistoryPage> {
               ),
             ),
             // Show loading indicator conditionally
-            
+
             if (isLoading)
               Container(
                 color: Colors.black.withOpacity(0.7),

@@ -39,7 +39,7 @@ class HistoryCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       color: Theme.of(context).colorScheme.onPrimary,
       child: SizedBox(
-        width: MediaQuery.of(context).size.width - 48,
+        width: MediaQuery.of(context).size.width - 40,
         height: 100,
         child: Column(children: [
           Row(
@@ -69,30 +69,26 @@ class HistoryCard extends StatelessWidget {
                         children: [
                           Text(changeDateFormate(),
                               style: TextStyle(
-                                  fontSize: 20, 
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .background,
+                                  fontSize: 20,
+                                  color:
+                                      Theme.of(context).colorScheme.background,
                                   fontWeight: FontWeight.bold)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
-                            mainAxisSize: MainAxisSize
-                                .min,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(
-                                (int.parse(batteryLevel) <= 50)
+                                (int.parse(batteryLevel) <= 30)
                                     ? Icons.battery_3_bar
                                     : Icons.battery_5_bar,
                                 color: Colors.green.shade700,
                               ),
-                          
                               Text(
                                 '$batteryLevel%',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .background,
+                                  color:
+                                      Theme.of(context).colorScheme.background,
                                 ),
                               ),
                             ],
@@ -100,7 +96,6 @@ class HistoryCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    
                     Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       child: Row(
@@ -108,13 +103,12 @@ class HistoryCard extends StatelessWidget {
                         children: [
                           Text(name,
                               style: TextStyle(
-                                  fontSize: 20, 
+                                  fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.blue.shade700
-                                  )),
-                          
+                                  color: Colors.blue.shade700)),
                           SizedBox(
-                            width: 10,)
+                            width: 10,
+                          )
                         ],
                       ),
                     ),
@@ -127,11 +121,13 @@ class HistoryCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Icon(Icons.qr_code_scanner,
-                              size: 24,
-                              color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground),
-                              SizedBox(width: 4,),
+                                  size: 24,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground),
+                              SizedBox(
+                                width: 4,
+                              ),
                               Text(tagId,
                                   style: TextStyle(
                                       fontSize: 22,
@@ -143,21 +139,22 @@ class HistoryCard extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Row(children: [
-                                Icon(Icons.access_time,
-                                size: 19,
-                                color: Theme.of(context)
+                              Row(
+                                children: [
+                                  Icon(Icons.access_time,
+                                      size: 19,
+                                      color: Theme.of(context)
                                           .colorScheme
                                           .background),
-                                Text(changeTimeFormate(),
-                                    style: TextStyle(
+                                  Text(changeTimeFormate(),
+                                      style: TextStyle(
                                         fontSize: 18,
-                                         color: Theme.of(context)
-                                          .colorScheme
-                                          .background,)),
-                             
-                              ],),
-        
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .background,
+                                      )),
+                                ],
+                              ),
                             ],
                           ),
                         ],
