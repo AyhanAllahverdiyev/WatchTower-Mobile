@@ -5,13 +5,14 @@ import 'dart:convert';
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:watch_tower_flutter/services/nfc_Services.dart';
 import 'package:watch_tower_flutter/utils/alert_utils.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:watch_tower_flutter/utils/login_utils.dart';
 
+import '../pages/home.dart';
 import '../pages/nfcHome.dart';
 import 'login_Services.dart';
 
@@ -162,6 +163,24 @@ class SessionService {
             Navigator.pop(context);
           }
   }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ Future<void> endSessionButton(BuildContext context) async{
+            int result = await SessionService().endActiveSessionStatus();
+            print("nfc Home 2");
+            if (result < 400) {
+              print('read order resetted');
+AlertUtils().getCustomToast("Session successfuly saved!", Colors.green);
+             await  Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+              print('session stopped');
+            } else {
+              print('error while resetting read order');
+              AlertUtils().errorAlert("Unable to end current session", context);
+            }
+ }
 
 /////////////////////////////////////////////////////////////////////////////////////////
 }

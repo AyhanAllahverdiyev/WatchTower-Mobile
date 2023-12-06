@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:watch_tower_flutter/pages/nfcHome.dart';
 import 'package:watch_tower_flutter/services/session_services.dart';
 import '../services/nfc_Services.dart';
@@ -138,6 +139,20 @@ class AlertUtils {
     );
     return isConfirmed;
   }
-
+////////////////////////////////////////////////////////////////////////////////////////////////
+void getCustomToast(String message,Color color){
+  Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM_LEFT,
+        timeInSecForIosWeb: 1,
+    
+        backgroundColor: color,
+        textColor: Colors.white,
+        fontSize: 18.0,
+        
+    );
+   
+}
   
 }

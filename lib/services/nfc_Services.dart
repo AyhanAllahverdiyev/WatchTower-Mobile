@@ -217,6 +217,8 @@ class NfcService {
     }
   }
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   Future<bool> writeService(String name) async {
     if (await HttpServices().verifyToken()) {
       try {
@@ -255,7 +257,7 @@ class NfcService {
           result.value = 'No NFC tag found. Please scan an NFC tag.';
         }
 
-        return tagFound;
+        return true;
       } catch (e) {
         result.value = 'An error occurred while starting the NFC session: $e';
         return false;
@@ -266,14 +268,20 @@ class NfcService {
     }
   }
 
+
+
+
   Future<String> createNfcData(
-    String name,
+    String name
   ) async {
     var uuid = Uuid();
     String uniqueId = uuid.v4();
     List<String> location = await DeviceService().getLocation();
+    print('======================LOCATION======================');
     print(location);
     if (location[0] == 'err') {
+      AlertUtils().getCustomToast(
+"Please enable your location services.", Colors.red);
       throw Exception('Error getting location');
     } else {
       Location loc = Location(lat: location[0], long: location[1]);

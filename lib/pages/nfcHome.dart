@@ -22,7 +22,6 @@ class NfcHomePage extends StatefulWidget {
   State<NfcHomePage> createState() => NfcHomePageState();
 }
 
-
 List<Map<String, dynamic>> finalOrderArray = [];
 
 class NfcHomePageState extends State<NfcHomePage> {
@@ -30,54 +29,61 @@ class NfcHomePageState extends State<NfcHomePage> {
   static bool session = false;
   static bool tour = false;
   String sessionId = '';
-  bool isOldSessionOn=false;
+  bool isOldSessionOn = false;
   bool isLightModeSelected = true;
   @override
   void initState() {
-
     print(widget.isOldSessionOn);
     LoginUtils().getThemeMode().then((value) {
       setState(() {
         isLightModeSelected = value;
-        isOldSessionOn=widget.isOldSessionOn;
+        isOldSessionOn = widget.isOldSessionOn;
       });
     });
     getOrderArrayForReadPage();
   }
 
-
-
-
   Future<void> getOrderArrayForReadPage() async {
-    print("!!!!!!!!!!!!!!!!!!!! GET ORDER ARRAY FOR READ PAGE !!!!!!!!!!!!!!!!!!!!!!");
+    print(
+        "!!!!!!!!!!!!!!!!!!!! GET ORDER ARRAY FOR READ PAGE !!!!!!!!!!!!!!!!!!!!!!");
     ApiResponse jsonResponse = await SessionService().checkSessionStatus();
-    Map<String, dynamic> orderArray = json.decode(jsonResponse.response);
+    if(jsonResponse.statusCode<400){
+      if(isOldSessionOn){
+        AlertUtils().getCustomToast("Your last session has been resumed.", Colors.green);
+      }else{
+        AlertUtils().getCustomToast("Your session has been started.", Colors.green);
+      }
+     Map<String, dynamic> orderArray = json.decode(jsonResponse.response);
 
     sessionId = orderArray['sessionId'];
     List<dynamic> allowedOrderMaps = orderArray['data'];
-      finalOrderArray = allowedOrderMaps.map((item) {
-    return {
-      'name': item['name'],
-      'isRead': item['isRead'],
-    };
-  }).toList();
+    finalOrderArray = allowedOrderMaps.map((item) {
+      return {
+        'name': item['name'],
+        'isRead': item['isRead'],
+      };
+    }).toList();
 
-  setState(() {
-    sessionId = sessionId;
-    finalOrderArray = finalOrderArray;
-  });
-
+    setState(() {
+      sessionId = sessionId;
+      finalOrderArray = finalOrderArray;
+    });
 
     List<String> newAllowedOrderArray =
         allowedOrderMaps.map((map) => map['name'].toString()).toList();
     print("newAllowedOrderArray: $newAllowedOrderArray");
     setState(() {
       allowedOrderArray = newAllowedOrderArray;
-
     });
+    }else if(jsonResponse.statusCode>=400){
+      AlertUtils().errorAlert("Internal Server Error", context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+      }
 
- 
-
+    
   }
 
   Future<void> updateIsReadValue(String name, String newReadValue) async {
@@ -123,8 +129,6 @@ class NfcHomePageState extends State<NfcHomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-          
-
                 for (int i = 0; i < finalOrderArray.length; i++)
                   NfcBlockWidget(
                     order: finalOrderArray[i]["name"],
@@ -141,10 +145,11 @@ class NfcHomePageState extends State<NfcHomePage> {
                       onPressed: () async {
                         print(
                             '==============================CONTENTS OF NFC TAG==============================');
-                        int readTagResult = await NfcService().tagRead(context,sessionId);
+                        int readTagResult =
+                            await NfcService().tagRead(context, sessionId);
                         if (readTagResult == 302) {
-                          await AlertUtils().successfulAlert(
-                              "Tour Completed", context);
+                          await AlertUtils()
+                              .successfulAlert("Tour Completed", context);
                           getOrderArrayForReadPage();
                           Navigator.pushReplacement(
                             context,
@@ -153,7 +158,6 @@ class NfcHomePageState extends State<NfcHomePage> {
                                       isOldSessionOn: true,
                                     )),
                           );
-              
                         } else if (readTagResult < 400) {
                           print("tag read successfully");
                           print("//////////////////////////////////////////");
@@ -200,7 +204,7 @@ class NfcHomePageState extends State<NfcHomePage> {
                 //                 print("nfc Home 2");
                 //         if (result<400) {
                 //           print('read order resetted');
-                    
+
                 //           Navigator.pushReplacement(
                 //             context,
                 //             MaterialPageRoute(builder: (context) => HomePage()),
@@ -237,28 +241,18 @@ class NfcHomePageState extends State<NfcHomePage> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: ()async{
-int result = await SessionService()
-                            .endActiveSessionStatus();
-                                print("nfc Home 2");
-                        if (result<400) {
-                          print('read order resetted');
-                    
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
-                          print('session stopped');
-                        } else {
-                          print('error while resetting read order');
-                          AlertUtils().errorAlert(
-                              "Unable to end current session", context);
-                        }
-        },
-        tooltip: "End Session",
-        backgroundColor:Colors.red ,
-        child: Icon(Icons.save,
-        color: Colors.white,),
+          onPressed: () async {
+             bool isConfirmed=await AlertUtils().confirmSessionAlert("The session will be terminated and saved.", context);
+              if(isConfirmed){
+                SessionService().endSessionButton(context);
+              }
+          },
+          tooltip: "End Session",
+          backgroundColor: Colors.red,
+          child: Icon(
+            Icons.save,
+            color: Colors.white,
+          ),
         ),
         bottomNavigationBar: BottomAppBarWidget(pageName: "NfcHomePage"),
       ),

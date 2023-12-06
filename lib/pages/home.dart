@@ -298,10 +298,10 @@ class _HomePageState extends State<HomePage> {
                                       padding: const EdgeInsets.only(top: 5),
                                       child: Text(
                                           isSessionActive
-                                              ? "Continue Session!"
-                                              : "Start Session!",
+                                              ? "Continue Last Session!"
+                                              : "Start New Session!",
                                           style: TextStyle(
-                                              fontSize: 25,
+                                              fontSize: 28,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.blue)),
                                     ),
@@ -310,7 +310,7 @@ class _HomePageState extends State<HomePage> {
                                           const EdgeInsets.only(bottom: 15),
                                       child: Text("Scan NFC Tags Now",
                                           style: TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 18,
                                             fontWeight: FontWeight.bold,
                                           )),
                                     ),
@@ -365,6 +365,7 @@ class _HomePageState extends State<HomePage> {
                                     if (isSessionActive)
                                       ElevatedButton(
                                         onPressed: () async {
+  
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
@@ -383,7 +384,7 @@ class _HomePageState extends State<HomePage> {
                                           child: Text('Continue Session',
                                               style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 18,
+                                                  fontSize: 20,
                                                   fontWeight: FontWeight.bold)),
                                         ),
                                         style: ButtonStyle(
@@ -402,11 +403,7 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                               ),
-                              Image(
-                                image:
-                                    AssetImage('assets/images/nfc_reader.png'),
-                                width: MediaQuery.of(context).size.width / 3.6,
-                              ),
+                           
                             ],
                           ),
                         ),
