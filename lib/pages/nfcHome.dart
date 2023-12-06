@@ -47,43 +47,43 @@ class NfcHomePageState extends State<NfcHomePage> {
     print(
         "!!!!!!!!!!!!!!!!!!!! GET ORDER ARRAY FOR READ PAGE !!!!!!!!!!!!!!!!!!!!!!");
     ApiResponse jsonResponse = await SessionService().checkSessionStatus();
-    if(jsonResponse.statusCode<400){
-      if(isOldSessionOn){
-        AlertUtils().getCustomToast("Your last session has been resumed.", Colors.green);
-      }else{
-        AlertUtils().getCustomToast("Your session has been started.", Colors.green);
+    if (jsonResponse.statusCode < 400) {
+      if (isOldSessionOn) {
+        AlertUtils().getCustomToast(
+            "Your last session has been resumed.", Colors.green);
+      } else {
+        AlertUtils()
+            .getCustomToast("Your session has been started.", Colors.green);
       }
-     Map<String, dynamic> orderArray = json.decode(jsonResponse.response);
+      Map<String, dynamic> orderArray = json.decode(jsonResponse.response);
 
-    sessionId = orderArray['sessionId'];
-    List<dynamic> allowedOrderMaps = orderArray['data'];
-    finalOrderArray = allowedOrderMaps.map((item) {
-      return {
-        'name': item['name'],
-        'isRead': item['isRead'],
-      };
-    }).toList();
+      sessionId = orderArray['sessionId'];
+      List<dynamic> allowedOrderMaps = orderArray['data'];
+      finalOrderArray = allowedOrderMaps.map((item) {
+        return {
+          'name': item['name'],
+          'isRead': item['isRead'],
+        };
+      }).toList();
 
-    setState(() {
-      sessionId = sessionId;
-      finalOrderArray = finalOrderArray;
-    });
+      setState(() {
+        sessionId = sessionId;
+        finalOrderArray = finalOrderArray;
+      });
 
-    List<String> newAllowedOrderArray =
-        allowedOrderMaps.map((map) => map['name'].toString()).toList();
-    print("newAllowedOrderArray: $newAllowedOrderArray");
-    setState(() {
-      allowedOrderArray = newAllowedOrderArray;
-    });
-    }else if(jsonResponse.statusCode>=400){
+      List<String> newAllowedOrderArray =
+          allowedOrderMaps.map((map) => map['name'].toString()).toList();
+      print("newAllowedOrderArray: $newAllowedOrderArray");
+      setState(() {
+        allowedOrderArray = newAllowedOrderArray;
+      });
+    } else if (jsonResponse.statusCode >= 400) {
       AlertUtils().errorAlert("Internal Server Error", context);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
       );
-      }
-
-    
+    }
   }
 
   Future<void> updateIsReadValue(String name, String newReadValue) async {
@@ -181,6 +181,8 @@ class NfcHomePageState extends State<NfcHomePage> {
                                 fontWeight: FontWeight.bold)),
                       ),
                       style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.primary),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
@@ -242,10 +244,11 @@ class NfcHomePageState extends State<NfcHomePage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-             bool isConfirmed=await AlertUtils().confirmSessionAlert("The session will be terminated and saved.", context);
-              if(isConfirmed){
-                SessionService().endSessionButton(context);
-              }
+            bool isConfirmed = await AlertUtils().confirmSessionAlert(
+                "The session will be terminated and saved.", context);
+            if (isConfirmed) {
+              SessionService().endSessionButton(context);
+            }
           },
           tooltip: "End Session",
           backgroundColor: Colors.red,
