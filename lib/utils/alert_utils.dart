@@ -1,18 +1,22 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:watch_tower_flutter/pages/nfcHome.dart';
-import 'package:watch_tower_flutter/services/session_services.dart';
-import '../services/nfc_Services.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:uuid/uuid.dart';
 
 class addNewTag {
   String tagName;
   bool isConfirmed;
-  addNewTag(this.tagName, this.isConfirmed);
+  String card_id;
+  addNewTag(this.tagName, this.isConfirmed,this.card_id);
+}
+
+class addNewTagDialogObject {
+  String tagName;
+  bool isConfirmed;
+  addNewTagDialogObject(this.tagName, this.isConfirmed);
 }
 
 class AlertUtils {
@@ -74,7 +78,7 @@ class AlertUtils {
     isDialogOpen = false;
   }
 
-  Future<addNewTag> addNewTagDialog(BuildContext context) async {
+  Future<addNewTagDialogObject> addNewTagDialog(BuildContext context) async {
     String newTag = '';
     bool isConfirmed = false;
 
@@ -109,7 +113,7 @@ class AlertUtils {
       },
     );
 
-    return addNewTag(newTag, isConfirmed);
+    return addNewTagDialogObject(newTag, isConfirmed);
   }
 
   ////////////////////////////////////////////////////////////////////////
