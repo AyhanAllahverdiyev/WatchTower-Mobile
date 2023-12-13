@@ -133,6 +133,9 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                 }
                 final String item = allowedOrderArray.removeAt(oldIndex);
                 allowedOrderArray.insert(newIndex, item);
+                final Map<String, dynamic> movedItem =
+                    resultArray.removeAt(oldIndex);
+                resultArray.insert(newIndex, movedItem);
               });
             },
             children: [
@@ -268,8 +271,6 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                   SizedBox(height: 10),
                   FloatingActionButton(
                     onPressed: () async {
-                     
-
                       index = 0;
 
                       index = 0;
