@@ -39,14 +39,14 @@ class HistoryCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       color: Theme.of(context).colorScheme.onPrimary,
       child: SizedBox(
-        width: MediaQuery.of(context).size.width - 40,
-        height: 100,
+        width: MediaQuery.of(context).size.width - 48,
+        height: 105,
         child: Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                height: 100,
+                height: 105,
                 width: 25,
                 decoration: BoxDecoration(
                   color:
@@ -58,12 +58,15 @@ class HistoryCard extends StatelessWidget {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width - 78,
-                height: 90,
+                height: 105,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -78,10 +81,13 @@ class HistoryCard extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(
-                                (int.parse(batteryLevel) <= 30)
+                                (int.parse(batteryLevel) <= 50)
                                     ? Icons.battery_3_bar
                                     : Icons.battery_5_bar,
-                                color: Colors.green.shade700,
+                                color: (int.parse(batteryLevel) <= 50)
+                                    ? Colors.red.shade700
+                                    : Colors
+                                        .green, // Change color based on battery level
                               ),
                               Text(
                                 '$batteryLevel%',
@@ -92,7 +98,7 @@ class HistoryCard extends StatelessWidget {
                                 ),
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),

@@ -301,7 +301,7 @@ class _HomePageState extends State<HomePage> {
                                               ? "Continue Last Session!"
                                               : "Start New Session!",
                                           style: TextStyle(
-                                              fontSize: 28,
+                                              fontSize: 20,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.blue)),
                                     ),
@@ -365,7 +365,6 @@ class _HomePageState extends State<HomePage> {
                                     if (isSessionActive)
                                       ElevatedButton(
                                         onPressed: () async {
-  
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
@@ -403,7 +402,6 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                               ),
-                           
                             ],
                           ),
                         ),
