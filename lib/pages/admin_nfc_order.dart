@@ -259,6 +259,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                     child: Icon(Icons.add, color: Colors.white),
                   ),
                   SizedBox(height: 10),
+                  ElevatedButton(onPressed: () {}, child: Text('STOP')),
                   FloatingActionButton(
                       onPressed: () {
                         setState(() {
@@ -271,13 +272,12 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                   SizedBox(height: 10),
                   FloatingActionButton(
                     onPressed: () async {
-                        if(isDeleteSelected){
-                            setState(() {
+                      if (isDeleteSelected) {
+                        setState(() {
                           isDeleteSelected = !isDeleteSelected;
                         });
-                        }
-                      
-                     
+                      }
+
                       index = 0;
 
                       index = 0;
