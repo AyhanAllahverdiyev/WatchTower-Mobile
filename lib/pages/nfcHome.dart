@@ -148,16 +148,19 @@ class NfcHomePageState extends State<NfcHomePage> {
                         int readTagResult =
                             await NfcService().tagRead(context, sessionId);
                         if (readTagResult == 302) {
-                          await AlertUtils()
-                              .successfulAlert("Tour Completed", context);
-                          getOrderArrayForReadPage();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NfcHomePage(
-                                      isOldSessionOn: true,
-                                    )),
-                          );
+                      
+                          // await AlertUtils()
+                          //     .successfulAlert("Tour Completed", context);
+                          // getOrderArrayForReadPage();
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => NfcHomePage(
+                          //             isOldSessionOn: true,
+                          //           )),
+                          // );
+                          print(sessionId);
+                          await SessionService().checkTourOrder(sessionId,context);
                         } else if (readTagResult < 400) {
                           print("tag read successfully");
                           print("//////////////////////////////////////////");
