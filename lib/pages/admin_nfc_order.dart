@@ -271,6 +271,13 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                   SizedBox(height: 10),
                   FloatingActionButton(
                     onPressed: () async {
+                        if(isDeleteSelected){
+                            setState(() {
+                          isDeleteSelected = !isDeleteSelected;
+                        });
+                        }
+                      
+                     
                       index = 0;
 
                       index = 0;
