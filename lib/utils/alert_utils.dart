@@ -122,6 +122,7 @@ class AlertUtils {
       context: context,
       type: QuickAlertType.confirm,
       text: message,
+      textColor: Theme.of(context).colorScheme.onPrimary,
       confirmBtnText: 'Yes',
       cancelBtnText: 'No',
       confirmBtnColor: Colors.green,
