@@ -70,24 +70,24 @@ class Location {
 
 class NfcService {
   String BaseUrl = LoginUtils().baseUrl;
-  Future<bool> resetReadOrder() async {
-    try {
-      print('inside reset read order');
-      final response = await http.get(
-        Uri.parse(BaseUrl + 'reset'),
-      );
-      if (response.statusCode == 200) {
-        print(response.body);
-        return true;
-      } else {
-        print(response.body);
-        return false;
-      }
-    } catch (e) {
-      print('Error in resetReadOrder : $e');
-      return false;
-    }
-  }
+  // Future<bool> resetReadOrder() async {
+  //   try {
+  //     print('inside reset read order');
+  //     final response = await http.get(
+  //       Uri.parse(BaseUrl + 'reset'),
+  //     );
+  //     if (response.statusCode == 200) {
+  //       print(response.body);
+  //       return true;
+  //     } else {
+  //       print(response.body);
+  //       return false;
+  //     }
+  //   } catch (e) {
+  //     print('Error in resetReadOrder : $e');
+  //     return false;
+  //   }
+  // }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

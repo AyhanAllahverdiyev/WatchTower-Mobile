@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:quickalert/quickalert.dart';
@@ -10,7 +9,7 @@ class addNewTag {
   String tagName;
   bool isConfirmed;
   String card_id;
-  addNewTag(this.tagName, this.isConfirmed,this.card_id);
+  addNewTag(this.tagName, this.isConfirmed, this.card_id);
 }
 
 class addNewTagDialogObject {
@@ -45,7 +44,7 @@ class AlertUtils {
       backgroundColor: Theme.of(context).colorScheme.background,
       titleColor: Colors.red,
       showConfirmBtn: false,
-      autoCloseDuration: Duration(milliseconds: 1500),
+      autoCloseDuration: Duration(milliseconds: 3000),
     );
     isDialogOpen = false;
   }
@@ -117,8 +116,7 @@ class AlertUtils {
   }
 
   ////////////////////////////////////////////////////////////////////////
-  Future<bool> confirmSessionAlert(
-      String message, BuildContext context) async {
+  Future<bool> confirmSessionAlert(String message, BuildContext context) async {
     bool isConfirmed = false;
     await QuickAlert.show(
       context: context,
@@ -131,10 +129,6 @@ class AlertUtils {
       onConfirmBtnTap: () async {
         Navigator.pop(context);
         isConfirmed = true;
-
-      
-      
-  
       },
       onCancelBtnTap: () {
         Navigator.pop(context);
@@ -143,20 +137,17 @@ class AlertUtils {
     );
     return isConfirmed;
   }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
-void getCustomToast(String message,Color color){
-  Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM_LEFT,
-        timeInSecForIosWeb: 1,
-    
-        backgroundColor: color,
-        textColor: Colors.white,
-        fontSize: 18.0,
-        
+  void getCustomToast(String message, Color color) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM_LEFT,
+      timeInSecForIosWeb: 1,
+      backgroundColor: color,
+      textColor: Colors.white,
+      fontSize: 18.0,
     );
-   
-}
-  
+  }
 }

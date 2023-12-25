@@ -12,20 +12,26 @@ class logoutServices {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwt = prefs.getString('jwt');
     LoginUtils().printAllSharedPreferences();
-
-    final response = await http.post(
-      Uri.parse(baseUrl + 'logout'),
-      headers: {'Content-Type': 'application/json; charset=UTF-8'},
-      body: jsonEncode({'jwt': jwt}), // Sending JWT in the request body
-    );
-    print(response.body);
-    bool result = await NfcService().resetReadOrder();
-    if (response.statusCode == 200) {
-      prefs.remove('jwt');
+    if (jwt != null) {
+      final response = await http.post(
+        Uri.parse(baseUrl + 'logout'),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: jsonEncode({'jwt': jwt}),
+      );
+      print(response.body);
+      if (response.statusCode == 200) {
+        prefs.remove('jwt');
+        print('Logged out successfully');
+        await SessionService().endActiveSessionStatus();
+        await prefs.clear();
+      } else {
+        print('Logout failed: ${response.body}');
+      }
+    } else {
+      print('jwt is null');
+      await prefs.clear();
       print('Logged out successfully');
       await SessionService().endActiveSessionStatus();
-    } else {
-      print('Logout failed: ${response.body}');
     }
   }
 }
