@@ -221,9 +221,7 @@ class NfcService {
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  Future<WritingResult> writeService(String name) async {
-    NfcData newNfcTag = await createNfcData(name);
-
+  Future<WritingResult> writeService(NfcData newNfcTag) async {
     Future<WritingResult> writeNfcData(NfcData tagData) async {
       try {
         String json = jsonEncode(tagData.toJson());
@@ -260,7 +258,7 @@ class NfcService {
           }
         });
 
-        await Future.delayed(Duration(seconds: 3));
+        await Future.delayed(Duration(milliseconds: 500));
 
         if (success) {
           print('Success achieved!');
@@ -269,7 +267,7 @@ class NfcService {
         } else {
           print('Retrying...');
           await NfcManager.instance.stopSession();
-          return writeNfcData(tagData); // Recursive call until success
+          return writeNfcData(tagData);
         }
       } catch (e) {
         print('Error: $e');

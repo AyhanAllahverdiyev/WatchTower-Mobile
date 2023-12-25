@@ -236,8 +236,10 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                           await AlertUtils()
                               .errorAlert('Tag names must be unique', context);
                         } else {
-                          var resultOfNfcWrite = await NfcService()
-                              .writeService(newTagName.tagName);
+                          var nfcData = await NfcService()
+                              .createNfcData(newTagName.tagName);
+                          var resultOfNfcWrite =
+                              await NfcService().writeService(nfcData);
                           if (resultOfNfcWrite.status) {
                             setState(() {
                               allowedOrderArray.add(newTagName.tagName);
