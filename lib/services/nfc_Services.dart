@@ -69,24 +69,6 @@ class Location {
 
 class NfcService {
   String BaseUrl = LoginUtils().baseUrl;
-  // Future<bool> resetReadOrder() async {
-  //   try {
-  //     print('inside reset read order');
-  //     final response = await http.get(
-  //       Uri.parse(BaseUrl + 'reset'),
-  //     );
-  //     if (response.statusCode == 200) {
-  //       print(response.body);
-  //       return true;
-  //     } else {
-  //       print(response.body);
-  //       return false;
-  //     }
-  //   } catch (e) {
-  //     print('Error in resetReadOrder : $e');
-  //     return false;
-  //   }
-  // }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -221,6 +203,8 @@ class NfcService {
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  int counter = 0;
+
   Future<WritingResult> writeService(NfcData newNfcTag) async {
     Future<WritingResult> writeNfcData(NfcData tagData) async {
       try {
@@ -257,12 +241,16 @@ class NfcService {
             print('Exception: $e');
           }
         });
-
+        counter++;
         await Future.delayed(Duration(milliseconds: 500));
 
-        if (success) {
+        if (success == true || counter == 20) {
           print('Success achieved!');
           await NfcManager.instance.stopSession();
+          if (counter >= 20) {
+            return WritingResult(tagData, false);
+          }
+
           return WritingResult(tagData, true);
         } else {
           print('Retrying...');
