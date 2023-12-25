@@ -11,6 +11,8 @@ import 'package:watch_tower_flutter/services/login_Services.dart';
 import '../services/db_service.dart';
 import '../utils/alert_utils.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class NfcOrderPage extends StatefulWidget {
   const NfcOrderPage({super.key});
@@ -31,6 +33,30 @@ class NfcOrderPageState extends State<NfcOrderPage> {
   int dbResponse = 500;
   bool isLightModeSelected = true;
   int index = 0;
+
+  bool _isLoading = false;
+
+  Future<void> _performNFCWrite(String tagName, var newTagName) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    var nfcData = await NfcService().createNfcData(newTagName.tagName);
+    var resultOfNfcWrite = await NfcService().writeService(nfcData);
+    if (resultOfNfcWrite.status) {
+      setState(() {
+        allowedOrderArray.add(newTagName.tagName);
+        addValuesToArray(newTagName.tagName, false, index++,
+            resultOfNfcWrite.nfcData.card_id, resultOfNfcWrite.nfcData.loc);
+      });
+    } else {
+      await AlertUtils().errorAlert('Please try again', context);
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   void initState() {
@@ -123,89 +149,101 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                 ),
               ],
             )),
-        body: Container(
-          margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-          child: ReorderableListView(
-            onReorder: (int oldIndex, int newIndex) {
-              setState(() {
-                if (newIndex > oldIndex) {
-                  newIndex -= 1;
-                }
-                final String item = allowedOrderArray.removeAt(oldIndex);
-                allowedOrderArray.insert(newIndex, item);
-                final Map<String, dynamic> movedItem =
-                    resultArray.removeAt(oldIndex);
-                resultArray.insert(newIndex, movedItem);
-              });
-            },
-            children: [
-              for (var i = 0; i < allowedOrderArray.length; i++)
-                Container(
-                  key: ValueKey(generateID()),
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: TextButton(
-                      onPressed: () {
-                        print('pressed delete button at index $i');
-
-                        if (isDeleteSelected) {
-                          setState(() {
-                            allowedOrderArray =
-                                deleteTag(newAllowedOrderArray, i);
-                            resultArray.removeAt(i);
-                          });
-                        }
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.onPrimary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
+        body: Stack(children: [
+          if (_isLoading)
+            Container(
+              child: Center(
+                child: SpinKitFadingCircle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  size: 50.0,
+                ),
+              ),
+            ),
+          if (!_isLoading)
+            Container(
+              margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
+              child: ReorderableListView(
+                onReorder: (int oldIndex, int newIndex) {
+                  setState(() {
+                    if (newIndex > oldIndex) {
+                      newIndex -= 1;
+                    }
+                    final String item = allowedOrderArray.removeAt(oldIndex);
+                    allowedOrderArray.insert(newIndex, item);
+                    final Map<String, dynamic> movedItem =
+                        resultArray.removeAt(oldIndex);
+                    resultArray.insert(newIndex, movedItem);
+                  });
+                },
+                children: [
+                  for (var i = 0; i < allowedOrderArray.length; i++)
+                    Container(
+                      key: ValueKey(generateID()),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: TextButton(
+                          onPressed: () {
+                            print('pressed delete button at index $i');
+
+                            if (isDeleteSelected) {
+                              setState(() {
+                                allowedOrderArray =
+                                    deleteTag(newAllowedOrderArray, i);
+                                resultArray.removeAt(i);
+                              });
+                            }
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.onPrimary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(
-                                  Icons.nfc_outlined,
-                                  color: Colors.blue,
-                                  size: 20,
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.nfc_outlined,
+                                      color: Colors.blue,
+                                      size: 20,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text("Tag Name: ",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background)),
+                                    Text(
+                                      allowedOrderArray[i],
+                                      style: TextStyle(
+                                        fontSize: 25.0,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(width: 10),
-                                Text("Tag Name: ",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background)),
-                                Text(
-                                  allowedOrderArray[i],
-                                  style: TextStyle(
-                                    fontSize: 25.0,
+                                if (isDeleteSelected)
+                                  Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                    size: 28,
                                   ),
-                                ),
                               ],
                             ),
-                            if (isDeleteSelected)
-                              Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                                size: 28,
-                              ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-            ],
-          ),
-        ),
+                ],
+              ),
+            ),
+        ]),
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -236,24 +274,8 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                           await AlertUtils()
                               .errorAlert('Tag names must be unique', context);
                         } else {
-                          var nfcData = await NfcService()
-                              .createNfcData(newTagName.tagName);
-                          var resultOfNfcWrite =
-                              await NfcService().writeService(nfcData);
-                          if (resultOfNfcWrite.status) {
-                            setState(() {
-                              allowedOrderArray.add(newTagName.tagName);
-                              addValuesToArray(
-                                  newTagName.tagName,
-                                  false,
-                                  index++,
-                                  resultOfNfcWrite.nfcData.card_id,
-                                  resultOfNfcWrite.nfcData.loc);
-                            });
-                          } else {
-                            await AlertUtils()
-                                .errorAlert('Error Writing to Tag', context);
-                          }
+                          await _performNFCWrite(
+                              newTagName.tagName, newTagName);
                         }
                       }
                     },
@@ -261,7 +283,6 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                     child: Icon(Icons.add, color: Colors.white),
                   ),
                   SizedBox(height: 10),
-                  ElevatedButton(onPressed: () {}, child: Text('STOP')),
                   FloatingActionButton(
                       onPressed: () {
                         setState(() {

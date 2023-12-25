@@ -20,7 +20,7 @@ class HistoryPageState extends State<HistoryPage> {
   int apiResponseCode = 0;
   String userId = "";
   List<dynamic> jsonList = [];
-  bool isLoading = true; 
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -30,13 +30,21 @@ class HistoryPageState extends State<HistoryPage> {
 
   void _getUserHistory() async {
     setState(() {
-      isLoading = true; 
+      isLoading = true;
     });
 
     String userId = await LoginUtils().getUserId();
     ApiResponse response = await DbServices().getUserHistory(userId);
-    if (response.statusCode > 400) {
+    if (response.statusCode > 400 && response.statusCode < 500) {
       AlertUtils().InfoAlert("Couldn't Find Any Record!", context);
+      await Future.delayed(Duration(seconds: 2));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
+        (route) => false,
+      );
+    } else if (response.statusCode >= 500) {
+      AlertUtils().errorAlert("Check Connection", context);
       await Future.delayed(Duration(seconds: 2));
       Navigator.pushAndRemoveUntil(
         context,
@@ -83,25 +91,20 @@ class HistoryPageState extends State<HistoryPage> {
                     ),
                     for (var i = 0; i < jsonList.length; i++)
                       HistoryCard(
-                 
                         date: jsonList[i]['createdAt'],
                         batteryLevel: jsonList[i]['battery_level'],
                         name: jsonList[i]['name'],
                         isItself: jsonList[i]['_id'] != userId,
-                  
                       ),
                   ],
                 ),
               ),
             ),
-         
-
             if (isLoading)
               Container(
                 color: Colors.black.withOpacity(0.7),
                 child: Center(
                   child: SpinKitCubeGrid(
-                    duration: Duration(milliseconds: 1000),
                     color: Colors.white,
                     size: 50.0,
                   ),
