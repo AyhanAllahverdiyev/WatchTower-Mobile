@@ -246,9 +246,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   await AlertUtils()
                       .successfulAlert('Logging  out...', context);
                   await logoutServices().logout();
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  prefs.remove('jwt');
+               
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => LoginPage()),
@@ -269,7 +267,37 @@ class _ProfilePageState extends State<ProfilePage> {
                         )),
                   ],
                 ),
+              ),
+              ///////////////////////////////////////////////
+              SizedBox(height: 10),
+              TextButton(
+                onPressed: () async {
+                  await AlertUtils()
+                      .successfulAlert('Logging  out...', context);
+                  await logoutServices().logout2();
+                  
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    (route) => false,
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.person,
+                      color: Colors.red,
+                    ),
+                    Text('Go to Login Page',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 20.0,
+                        )),
+                  ],
+                ),
               )
+              ///////////////////////////////////////////////
             ],
           ),
         ),

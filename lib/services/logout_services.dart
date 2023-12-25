@@ -34,4 +34,34 @@ class logoutServices {
       await SessionService().endActiveSessionStatus();
     }
   }
+
+
+
+
+
+
+   Future<void> logout2() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwt = prefs.getString('jwt');
+    LoginUtils().printAllSharedPreferences();
+    if (jwt != null) {
+      final response = await http.post(
+        Uri.parse(baseUrl + 'logout'),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: jsonEncode({'jwt': jwt}),
+      );
+      print(response.body);
+      if (response.statusCode == 200) {
+        prefs.remove('jwt');
+        print('Logged out successfully');
+        await SessionService().endActiveSessionStatus();
+       } else {
+        print('Logout failed: ${response.body}');
+      }
+    } else {
+      print('jwt is null');
+       print('Logged out successfully');
+      await SessionService().endActiveSessionStatus();
+    }
+  }
 }
