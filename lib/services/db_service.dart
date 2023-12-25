@@ -13,15 +13,15 @@ class dbResponse {
 
   dbResponse(this.statusCode, this.response, [this.error = ""]);
 }
+
 class Tag {
   String name;
   bool isRead;
   int index;
   String card_id;
-  Map<String,dynamic> loc;
+  Map<String, dynamic> loc;
 
-
-  Tag(this.name, this.isRead, this.index,this.card_id,this.loc);
+  Tag(this.name, this.isRead, this.index, this.card_id, this.loc);
 
   Map<String, dynamic> toJson() {
     return {
@@ -49,8 +49,9 @@ class DbServices {
       if (response.statusCode >= 399) {
         print('ERROR: ${response.body}');
         Map<String, dynamic> decodedJson = jsonDecode(response.body);
-        String expectedItemNAME=decodedJson['expectedItemNAME'];
-        await AlertUtils().errorAlert("Wrong Tag! Please Scan: $expectedItemNAME", context);
+        String expectedItemNAME = decodedJson['expectedItemNAME'];
+        await AlertUtils().errorAlert(
+            "Wrong Tag!            Please Scan: $expectedItemNAME", context);
         return response.statusCode;
       } else if (response.statusCode == 302) {
         String jsonStringWithoutQuotes =
@@ -77,7 +78,6 @@ class DbServices {
         await NfcHomePageState()
             .updateIsReadValue(newJsonObject['ID'].toString(), 'true');
 
-
         return response.statusCode;
       }
     } catch (e) {
@@ -98,10 +98,11 @@ class DbServices {
     print("//////////////////////////////////////////////");
     print('trying to set read order : $array');
 
-
     try {
-      List<Tag> tags = array.map((tagData) =>
-      Tag(tagData["name"], tagData["isRead"], tagData["index"],tagData["card_id"],tagData["loc"])).toList();
+      List<Tag> tags = array
+          .map((tagData) => Tag(tagData["name"], tagData["isRead"],
+              tagData["index"], tagData["card_id"], tagData["loc"]))
+          .toList();
       String jsonString = jsonEncode(tags.map((tag) => tag.toJson()).toList());
       print('jsonString: $jsonString');
       final response = await http.post(

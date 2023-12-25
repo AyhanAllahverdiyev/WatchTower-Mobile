@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import '../services/login_Services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:crypto/crypto.dart';
 
 class LoginError {
   bool isLoginDone = false;
@@ -79,10 +80,18 @@ class LoginUtils {
     return Credentials(mailController, passwordController, checkedValue);
   }
 
+  String hashPassword(String password) {
+     var bytes = utf8.encode(password);
+
+     var hash = sha256.convert(bytes);
+
+     return hash.toString();
+  }
+
   Future<void> saveCredentials(
       String mail, String password, bool rememberMe) async {
     final prefs = await SharedPreferences.getInstance();
-    if (rememberMe) {
+    if (rememberMe) { 
       prefs.setString('email', mail);
       prefs.setString('password', password);
       prefs.setBool('rememberMe', true);
