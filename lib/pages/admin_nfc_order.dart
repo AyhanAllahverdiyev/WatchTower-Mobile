@@ -236,8 +236,10 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                           await AlertUtils()
                               .errorAlert('Tag names must be unique', context);
                         } else {
-                          var resultOfNfcWrite = await NfcService()
-                              .writeService(newTagName.tagName);
+                          var nfcData = await NfcService()
+                              .createNfcData(newTagName.tagName);
+                          var resultOfNfcWrite =
+                              await NfcService().writeService(nfcData);
                           if (resultOfNfcWrite.status) {
                             setState(() {
                               allowedOrderArray.add(newTagName.tagName);
@@ -259,6 +261,7 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                     child: Icon(Icons.add, color: Colors.white),
                   ),
                   SizedBox(height: 10),
+                  ElevatedButton(onPressed: () {}, child: Text('STOP')),
                   FloatingActionButton(
                       onPressed: () {
                         setState(() {
@@ -271,13 +274,12 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                   SizedBox(height: 10),
                   FloatingActionButton(
                     onPressed: () async {
-                        if(isDeleteSelected){
-                            setState(() {
+                      if (isDeleteSelected) {
+                        setState(() {
                           isDeleteSelected = !isDeleteSelected;
                         });
-                        }
-                      
-                     
+                      }
+
                       index = 0;
 
                       index = 0;

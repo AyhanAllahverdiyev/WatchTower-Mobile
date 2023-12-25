@@ -16,17 +16,16 @@ import 'db_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-
-class WritingResult{
+class WritingResult {
   NfcData nfcData;
   bool status;
-  WritingResult(this.nfcData,this.status);
+  WritingResult(this.nfcData, this.status);
 }
+
 class NfcData {
   String card_id;
   String name;
   Location loc;
-
 
   NfcData({required this.card_id, required this.name, required this.loc});
 
@@ -159,13 +158,11 @@ class NfcService {
               int statusCode =
                   await DbServices().saveToDatabase(context, payload_as_String);
               NfcManager.instance.stopSession();
-              completer
-                  .complete(statusCode); 
+              completer.complete(statusCode);
             }
           } catch (e) {
             NfcManager.instance.stopSession();
-            completer.complete(
-                -1); 
+            completer.complete(-1);
           }
         });
 
@@ -224,21 +221,20 @@ class NfcService {
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  Future<WritingResult> writeService(String name) async {
-    if (await HttpServices().verifyToken()) {
+  Future<WritingResult> writeService(NfcData newNfcTag) async {
+    Future<WritingResult> writeNfcData(NfcData tagData) async {
       try {
-        NfcData newNfcTag = await createNfcData(name);
-        bool tagFound = false;
-        String json = jsonEncode(newNfcTag.toJson());
+        String json = jsonEncode(tagData.toJson());
+        bool success = false;
+        await NfcManager.instance.stopSession();
+
         await NfcManager.instance.startSession(
             onDiscovered: (NfcTag tag) async {
-          tagFound = true;
           var ndef = Ndef.from(tag);
 
           if (ndef == null || !ndef.isWritable) {
-            result.value = 'Tag is not ndef writable';
-            NfcManager.instance.stopSession(errorMessage: result.value);
+            await NfcManager.instance
+                .stopSession(errorMessage: 'Tag is not ndef writable');
             return;
           }
 
@@ -248,50 +244,53 @@ class NfcService {
 
           try {
             await ndef.write(message);
-            result.value = 'Success to "Ndef Write"';
-            
             print('Success to ndef write');
+            success = true;
+            await NfcManager.instance.stopSession();
           } on PlatformException catch (e) {
-            result.value = 'PlatformException: $e';
+            await NfcManager.instance.stopSession();
+
+            print('Platform Exception: $e');
           } catch (e) {
-            result.value = 'An error occurred: $e';
-          } finally {
-            NfcManager.instance.stopSession();
+            await NfcManager.instance.stopSession();
+
+            print('Exception: $e');
           }
         });
 
-        if (!tagFound) {
-          result.value = 'No NFC tag found. Please scan an NFC tag.';
-        }
+        await Future.delayed(Duration(milliseconds: 500));
 
-        return WritingResult(newNfcTag,true);
+        if (success) {
+          print('Success achieved!');
+          await NfcManager.instance.stopSession();
+          return WritingResult(tagData, true);
+        } else {
+          print('Retrying...');
+          await NfcManager.instance.stopSession();
+          return writeNfcData(tagData);
+        }
       } catch (e) {
-        result.value = 'An error occurred while starting the NFC session: $e';
-       return WritingResult(NfcData(card_id: "", name: "", loc: Location(lat: "", long: "")),false);
+        print('Error: $e');
+        await NfcManager.instance.stopSession();
+        return writeNfcData(tagData);
       }
-    } else {
-      print('JWT is not valid');
-      return WritingResult(NfcData(card_id: "", name: "", loc: Location(lat: "", long: "")),false);
     }
+
+    return writeNfcData(newNfcTag);
   }
 
-
-
-
-  Future<NfcData> createNfcData(
-    String name
-  ) async {
+//////////
+  Future<NfcData> createNfcData(String name) async {
     var uuid = Uuid();
     String uniqueId = uuid.v4();
     List<String> location = await DeviceService().getLocation();
     print('======================LOCATION======================');
     print(location);
     if (location[0] == 'err') {
-      AlertUtils().getCustomToast(
-"Please enable your location services.", Colors.red);
+      AlertUtils()
+          .getCustomToast("Please enable your location services.", Colors.red);
       throw Exception('Error getting location');
     } else {
-      
       Location loc = Location(lat: location[0], long: location[1]);
       print('======================LOCATION======================');
       print(location[0]);
