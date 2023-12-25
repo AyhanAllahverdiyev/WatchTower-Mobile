@@ -160,16 +160,15 @@ class NfcService {
                   await DbServices().saveToDatabase(context, payload_as_String);
               NfcManager.instance.stopSession();
               completer
-                  .complete(statusCode); // Complete the Future with status code
+                  .complete(statusCode); 
             }
           } catch (e) {
             NfcManager.instance.stopSession();
             completer.complete(
-                -1); // Complete the Future with -1 in case of an exception
+                -1); 
           }
         });
 
-        // Return the Future from the Completer
         return completer.future;
       } catch (e) {
         AlertUtils().errorAlert(
