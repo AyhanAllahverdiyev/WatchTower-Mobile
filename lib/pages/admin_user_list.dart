@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:watch_tower_flutter/pages/admin_home.dart';
 import '../components/bottom_navigation.dart';
 import '../services/db_service.dart';
 import '../utils/alert_utils.dart';
@@ -10,6 +11,7 @@ import '../components/users_list_block.dart';
 import '../services/payload_services.dart';
 import '../utils/login_utils.dart';
 import '../components/admin_users_list_block.dart';
+import 'home.dart';
 
 class UsersListPage extends StatefulWidget {
   const UsersListPage({super.key});
@@ -24,6 +26,7 @@ class UsersListPageState extends State<UsersListPage> {
   List<int> statusCodeList = [];
   String mailAddress = "";
   String authLevel = "";
+  bool isLoading = false;
   @override
   void initState() {
     _getUsersArray();
@@ -39,10 +42,19 @@ class UsersListPageState extends State<UsersListPage> {
   }
 
   Future _getUsersArray() async {
+      setState(() {
+      isLoading = true;
+    });
     dbResponse userListResponce = await DbServices().getAllUsers();
     if (userListResponce.statusCode >= 399) {
       if (!AlertUtils().isDialogOpen) {
-        await AlertUtils().errorAlert("Internal Server Error!", context);
+        await AlertUtils().errorAlert("An Error Occured!", context);
+        await Future.delayed(Duration.zero);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => AdminHomePage()),
+          (route) => false,
+        );
       }
     } else {
       String usersListString2 = userListResponce.response;
@@ -51,7 +63,19 @@ class UsersListPageState extends State<UsersListPage> {
         usersListString = usersListString2;
         usersList = usersList2;
       });
+      if (usersList.isEmpty) {
+        await AlertUtils().InfoAlert("No Users Found!", context);
+        await Future.delayed(Duration.zero);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => AdminHomePage()),
+          (route) => false,
+        );
+      }
     }
+        setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -61,48 +85,54 @@ class UsersListPageState extends State<UsersListPage> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-        backgroundColor: Colors.black,
         appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(40.0),
-            child: AppBar(backgroundColor: Color.fromARGB(57, 108, 126, 241))),
-        body: SingleChildScrollView(
-          child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("User Email",
-                          style: TextStyle(
+            preferredSize: const Size.fromHeight(40.0), child: AppBar()),
+        body: Stack(
+          children: [
+            if (isLoading)
+              Center(
+                child: CircularProgressIndicator(),
+              ),
+            if (!isLoading)
+           SingleChildScrollView(
+            child: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("User Email",
+                            style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                      Text("Auth Level",
-                          style: TextStyle(
+                            )),
+                        Text("Access Level",
+                            style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                    ],
+                            )),
+                      ],
+                    ),
                   ),
-                ),
-                for (int index = 0; index < usersList.length; index++)
-                  if (authLevel == 'admin')
-                    AdminUserListBlockWidget(
-                        email: usersList[index]['email'],
-                        auth_level: usersList[index]['auth_level'],
-                        id: usersList[index]['_id'])
-                  else if (authLevel == 'super_admin')
-                    UserListBlockWidget(
-                        email: usersList[index]['email'],
-                        auth_level: usersList[index]['auth_level'],
-                        id: usersList[index]['_id'])
-              ],
+                  for (int index = 0; index < usersList.length; index++)
+                    if (authLevel == 'admin')
+                      AdminUserListBlockWidget(
+                          email: usersList[index]['email'],
+                          auth_level: usersList[index]['auth_level'],
+                          id: usersList[index]['_id'])
+                    else if (authLevel == 'super_admin')
+                      UserListBlockWidget(
+                          email: usersList[index]['email'],
+                          auth_level: usersList[index]['auth_level'],
+                          id: usersList[index]['_id'])
+                ],
+              ),
             ),
-          ),
+          ),]
         ),
         floatingActionButton: authLevel == "super_admin"
             ? FloatingActionButton(
@@ -137,10 +167,12 @@ class UsersListPageState extends State<UsersListPage> {
                 },
                 tooltip: 'Save',
                 backgroundColor: Colors.green,
-                child: Icon(Icons.save),
+                child: Icon(Icons.save, color: Colors.white),
               )
             : null,
-        bottomNavigationBar: BottomAppBarWidget(pageName: "UsersListPage",),
+        bottomNavigationBar: BottomAppBarWidget(
+          pageName: "UsersListPage",
+        ),
       ),
     );
   }

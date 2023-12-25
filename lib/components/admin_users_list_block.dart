@@ -48,43 +48,41 @@ class AdminUserListBlockWidgetState extends State<AdminUserListBlockWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {},
-      style: TextButton.styleFrom(
-        backgroundColor: Color.fromARGB(57, 108, 126, 241),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          (checkUserInformations(widget.email, widget.auth_level, widget.id))
-              ? Text(
-                  widget.email.length > 23
-                      ? widget.email.substring(0, 20) + "..."
-                      : widget.email,
-                  style: TextStyle(fontSize: 20.0, color: Colors.white),
-                )
-              : Text("Undefined", style: TextStyle(color: Colors.red)),
-          (checkUserInformations(widget.email, widget.auth_level, widget.id))
-              ? Container(
-                  height: 20,
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.white,
-                        width: 1.0,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextButton(
+        onPressed: () {},
+        style: TextButton.styleFrom(
+            padding: EdgeInsets.all(20.0),
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            (checkUserInformations(widget.email, widget.auth_level, widget.id))
+                ? Text(
+                    widget.email.length > 23
+                        ? widget.email.substring(0, 20) + "..."
+                        : widget.email,
+                    style: TextStyle(fontSize: 20.0, color: Theme.of(context).colorScheme.background),
+                  )
+                : Text("Undefined", style: TextStyle(color: Colors.red)),
+            (checkUserInformations(widget.email, widget.auth_level, widget.id))
+                ? Text(
+                      widget.auth_level.replaceFirst(widget.auth_level[0],
+                          widget.auth_level[0].toUpperCase()),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.background,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ),
-                  ),
-                  child: Text(
-                    widget.auth_level.replaceFirst(widget.auth_level[0],
-                        widget.auth_level[0].toUpperCase()),
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-              : Text(" ", style: TextStyle(color: Colors.red)),
-        ],
+                    )
+              
+                : Text(" ", style: TextStyle(color: Colors.red)),
+          ],
+        ),
       ),
     );
   }

@@ -31,6 +31,7 @@ class NfcHomePageState extends State<NfcHomePage> {
   String sessionId = '';
   bool isOldSessionOn = false;
   bool isLightModeSelected = true;
+  bool isLoading = false;
   @override
   void initState() {
     print(widget.isOldSessionOn);
@@ -44,6 +45,9 @@ class NfcHomePageState extends State<NfcHomePage> {
   }
 
   Future<void> getOrderArrayForReadPage() async {
+    setState(() {
+      isLoading = true;
+    });
     print(
         "!!!!!!!!!!!!!!!!!!!! GET ORDER ARRAY FOR READ PAGE !!!!!!!!!!!!!!!!!!!!!!");
     ApiResponse jsonResponse = await SessionService().checkSessionStatus();
@@ -77,6 +81,15 @@ class NfcHomePageState extends State<NfcHomePage> {
       setState(() {
         allowedOrderArray = newAllowedOrderArray;
       });
+      if(allowedOrderArray.isEmpty){
+        await AlertUtils().InfoAlert("No tags found!", context);
+        await SessionService().endSessionButton(context);
+        await Future.delayed(Duration.zero);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      }
     } else if (jsonResponse.statusCode >= 400) {
       AlertUtils().errorAlert("Internal Server Error", context);
       Navigator.pushReplacement(
@@ -84,6 +97,9 @@ class NfcHomePageState extends State<NfcHomePage> {
         MaterialPageRoute(builder: (context) => HomePage()),
       );
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> updateIsReadValue(String name, String newReadValue) async {
@@ -124,126 +140,134 @@ class NfcHomePageState extends State<NfcHomePage> {
                 ),
               ],
             )),
-        body: SingleChildScrollView(
-          child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (int i = 0; i < finalOrderArray.length; i++)
-                  NfcBlockWidget(
-                    order: finalOrderArray[i]["name"],
-                    isRead: finalOrderArray[i]["isRead"].toString(),
-                    index: i,
-                  ),
-                SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width - 40,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        print(
-                            '==============================CONTENTS OF NFC TAG==============================');
-                        int readTagResult =
-                            await NfcService().tagRead(context, sessionId);
-                        if (readTagResult == 302) {
-                      
-                          // await AlertUtils()
-                          //     .successfulAlert("Tour Completed", context);
-                          // getOrderArrayForReadPage();
-                          // Navigator.pushReplacement(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => NfcHomePage(
-                          //             isOldSessionOn: true,
-                          //           )),
-                          // );
-                          print(sessionId);
-                          await SessionService().checkTourOrder(sessionId,context);
-                        } else if (readTagResult < 400) {
-                          print("tag read successfully");
-                          print("//////////////////////////////////////////");
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NfcHomePage(
-                                      isOldSessionOn: true,
-                                    )),
-                          );
-                        }
-                        print("tag read result:$readTagResult");
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20, right: 20, top: 10, bottom: 10),
-                        child: Text('Read tag',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Theme.of(context).colorScheme.primary),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+        body: Stack(
+          children: [
+            if (isLoading)
+              Center(
+                child: CircularProgressIndicator(),
+              ),
+            if (!isLoading)
+           SingleChildScrollView(
+            child: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (int i = 0; i < finalOrderArray.length; i++)
+                    NfcBlockWidget(
+                      order: finalOrderArray[i]["name"],
+                      isRead: finalOrderArray[i]["isRead"].toString(),
+                      index: i,
+                    ),
+                  SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width - 40,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          print(
+                              '==============================CONTENTS OF NFC TAG==============================');
+                          int readTagResult =
+                              await NfcService().tagRead(context, sessionId);
+                          if (readTagResult == 302) {
+                        
+                            // await AlertUtils()
+                            //     .successfulAlert("Tour Completed", context);
+                            // getOrderArrayForReadPage();
+                            // Navigator.pushReplacement(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => NfcHomePage(
+                            //             isOldSessionOn: true,
+                            //           )),
+                            // );
+                            print(sessionId);
+                            await SessionService().checkTourOrder(sessionId,context);
+                          } else if (readTagResult < 400) {
+                            print("tag read successfully");
+                            print("//////////////////////////////////////////");
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NfcHomePage(
+                                        isOldSessionOn: true,
+                                      )),
+                            );
+                          }
+                          print("tag read result:$readTagResult");
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 10, bottom: 10),
+                          child: Text('Read tag',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).colorScheme.primary),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 20),
-                // Align(
-                //   alignment: Alignment.bottomCenter,
-                //   child: SizedBox(
-                //     width: MediaQuery.of(context).size.width - 40,
-                //     height: 50,
-                //     child: ElevatedButton(
-                //       onPressed: () async {
-                //         int result = await SessionService()
-                //             .endActiveSessionStatus();
-                //                 print("nfc Home 2");
-                //         if (result<400) {
-                //           print('read order resetted');
-
-                //           Navigator.pushReplacement(
-                //             context,
-                //             MaterialPageRoute(builder: (context) => HomePage()),
-                //           );
-                //           print('session stopped');
-                //         } else {
-                //           print('error while resetting read order');
-                //           AlertUtils().errorAlert(
-                //               "Unable to end current session", context);
-                //         }
-                //       },
-                //       child: Padding(
-                //         padding: const EdgeInsets.only(
-                //             left: 20, right: 20, top: 10, bottom: 10),
-                //         child: Text('End Session',
-                //             style: TextStyle(
-                //                 color: Colors.white,
-                //                 fontSize: 20,
-                //                 fontWeight: FontWeight.bold)),
-                //       ),
-                //       style: ButtonStyle(
-                //         shape:
-                //             MaterialStateProperty.all<RoundedRectangleBorder>(
-                //           RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.circular(10.0),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ],
+                  SizedBox(height: 20),
+                  // Align(
+                  //   alignment: Alignment.bottomCenter,
+                  //   child: SizedBox(
+                  //     width: MediaQuery.of(context).size.width - 40,
+                  //     height: 50,
+                  //     child: ElevatedButton(
+                  //       onPressed: () async {
+                  //         int result = await SessionService()
+                  //             .endActiveSessionStatus();
+                  //                 print("nfc Home 2");
+                  //         if (result<400) {
+                  //           print('read order resetted');
+        
+                  //           Navigator.pushReplacement(
+                  //             context,
+                  //             MaterialPageRoute(builder: (context) => HomePage()),
+                  //           );
+                  //           print('session stopped');
+                  //         } else {
+                  //           print('error while resetting read order');
+                  //           AlertUtils().errorAlert(
+                  //               "Unable to end current session", context);
+                  //         }
+                  //       },
+                  //       child: Padding(
+                  //         padding: const EdgeInsets.only(
+                  //             left: 20, right: 20, top: 10, bottom: 10),
+                  //         child: Text('End Session',
+                  //             style: TextStyle(
+                  //                 color: Colors.white,
+                  //                 fontSize: 20,
+                  //                 fontWeight: FontWeight.bold)),
+                  //       ),
+                  //       style: ButtonStyle(
+                  //         shape:
+                  //             MaterialStateProperty.all<RoundedRectangleBorder>(
+                  //           RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(10.0),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
-          ),
+          ),]
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
