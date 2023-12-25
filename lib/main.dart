@@ -61,7 +61,7 @@ class ThemeProvider with ChangeNotifier {
     await LoginUtils().saveThemeMode(_isLightModeSelected);
     notifyListeners();
   }
-
+  
   Future<void> toggleThemeMode() async {
     _isLightModeSelected = !_isLightModeSelected;
     await LoginUtils().changeThemeMode();

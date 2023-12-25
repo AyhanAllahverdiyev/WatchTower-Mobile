@@ -278,8 +278,62 @@ class NfcService {
 
     return writeNfcData(newNfcTag);
   }
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Future<WritingResult> writeServiceForIOS(NfcData newNfcTag) async {
+    if (await HttpServices().verifyToken()) {
+      try {
+    
+        bool tagFound = false;
+        String json = jsonEncode(newNfcTag.toJson());
+        await NfcManager.instance.startSession(
+            onDiscovered: (NfcTag tag) async {
+          tagFound = true;
+          var ndef = Ndef.from(tag);
 
-//////////
+          if (ndef == null || !ndef.isWritable) {
+            result.value = 'Tag is not ndef writable';
+            NfcManager.instance.stopSession(errorMessage: result.value);
+            return;
+          }
+
+          NdefMessage message = NdefMessage([
+            NdefRecord.createText(json),
+          ]);
+
+          try {
+            await ndef.write(message);
+            result.value = 'Success to "Ndef Write"';
+            
+            print('Success to ndef write');
+          } on PlatformException catch (e) {
+            result.value = 'PlatformException: $e';
+          } catch (e) {
+            result.value = 'An error occurred: $e';
+          } finally {
+            NfcManager.instance.stopSession();
+          }
+        });
+
+        if (!tagFound) {
+          result.value = 'No NFC tag found. Please scan an NFC tag.';
+        }
+        print('result.value: ${result.value}');
+        print('nfcData: ${newNfcTag.toJson()}');
+        return WritingResult(newNfcTag,true);
+      } catch (e) {
+        result.value = 'An error occurred while starting the NFC session: $e';
+       return WritingResult(NfcData(card_id: "", name: "", loc: Location(lat: "", long: "")),false);
+      }
+    } else {
+      print('JWT is not valid');
+      return WritingResult(NfcData(card_id: "", name: "", loc: Location(lat: "", long: "")),false);
+    }
+  }
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Future<NfcData> createNfcData(String name) async {
     var uuid = Uuid();
     String uniqueId = uuid.v4();

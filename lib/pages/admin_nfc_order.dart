@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, prefer_const_literals_to_create_immutables, deprecated_member_use, sort_child_properties_last
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:watch_tower_flutter/main.dart';
@@ -20,6 +22,7 @@ class NfcOrderPage extends StatefulWidget {
 }
 
 class NfcOrderPageState extends State<NfcOrderPage> {
+  WritingResult resultOfNfcWrite=WritingResult(NfcData(card_id: "", name: "", loc: Location(lat: "", long: "")), false);
   var uuid = Uuid();
   List<Map<String, dynamic>> resultArray = [];
 
@@ -238,9 +241,17 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                         } else {
                           var nfcData = await NfcService()
                               .createNfcData(newTagName.tagName);
-                          var resultOfNfcWrite =
-                              await NfcService().writeService(nfcData);
-                          if (resultOfNfcWrite.status) {
+                       
+                  
+                           if(Platform.isIOS){
+                            print("!!!!!!!!!!!!!!!!!!! IOS !!!!!!!!!!!!!!!!!!!!!!!!");
+                            var resultOfNfcWrite =
+                              await NfcService().writeServiceForIOS(nfcData);
+                              setState(() {
+                                resultOfNfcWrite=resultOfNfcWrite;
+                              });
+                              print('resultOfNfcWrite: $resultOfNfcWrite');
+                              if (resultOfNfcWrite.status) {
                             setState(() {
                               allowedOrderArray.add(newTagName.tagName);
                               addValuesToArray(
@@ -254,6 +265,34 @@ class NfcOrderPageState extends State<NfcOrderPage> {
                             await AlertUtils()
                                 .errorAlert('Error Writing to Tag', context);
                           }
+
+                          }else{
+                          print("!!!!!!!!!!!!!!!!!!! Other !!!!!!!!!!!!!!!!!!!!!!!!");
+                                var resultOfNfcWrite =
+                              await NfcService().writeService(nfcData);
+                              setState(() {
+                                resultOfNfcWrite=resultOfNfcWrite;
+                              });
+                              print('resultOfNfcWrite: $resultOfNfcWrite');
+                              if (resultOfNfcWrite.status) {
+                            setState(() {
+                              allowedOrderArray.add(newTagName.tagName);
+                              addValuesToArray(
+                                  newTagName.tagName,
+                                  false,
+                                  index++,
+                                  resultOfNfcWrite.nfcData.card_id,
+                                  resultOfNfcWrite.nfcData.loc);
+                            });
+                          } else {
+                            await AlertUtils()
+                                .errorAlert('Error Writing to Tag', context);
+                          }
+                          }
+                       
+               
+                     
+                          
                         }
                       }
                     },
