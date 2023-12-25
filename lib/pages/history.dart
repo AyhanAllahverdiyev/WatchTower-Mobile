@@ -20,7 +20,7 @@ class HistoryPageState extends State<HistoryPage> {
   int apiResponseCode = 0;
   String userId = "";
   List<dynamic> jsonList = [];
-  bool isLoading = true; // Added loading state
+  bool isLoading = true; 
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class HistoryPageState extends State<HistoryPage> {
 
   void _getUserHistory() async {
     setState(() {
-      isLoading = true; // Show loading indicator before fetching data
+      isLoading = true; 
     });
 
     String userId = await LoginUtils().getUserId();
@@ -48,7 +48,7 @@ class HistoryPageState extends State<HistoryPage> {
       userId = userId;
       jsonList = json.decode(response.response);
       apiResponseCode = response.statusCode;
-      isLoading = false; // Hide loading indicator after getting data
+      isLoading = false;
     });
   }
 
@@ -83,17 +83,18 @@ class HistoryPageState extends State<HistoryPage> {
                     ),
                     for (var i = 0; i < jsonList.length; i++)
                       HistoryCard(
-                        tagId: jsonList[i]['ID'],
+                 
                         date: jsonList[i]['createdAt'],
                         batteryLevel: jsonList[i]['battery_level'],
                         name: jsonList[i]['name'],
                         isItself: jsonList[i]['_id'] != userId,
+                  
                       ),
                   ],
                 ),
               ),
             ),
-            // Show loading indicator conditionally
+         
 
             if (isLoading)
               Container(

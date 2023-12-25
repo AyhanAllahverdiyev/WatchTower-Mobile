@@ -6,7 +6,6 @@ import '../pages/admin_user_list.dart';
 import '../pages/admin_home.dart';
 
 class HistoryCard extends StatelessWidget {
-  final String tagId;
   final String date;
   final String batteryLevel;
   final String name;
@@ -14,7 +13,6 @@ class HistoryCard extends StatelessWidget {
 
   const HistoryCard(
       {Key? key,
-      required this.tagId,
       required this.date,
       required this.batteryLevel,
       required this.name,
@@ -35,6 +33,7 @@ class HistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int parsedBatteryLevel = int.tryParse(batteryLevel) ?? 0;
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       color: Theme.of(context).colorScheme.onPrimary,
@@ -60,7 +59,7 @@ class HistoryCard extends StatelessWidget {
                 width: MediaQuery.of(context).size.width - 78,
                 height: 105,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(
@@ -81,10 +80,10 @@ class HistoryCard extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(
-                                (int.parse(batteryLevel) <= 50)
+                                (parsedBatteryLevel <= 50)
                                     ? Icons.battery_3_bar
                                     : Icons.battery_5_bar,
-                                color: (int.parse(batteryLevel) <= 50)
+                                color: (parsedBatteryLevel <= 50)
                                     ? Colors.red.shade700
                                     : Colors
                                         .green, // Change color based on battery level
@@ -102,22 +101,7 @@ class HistoryCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(name,
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue.shade700)),
-                          SizedBox(
-                            width: 10,
-                          )
-                        ],
-                      ),
-                    ),
+                  
                     Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       child: Row(
@@ -134,7 +118,7 @@ class HistoryCard extends StatelessWidget {
                               SizedBox(
                                 width: 4,
                               ),
-                              Text(tagId,
+                              Text(name,
                                   style: TextStyle(
                                       fontSize: 22,
                                       color: Theme.of(context)
