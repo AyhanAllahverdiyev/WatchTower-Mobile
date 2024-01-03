@@ -24,6 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String userEmail = "";
   bool light = true;
   bool isLightModeSelected = true;
+  String authLevel = "";
   @override
   void initState() {
     loadSavedCredentials();
@@ -32,8 +33,18 @@ class _ProfilePageState extends State<ProfilePage> {
         isLightModeSelected = value;
       });
     });
+    _getAuthLevel();
+  
+    
   }
+  _getAuthLevel() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    authLevel = prefs.getString('authLevel')!;
 
+      setState(() {
+        authLevel = authLevel;
+    });
+  }
   loadSavedCredentials() async {
     final credentials = await LoginUtils().loadSavedCredentials();
     String email = credentials.email;
@@ -142,6 +153,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
+              if (authLevel == 'user')
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextButton(
