@@ -1,4 +1,29 @@
-# WatchTower
+# WatchTower - Shift Tracking System
+
+## Overview
+This project, developed within the scope of the Ankara University Computer Engineering graduation project, is a "Shift Tracking System." It has been created through collaborative efforts by [Ayhan Allahverdiyev](https://github.com/AyhanAllahverdiyev) and [Filiz Salnur](https://github.com/filizsalnur). The backend code repository can be found at [WatchTower-Backend](https://github.com/filizsalnur/WatchTower-Backend).
+
+## Description
+WatchTower is a comprehensive Shift Tracking System designed to streamline and enhance shift management using NFC technology. The system provides real-time tracking of security guards' activities, evaluates performance, records shift passage times, and allows quick communication through an emergency alarm button. Managers can add/update shift tracking points, and the system ensures effective user authorization management.
+
+## Features
+- NFC technology for easy updates and tracking.
+- Real-time performance evaluation of security guards.
+- Recording passage times at shift tracking points.
+- Emergency alarm button for quick communication.
+- User-friendly system with minimal installation.
+- Web application for detailed analysis using machine learning.
+
+## Contributors
+- [Ayhan Allahverdiyev](https://github.com/AyhanAllahverdiyev)
+- [Filiz Salnur](https://github.com/filizsalnur)
+
+## Backend Repository
+[WatchTower-Backend](https://github.com/filizsalnur/WatchTower-Backend)
+
+Feel free to explore the project, contribute, or reach out to the contributors for more information.
+
+---
 
 ## Project Objectives:
 - Establish an easy-to-update and track shift system using NFC technology.
