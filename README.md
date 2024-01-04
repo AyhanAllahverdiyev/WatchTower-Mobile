@@ -93,3 +93,24 @@ In this section, Dark and Light mode screenshots of the mobile application are p
   <img width="411" alt="image" src="https://github.com/filizsalnur/WatchTower-Mobile/assets/92436947/660217b2-25a3-4128-a5b4-6012de1a6c2c">
   <figcaption>Figure 2.10 Alarm Sending Page Screenshots</figcaption>
 </figure>
+
+
+# About the Project
+
+## Choice of NFC Card Technology
+The preference for NFC card technology in the project aims to enhance security and provide an effective user experience. Below are the reasons for choosing NFC card technology:
+
+- **Secure User Authentication:** NFC cards enable users to securely authenticate their identities. As a difficult-to-copy and private authentication method, it is more secure compared to other methods.
+
+- **Risk Reduction:** NFC cards reduce security risks associated with QR codes or manual code entries. They prevent the risk of deception through photo capture or manual input.
+
+- **Event Tracking with NFC Cards:** Thanks to NFC card technology, events performed with cards scanned by security guards can be tracked by the system. Detailed records are kept of which card was scanned, when, and where.
+
+## Project Rationale
+The adoption of NFC card technology is motivated by the project's commitment to security and delivering an efficient user experience. The following points elaborate on the reasons for selecting NFC card technology:
+
+- **Secure User Authentication:** NFC cards facilitate secure user authentication, offering a robust method that is challenging to replicate. This adds an extra layer of security compared to other authentication methods.
+
+- **Risk Mitigation:** NFC cards help reduce security risks associated with QR codes or manual code inputs. They mitigate the risk of deception through practices like photo capture or manual entry.
+
+- **Event Tracking with NFC Cards:** The use of NFC card technology allows the system to monitor events initiated by security guards through card scans. This comprehensive tracking records details such as which card was scanned, when, and where.
