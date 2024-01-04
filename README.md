@@ -114,3 +114,33 @@ The adoption of NFC card technology is motivated by the project's commitment to 
 - **Risk Mitigation:** NFC cards help reduce security risks associated with QR codes or manual code inputs. They mitigate the risk of deception through practices like photo capture or manual entry.
 
 - **Event Tracking with NFC Cards:** The use of NFC card technology allows the system to monitor events initiated by security guards through card scans. This comprehensive tracking records details such as which card was scanned, when, and where.
+
+## Determination of Requirements for NFC Integration
+
+### NFC Card Reading and Writing Capabilities
+Specific NFC models and technologies have been utilized in the project, with a particular emphasis on the NDEF (NFC Data Exchange Format) standard. The advantages of this selection are outlined below:
+
+- **Efficient Data Exchange:** NDEF is a quick and effective standard for storing and sharing data on NFC cards. With fast read and write operations, data transfer is expedited, and the size is sufficient and optimized.
+
+- **Versatile Operations with NDEF:** NDEF is a standard that allows various operations on NFC cards, including writing, reading, erasing, and locking. This enables secure and manageable processing of data on the card.
+
+- **Wide Device Support:** NFC cards using the NDEF standard are supported across a broad range of phones. This means that most mobile devices can easily read these cards, allowing users to utilize the system on various devices.
+
+- **Widespread Adoption of NDEF:** The NDEF standard is widely adopted with the extensive use of NFC technology. This widespread adoption facilitates the acceptance of the project by different user groups.
+
+- **Secure Data Storage:** Data on NFC cards is securely stored due to encryption features. This enhances data security, particularly in situations where sensitive information is stored, and reduces the risk of unauthorized access.
+
+Therefore, the use of the NDEF standard is preferred to ensure the rapid, secure, and widely compatible use of NFC cards in the project.
+
+### Integration with iOS Devices
+The integration of NFC card technology in the iOS part of the project follows the steps outlined below:
+
+- **Apple Developer Account Requirement:** To enable the use of NFC card reading and writing features on iOS devices, the developer must have an Apple Developer account during the development process.
+
+- **Certificates and Permissions:** The developer needs to obtain necessary certificates and permissions through the Apple Developer account to utilize NFC features. This step enables the ability to interact with NFC.
+
+- **Activation of NFC Tag Reading Feature:** NFC card reading and writing capabilities are enabled in the Xcode environment of the project after obtaining certificates and permissions through the Apple Developer account.
+
+- **Code Development:** The developer must create code to perform NFC card reading and writing operations. These codes facilitate reading and writing operations using the NFC features of iOS devices.
+
+These steps are essential for the successful utilization of NFC card technology on iOS devices.
