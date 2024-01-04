@@ -12,7 +12,6 @@ WatchTower is a comprehensive Shift Tracking System designed to streamline and e
 - Recording passage times at shift tracking points.
 - Emergency alarm button for quick communication.
 - User-friendly system with minimal installation.
-- Web application for detailed analysis using machine learning.
 
 ## Contributors
 - [Ayhan Allahverdiyev](https://github.com/AyhanAllahverdiyev)
