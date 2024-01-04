@@ -19,7 +19,9 @@ WatchTower is a comprehensive Shift Tracking System designed to streamline and e
 - [Filiz Salnur](https://github.com/filizsalnur)
 
 ## Backend Repository
-[WatchTower-Backend](https://github.com/filizsalnur/WatchTower-Backend)
+- [WatchTower-Backend (Filiz Salnur)](https://github.com/filizsalnur/WatchTower-Backend)
+- [WatchTower-Backend (Ayhan Allahverdiyev)](https://github.com/AyhanAllahverdiyev/WatchTower-Backend)
+
 
 Feel free to explore the project, contribute, or reach out to the contributors for more information.
 
