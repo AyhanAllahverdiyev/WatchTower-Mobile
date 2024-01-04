@@ -1,3 +1,24 @@
+# WatchTower
+
+## Project Objectives:
+- Establish an easy-to-update and track shift system using NFC technology.
+- Conduct performance evaluations by tracking activities of security guards during their shifts.
+- Record passage times of security guards at shift tracking points according to sessions.
+- Provide an emergency alarm button for quick communication among users.
+- Set up a system for managers to add and update shift tracking points.
+- Enable real-time information flow to employers about incidents.
+- Effectively manage user authorization levels.
+- Develop a web application using machine learning for detailed analysis by managers.
+
+## Business Benefits and Advantages:
+The WatchTower application provides significant added value to the industry, offering several advantages:
+- The shift tracking system allows employers to manage security guards more effectively. Real-time data enables quick intervention in incidents.
+- The system facilitates security guards' prompt intervention in potential incidents during shifts, enhancing workplace security.
+- The project is user-friendly, with a minimal installation process. Employers can quickly deploy the system and manage daily operations with ease.
+- Compared to hardware systems, its greater accessibility allows businesses to achieve effective security management at a lower cost.
+- The system updates security guards' reading processes and other activities in real-time, providing employers with the ability to manage business processes more dynamically.
+
+
 # Mobile Application Screen Captures
 In this section, Dark and Light mode screenshots of the mobile application are provided. There are a total of 18 different screen captures.
 
